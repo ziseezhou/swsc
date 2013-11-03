@@ -1,0 +1,29 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {
+    padding:0;
+    margin:0;
+}
+
+body {
+    font-family: 'Microsoft YaHei', arial, sans-serif;
+    font-size: 63%;
+    background-color: #FDFDFD;
+}
+
+.body_navi {
+    padding: 5px;
+    font-size: 1.25em;
+    font-weight: bold;
+    text-align: left;
+    color: black;
+    background-color:#FFFFDD;
+    border-bottom: solid 1px #E3E197;
+}
+.body_toolbar {
+    padding: 5px;
+}
+.body_toolbar_item {
+    margin-right: 3px;
+}

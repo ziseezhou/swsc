@@ -1,0 +1,78 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+/* button default css*/
+.btn_base     {
+    display:block;
+    float:left;
+    font-size: 12px;
+    padding: 3px 5px;
+    color: black;
+    border: solid 1px #CCCCCC;
+    cursor: default;
+    border-radius: 2px;
+    background: #FEFEFE;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FEFEFE', endColorstr='#EDEDED');
+    background: -moz-linear-gradient(top, #FEFEFE, #EDEDED);
+    background: -webkit-gradient(linear,top,from(#FEFEFE),to(#EDEDED));
+    background: -webkit-linear-gradient(top, #FEFEFE, #EDEDED);
+    background: -o-linear-gradient(top, #FEFEFE, #EDEDED);
+}
+.btn_normal   {
+    color: black;
+    border: solid 1px #CCCCCC;
+    background: #FEFEFE;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FEFEFE', endColorstr='#EDEDED');
+    background: -moz-linear-gradient(top, #FEFEFE, #EDEDED);
+    background: -webkit-gradient(linear,top,from(#FEFEFE),to(#EDEDED));
+    background: -webkit-linear-gradient(top, #FEFEFE, #EDEDED);
+    background: -o-linear-gradient(top, #FEFEFE, #EDEDED);
+}
+.btn_hover    {
+    border: solid 1px #666666;
+}
+.btn_disabled {
+    color: #888888;
+}
+.btn_checked  {
+    color: #888888;
+    background: #FFFFFF;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#FFFFFF');
+}
+
+.btn_toolbar{
+    display: block;
+    float: left;
+    margin: 3px 5px 0 0;
+    text-align: center;
+    font-weight: bold;
+    width: 56px;
+    border: solid 2px white;
+    border-radius:5px;
+    -moz-border-radius:5px; /* Old Firefox */
+}
+
+.btn_toolbar_normal {
+    border: solid 2px white;
+    background: transparent;
+}
+.btn_toolbar_hover {
+    cursor: default;
+    border: solid 2px white;
+    background: #7F2711;
+}
+.btn_toolbar_checked {
+    background-color: white;
+    font-weight: bold;
+    cursor: default;
+    color: black;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F1FAFA', endColorstr='#FDFDFD');
+    background: -moz-linear-gradient(top, #F1FAFA, #FDFDFD);
+    background: -webkit-gradient(linear,top,from(#F1FAFA),to(#FDFDFD));
+    background: -webkit-linear-gradient(top, #F1FAFA, #FDFDFD);
+    background: -o-linear-gradient(top, #F1FAFA, #FDFDFD);
+}

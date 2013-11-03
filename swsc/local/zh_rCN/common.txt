@@ -1,0 +1,34 @@
+plog|日志
+calendar|日历
+account|账户
+search|搜索
+settings|设置
+navi_weekly_report|个人周报
+navi_finance_report|费用报销
+navi_exit|退出
+login|登录
+login_name|用户名
+login_pwd|密码
+login_input_null|用户名与密码不能为空.
+login_input_error|用户名或密码错误.
+
+// plog
+day|按天显示
+month|按月显示
+year|按年显示
+save|保存
+prev|前一天
+next|后一天
+today|今天
+
+// tips
+tip_navi_hello|您好！
+tip_navi_work|工作导航
+tip_error|有错误，请联系开发人员。
+
+// body_weekly
+btn_w_add|写周报
+btn_w_this|本周
+btn_w_last|上周
+btn_w_date_eg|日期格式: 20131001
+btn_w_query|日期方式查询

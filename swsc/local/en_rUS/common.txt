@@ -1,0 +1,34 @@
+plog|Plog
+calendar|Calendar
+account|Account
+search|Search
+settings|Settings
+navi_weekly_report|Weekly Report
+navi_finance_report|Finance Report
+navi_exit|Exit
+login|Login
+login_name|User Name
+login_pwd|Password
+login_input_null|User name and password can not be null.
+login_input_error|User name or password error.
+
+// plog
+day|Day View
+month|Month List
+year|Year List
+save|Save
+prev|Prev Day
+next|Next Day
+today|Today
+
+// tips
+tip_navi_hello|Hello!
+tip_navi_work|navigation:
+tip_error|Error, please notify the supporter.
+
+// body_weekly
+btn_w_add|Add
+btn_w_this|This Week
+btn_w_last|Last Week
+btn_w_date_eg|date format: 20131001
+btn_w_query|Query by date
