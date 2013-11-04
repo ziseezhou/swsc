@@ -3,7 +3,7 @@ calendar|日历
 account|账户
 search|搜索
 settings|设置
-navi_weekly_report|个人周报
+navi_weekly_report|部门周报
 navi_finance_report|费用报销
 navi_exit|退出
 login|登录
@@ -30,5 +30,5 @@ tip_error|有错误，请联系开发人员。
 btn_w_add|写周报
 btn_w_this|本周
 btn_w_last|上周
-btn_w_date_eg|日期格式: 20131001
-btn_w_query|日期方式查询
+btn_w_date_eg|日期格式：20131001
+btn_w_query|查询

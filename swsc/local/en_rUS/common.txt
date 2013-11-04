@@ -31,4 +31,4 @@ btn_w_add|Add
 btn_w_this|This Week
 btn_w_last|Last Week
 btn_w_date_eg|date format: 20131001
-btn_w_query|Query by date
+btn_w_query|Query

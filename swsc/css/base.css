@@ -27,3 +27,27 @@ body {
 .body_toolbar_item {
     margin-right: 3px;
 }
+.toolbar_divider {
+    display: block;
+    float: left;
+    width: 12px;
+    height: 22px;
+    background: transparent url('../img/icon/toolbar_divider.gif') no-repeat center;
+}
+
+.workspace {
+    margin-top: 10px;
+    padding: 5px;
+    clear: both;
+    float: left;
+}
+
+.workspace table, th, td{
+    border-collapse:collapse;
+    border: solid 1px black;
+}
+
+.workspace td {
+    height: 22px;
+    padding: 1px 3px;
+}

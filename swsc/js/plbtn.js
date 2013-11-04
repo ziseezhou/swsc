@@ -131,20 +131,19 @@
         },
 
         addIcon : function(i) {
-            var btnSpan = this.$element.children(".icon");
+            var btnSpan = this.$element.children("span.icon");
             if (btnSpan.length) {
-                this.$element.css('padding-left', '18px');
                 btnSpan.css('background', 'url('+i+') no-repeat');
             } else {
-                // get the icon width and height
-                this.$element.css('padding-left', '18px');
-                this.$element.add('span').css({
-                    'display': 'block',
+                this.$element.prepend("<span class='icon'></span>");
+                this.$element.children("span.icon").css({
+                    'float': 'left',
                     'width' : '16px',
                     'height' : '16px',
+                    'margin-right' : '3px',
                     'background' : 'url('+i+') no-repeat'
                 });
-            } 
+            }
         }
         
     };
