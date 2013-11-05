@@ -61,7 +61,7 @@ a:hover {
     padding: 0 5px 0 5px;
     color: white;
     height: 30px;
-    font-size: 1.3em;
+    font-size: 1.25em;
     font-weight: bold;
     background: transparent url(img/head_2.jpg) repeat-x;
 }

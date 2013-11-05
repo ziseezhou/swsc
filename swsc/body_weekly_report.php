@@ -59,7 +59,7 @@ input[type=text]:focus,input[type=password]:focus,textarea:focus{
 </style>
 </head>
 <body>
-    <div class="body_navi">&diams;&nbsp;<?=_('navi_weekly_report');?></div>
+    <div class="body_navi">&bull;&nbsp;<?=_('navi_weekly_report');?></div>
     <div class="body_toolbar">
         <div id="w_this" class="btn_base body_toolbar_item"><?=_('btn_w_this');?></div>
         <div id="w_last" class="btn_base body_toolbar_item"><?=_('btn_w_last');?></div>
@@ -72,6 +72,7 @@ input[type=text]:focus,input[type=password]:focus,textarea:focus{
         <div class="toolbar_divider"></div>
         <div id="w_add" class="btn_base body_toolbar_item"><?=_('btn_w_add');?></div>
     </div>
+
     <div class="workspace">
         <table border="0" cellpadding="1" cellspacing="0">
           <col width="65" />

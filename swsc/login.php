@@ -59,15 +59,18 @@ $(document).ready(function(){
         $.post(url, {a:account, p:pwd},
         function(data){
             if (data.ret) {
-                //alert('here');
+                // sign in successfully
+                // cookie the username
                 location.reload(true);
             } else {
-                //alert(jQuery.param(data));
                 infobox.html("<?=_('login_input_error');?>");
                 infobox.show();
             }
         }, "json");
     });
+
+    // cookie out username if exist
+    $("#a input").focus();
 });
 </script>
 <style type="text/css">
@@ -121,12 +124,12 @@ form {
     margin-left: -280px;
 }
 #a input, #p input {
+    padding: 3px;
     height: 22px;
     width: 155px;
     line-height: 22px;
     font-size: 12px;
     vertical-align:middle;
-    padding-top: 3px;
     background-color: white;
     border: solid 1px #000;
 }

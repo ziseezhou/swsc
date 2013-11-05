@@ -48,12 +48,7 @@ a:hover {
 }
 
 #tip {
-    margin-top: 0;
     width: 100%;
-    background: transparent url(img/nav_2.gif) repeat-x;
-    font-size: 1.25em;
-    font-weight: bold;
-    padding: 5px;
 }
 #menu li {
     display: block;
@@ -78,7 +73,7 @@ a:hover {
 </style>
 </head>
 <body>
-<div id="tip"><?=_('tip_navi_work');?></div>
+<div id="tip" class="body_navi"><?=_('tip_navi_work');?></div>
 <div id="menu">
     <li>&nbsp;&nbsp;<a id="body_weekly_report" target="f3"><?=_('navi_weekly_report');?></a></li>
     <li>&nbsp;&nbsp;<a id="body_finance_report" target="f3"><?=_('navi_finance_report');?></a></li>

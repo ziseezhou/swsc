@@ -6,9 +6,12 @@
     margin:0;
 }
 
+html {
+    font-size: 63%;
+}
 body {
     font-family: 'Microsoft YaHei', arial, sans-serif;
-    font-size: 63%;
+    font-size: 1.2em;
     background-color: #FDFDFD;
 }
 
@@ -18,8 +21,8 @@ body {
     font-weight: bold;
     text-align: left;
     color: black;
-    background-color:#FFFFDD;
-    border-bottom: solid 1px #E3E197;
+    background-color:#FFE88E;
+    border-bottom: solid 1px #F3AD47;
 }
 .body_toolbar {
     padding: 5px;
