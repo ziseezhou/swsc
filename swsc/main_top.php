@@ -81,7 +81,7 @@ a:hover {
 <body>
 <div id="banner"><img src="img/logo.jpg" /></div>
 <div id="toolbar">
-    <div id="left"><?=_('tip_navi_hello');?>&nbsp;<? echo $_SESSION['account']; ?></div>
+    <div id="left"><?=_('tip_navi_hello');?>&nbsp;<? echo $_SESSION['real_name']; ?></div>
     <div id="right">
         <div id="btn_exit" class="btn_toolbar"><?=_('navi_exit');?></div>
     </div>

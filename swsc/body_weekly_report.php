@@ -18,13 +18,21 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/plbtn.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#w_add").plbtn({click:function(){alert('w_add');}});
-    $("#w_this").plbtn({click:function(){alert('w_this');}});
+    $("#w_add").plbtn({click:function(){
+        $('#report_review').css('display', 'none');
+        $('#report_new').css('display', 'block');
+    }});
+    $("#w_this").plbtn({click:function(){
+        $('#report_new').css('display', 'none');
+        $('#report_review').css('display', 'block');
+    }});
     $("#w_last").plbtn({click:function(){alert('w_last');}});
     $("#w_query").plbtn({click:function(){alert('w_query');}});
 
     $("#w_add").plbtn('addIcon', 'img/icon/add.png');
     $("#w_query").tipsy({delayIn:500, fallback:"<?=_('btn_w_date_eg');?>"});
+
+    $("#w_this").click();
 });
 </script>
 <style type="text/css">
@@ -55,7 +63,13 @@ input[type=text]:focus,input[type=password]:focus,textarea:focus{
     -webkit-box-shadow:0 0 5px rgba(103,166,217,1);
     -o-box-shadow:0 0 5px rgba(103,166,217,1);
 }
-
+#report_review, #report_new {
+    display: none;
+}
+.tableHeader, .tableDate {
+    font-weight: bold;
+    border: solid 2px black;
+}
 </style>
 </head>
 <body>
@@ -74,19 +88,20 @@ input[type=text]:focus,input[type=password]:focus,textarea:focus{
     </div>
 
     <div class="workspace">
+        <div id="report_review">
         <table border="0" cellpadding="1" cellspacing="0">
           <col width="65" />
           <col width="64" span="4" />
           <col width="241" />
           <col width="64" span="2" />
-          <tr>
+          <tr class="tableDate">
             <td colspan="5" width="321">时间：2013年8月12日-2013年8月16日</td>
             <td width="241"></td>
             <td width="64"></td>
             <td width="64"></td>
           </tr>
-          <tr>
-            <td>　</td>
+          <tr class="tableHeader">
+            <td>姓名</td>
             <td width="64">项目名称</td>
             <td width="64">项目类型</td>
             <td width="64">项目阶段</td>
@@ -260,6 +275,50 @@ input[type=text]:focus,input[type=password]:focus,textarea:focus{
             <td width="64">　</td>
           </tr>
         </table>
+        </div>
+        <div id="report_new">
+        <table border="0" cellpadding="1" cellspacing="0">
+          <col width="65" />
+          <col width="64" span="4" />
+          <col width="241" />
+          <col width="64" span="2" />
+          <tr class="tableDate">
+            <td colspan="5" width="321">时间：2013年8月12日-2013年8月16日</td>
+            <td width="241"></td>
+            <td width="64"></td>
+            <td width="64"></td>
+          </tr>
+          <tr class="tableHeader">
+            <td>姓名</td>
+            <td width="64">项目名称</td>
+            <td width="64">项目类型</td>
+            <td width="64">项目阶段</td>
+            <td width="64">工作地点</td>
+            <td width="241">工作内容</td>
+            <td width="64">加班时长</td>
+            <td width="64">行程时长</td>
+          </tr>
+          <tr>
+            <td rowspan="2">侯泱</td>
+            <td width="64">同方股份</td>
+            <td width="64">资产重组</td>
+            <td width="64">封卷</td>
+            <td width="64">北京</td>
+            <td width="241">制作同方要求的申报材料</td>
+            <td width="64">0小时</td>
+            <td width="64">0小时</td>
+          </tr>
+          <tr>
+            <td width="64">德基机械</td>
+            <td width="64">IPO</td>
+            <td width="64">审核反馈</td>
+            <td width="64">浙江宁波、辽宁阜新</td>
+            <td width="241">走访德基机械客户</td>
+            <td width="64">0小时</td>
+            <td width="64">10小时</td>
+          </tr>
+        </table>
+        </div>
     </div>
 </body>
 </html>
