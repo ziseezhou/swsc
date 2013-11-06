@@ -10,7 +10,7 @@ $account    = db_str_filter($account);
 $pwd        = db_str_filter($pwd);
 
 if (strlen($account) > 0) {
-    $sql = "select * from u where a='$account'";
+    $sql = "select * from user where account='$account'";
     
     $conn = conn();
     PG_ASSERT2($conn, "db conn error!", true);
@@ -20,7 +20,7 @@ if (strlen($account) > 0) {
 
     if (mysql_num_rows($rs)>0) {
         $row = mysql_fetch_array($rs);
-        $sqlPwd = $row['p'];
+        $sqlPwd = $row['pwd'];
         
         if ($sqlPwd == $pwd) {
             $_SESSION['account'] = $account;
@@ -80,12 +80,13 @@ $(document).ready(function(){
 }
 html {
     overflow-y:scroll;
+    font-size: 63%;
 }
 body {
     margin:0;
     padding:45px 0 0 0;
     font-family: arial, sans-serif;
-    font-size: 63%;
+    font-size: 1.2em;
     background: #8E1D23 url(img/login_left_top.jpg) no-repeat left top;
 }
 ol,ul {

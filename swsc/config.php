@@ -6,7 +6,7 @@
 $_PG_DEBUG   = TRUE;
 
 $_DB_HOST    = "localhost";
-$_DB_NAME    = "plog";
+$_DB_NAME    = "swsc";
 $_DB_ACCOUNT = "root";
 $_DB_PWD     = "ZHOUGUIJUN";
 
