@@ -32,3 +32,14 @@ btn_w_this|This Week
 btn_w_last|Last Week
 btn_w_date_eg|date format: 20131001
 btn_w_query|Query
+btn_w_add_newline|New Line
+btn_w_add_save_all|Save All items
+table_header_Name|Name
+table_header_proName|Project Name
+table_header_proType|Project Type
+table_header_proStage|Project Stage
+table_header_workAddress|Place of Work
+table_header_workContent|Job Description
+table_header_extraWorktime|Overtime length (H)
+table_header_transDuration|Transportation Duration (H)
+table_header_actions|Actions

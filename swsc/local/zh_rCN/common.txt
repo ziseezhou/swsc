@@ -32,3 +32,14 @@ btn_w_this|本周
 btn_w_last|上周
 btn_w_date_eg|日期格式：20131001
 btn_w_query|查询
+btn_w_add_newline|添加一行
+btn_w_add_save_all|保存所有条目
+table_header_Name|姓名
+table_header_proName|项目名称
+table_header_proType|项目类型
+table_header_proStage|项目阶段
+table_header_workAddress|工作地点
+table_header_workContent|工作内容
+table_header_extraWorktime|加班时长(单位:小时)
+table_header_transDuration|行程时长(单位:小时)
+table_header_actions|操作
