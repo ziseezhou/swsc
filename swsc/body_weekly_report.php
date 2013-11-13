@@ -35,7 +35,24 @@ $(document).ready(function(){
 
     $('#w_this').click();
 
-    $('#w_add_newline').plbtn({click:function(){alert('w_add_newline');}});
+    $('#w_add_newline').plbtn({click:function(){
+        var ele_newLine = '<tr class="elem_input">\
+            <td width="64"><textarea rows="1"></textarea></td>\
+            <td width="64"><textarea rows="1"></textarea></td>\
+            <td width="64"><textarea rows="1"></textarea></td>\
+            <td width="64"><textarea rows="1"></textarea></td>\
+            <td width="240"><textarea rows="1"></textarea></td>\
+            <td width="64"><input type="text" name="a" maxlength="3" /></td>\
+            <td width="64"><input type="text" name="a" maxlength="3" /></td>\
+            <td></td>\
+          </tr>';
+
+        $('#report_new table').append(ele_newLine);
+        var firstLineTag = '#report_new table tr:nth-child(3) td';
+        var rowspan = $(firstLineTag).attr('rowspan');
+        $(firstLineTag).attr('rowspan', (parseInt(rowspan)+1));
+    }});
+
     $('#w_add_save_all').plbtn({click:function(){alert('w_add_save_all');}});
     $('#w_add_newline').plbtn('addIcon', 'img/icon/add.png');
     $('#w_add_save_all').plbtn('addIcon', 'img/icon/save.png');
