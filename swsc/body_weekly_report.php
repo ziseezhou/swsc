@@ -19,6 +19,104 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/jquery.autosize.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    var onClickSave = function(_id) {
+        var tr = $(this).parent().parent();
+
+        var proName = tr.children('.id_proName').children('textarea').val();
+        var proType = tr.children('.id_proType').children('textarea').val();
+        var proStage = tr.children('.id_proStage').children('textarea').val();
+        var workAddress = tr.children('.id_workAddress').children('textarea').val();
+        var workContent = tr.children('.id_workContent').children('textarea').val();
+        var extraWorktime = tr.children('.id_extraWorktime').children('input').val();
+        var transDuration = tr.children('.id_transDuration').children('input').val();
+
+        //alert(proName+proType+proStage+workAddress+workConten+extraWorktime+transDuration);
+        var dataInput = {
+            'id_proName': proName,
+            'id_proType': proType,
+            'id_proStage': proStage,
+            'id_workAddress': workAddress,
+            'id_workContent': workContent,
+            'id_extraWorktime': extraWorktime,
+            'id_transDuration': transDuration
+        };
+
+        var url = '?c=handler_weekly_report&action=add';
+        if (_id.length > 0) {
+            url = '?c=handler_weekly_report&action=edit&_id='+_id;
+        }
+
+        $.post(url, dataInput,
+        function(data){
+            if (data.ret) {
+                // succeed
+                // show the new item 
+            } else {
+                //infobox.html("<?=_('login_input_error');?>");
+                //infobox.show();
+                // show error;
+                alert(data.info);
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
+    };
+
+    var onClickDelete = function() {};
+    var onClickEdit = function() {};
+
+    var setupInputLine = function (sSelector) {
+        $(sSelector+' td').each(function(){
+            var childInput = $(this).children('input');
+            var childTextArea = $(this).children('textarea');
+            if (childInput.length || childTextArea.length) {
+                $(this).click(function(){
+                    if (childInput.length) {
+                        childInput.focus();
+                    } else {
+                        childTextArea.focus();
+                    }
+                });
+            }
+
+            if (childTextArea.length) {
+                childTextArea.css('width', $(this).css('width'));
+
+                $(this).bind("contextmenu",function(e){
+                    if (e.target.type=='textarea') {
+                        return true;
+                    } else {
+                        childTextArea.focus();
+                        return false;
+                    }
+                });
+            }
+        });
+
+        $(sSelector+' textarea').autosize();
+        $(sSelector+' .w_save').plbtn({
+            cssNormal:'btn_item_normal', 
+            cssHover:'btn_item_hover', 
+            cssDisabled:'btn_item_normal', 
+            cssChecked:'btn_item_normal'});
+        $(sSelector+' .w_save').plbtn('addIcon', 'img/icon/save.png');
+        $(sSelector+' .w_save').click(onClickSave);
+
+        // custom contextmenu
+    };
+
+    var ele_newLine = '<tr class="elem_input">\
+        <td width="64" class="id_proName"><textarea rows="1"></textarea></td>\
+        <td width="64" class="id_proType"><textarea rows="1"></textarea></td>\
+        <td width="64" class="id_proStage"><textarea rows="1"></textarea></td>\
+        <td width="64" class="id_workAddress"><textarea rows="1"></textarea></td>\
+        <td width="240" class="id_workContent"><textarea rows="1"></textarea></td>\
+        <td width="64" class="id_extraWorktime"><input type="text" name="a" value="0" maxlength="3" /></td>\
+        <td width="64" class="id_transDuration"><input type="text" name="a" value="0" maxlength="3" /></td>\
+        <td class="item_actions"><div class="btn_item w_save"></div></td>\
+      </tr>';
+
     $('#w_add').plbtn({click:function(){
         $('#report_review').css('display', 'none');
         $('#report_new').css('display', 'block');
@@ -36,87 +134,38 @@ $(document).ready(function(){
     $('#w_this').click();
 
     $('#w_add_newline').plbtn({click:function(){
-        var ele_newLine = '<tr class="elem_input">\
-            <td width="64"><textarea rows="1"></textarea></td>\
-            <td width="64"><textarea rows="1"></textarea></td>\
-            <td width="64"><textarea rows="1"></textarea></td>\
-            <td width="64"><textarea rows="1"></textarea></td>\
-            <td width="240"><textarea rows="1"></textarea></td>\
-            <td width="64"><input type="text" name="a" maxlength="3" /></td>\
-            <td width="64"><input type="text" name="a" maxlength="3" /></td>\
-            <td></td>\
-          </tr>';
-
         $('#report_new table').append(ele_newLine);
-        var firstLineTag = '#report_new table tr:nth-child(3) td';
+        var firstLineTag = '#report_new table tr:nth-child(3) td:first';
         var rowspan = $(firstLineTag).attr('rowspan');
         $(firstLineTag).attr('rowspan', (parseInt(rowspan)+1));
+
+        setupInputLine('#report_new table tr:last');
     }});
+    
 
     $('#w_add_save_all').plbtn({click:function(){alert('w_add_save_all');}});
-    $('#w_add_newline').plbtn('addIcon', 'img/icon/add.png');
+    $('#w_add_newline').plbtn('addIcon', 'img/icon/add_item.png');
     $('#w_add_save_all').plbtn('addIcon', 'img/icon/save.png');
 
 
     $('textarea').autosize();
 
-    $('.elem_input td').each(function(){
-        var childInput = $(this).children('input');
-        var childTextArea = $(this).children('textarea');
-        if (childInput.length || childTextArea.length) {
-            $(this).click(function(){
-                if (childInput.length) {
-                    childInput.focus();
-                } else {
-                    childTextArea.focus();
-                }
-            });
-        }
-
-        if (childTextArea.length) {
-            childTextArea.css('width', $(this).css('width'));
-            /*
-            $(this).mousedown(function(e) {
-                //e.stopPropagation(); // avoid triggering its parent
-                //alert(e.target.type);
-                //return false;
-                e.stopPropagation(); // avoid triggering its parent
-                e.preventDefault();
-                return false;
-            });
-            
-            $(this).mouseup(function(e) {
-                e.stopPropagation(); // avoid triggering its parent
-                e.preventDefault();
-                return false;
-                //alert(e.target.type);
-                //return false;
-            });
-            //($this).mousedown(function(e) {
-            //    //childTextArea.trigger('mouseup');
-            //    alert(e.currentTarget+', '+event.relatedTarget);
-            //});*/
-            
-            $(this).bind("contextmenu",function(e){
-                if (e.target.type=='textarea') {
-                    return true;
-                } else {
-                    childTextArea.focus();
-                    //childTextArea.trigger('mousedown', {type:'mousedown', button:2});
-                    //childTextArea.trigger('mouseup', {type:'mouseup', button:2});
-                    //childTextArea.trigger('contextmenu', e);
-                    //childTextArea.trigger({
-                    //    type: 'mousedown',
-                    //    which: 3
-                    //});
-                    //e.target.type=='textarea'
-                    //childTextArea.trigger('contextmenu');
-                    return false;
-                }
-            });
-        }
+    $(".btn_item").each(function(){
+        $(this).plbtn({cssNormal:'btn_item_normal', cssHover:'btn_item_hover', cssDisabled:'btn_item_normal', cssChecked:'btn_item_normal'});
+    });
+    $(".w_edit").each(function(){
+        $(this).plbtn('addIcon', 'img/icon/edit_item.png');
+    });
+    $(".w_delete").each(function(){
+        $(this).plbtn('addIcon', 'img/icon/delete_item.png');
     });
 
+
+    
+
+    // after loading exist items;
+    // add a new line;
+    $('#w_add_newline').click();
 
 });
 </script>
@@ -175,10 +224,15 @@ $(document).ready(function(){
     color: #0000CD;
 }
 .elem_input td {
+    padding-top: 4px;
     vertical-align: top;
 }
 .elem_input textarea {
     resize: none;
+    height: 1.2em;
+}
+.elem_input td .item_actions {
+    padding: 0;
 }
 </style>
 </head>
@@ -198,6 +252,8 @@ $(document).ready(function(){
     </div>
 
     <div class="workspace">
+
+        <!-- Department weekly report list -->
         <div id="report_review">
         <table border="0" cellpadding="1" cellspacing="0">
           <col width="64" />
@@ -287,35 +343,6 @@ $(document).ready(function(){
             <td width="64">10小时</td>
           </tr>
           <tr>
-            <td rowspan="2">李煜</td>
-            <td width="64">博彦科技</td>
-            <td width="64">非公开</td>
-            <td width="64">反馈答复</td>
-            <td width="64">非现场</td>
-            <td width="240">针对问题进行进一步讨论</td>
-            <td width="64">　</td>
-            <td width="64">　</td>
-          </tr>
-          <tr>
-            <td width="64">诚益通</td>
-            <td width="64">IPO</td>
-            <td width="64">补充中期材料</td>
-            <td width="64">非现场</td>
-            <td width="240">补充反馈恢复中7月回款情况</td>
-            <td width="64">　</td>
-            <td width="64">　</td>
-          </tr>
-          <tr>
-            <td>顾形宇</td>
-            <td width="64">高鸿股份</td>
-            <td width="64">并购</td>
-            <td width="64">尽职调查</td>
-            <td width="64">高阳捷迅现场</td>
-            <td width="240">现场尽职调查</td>
-            <td width="64">　</td>
-            <td width="64">　</td>
-          </tr>
-          <tr>
             <td rowspan="4">陈明星</td>
             <td width="64">山东美多</td>
             <td width="64">IPO</td>
@@ -352,37 +379,10 @@ $(document).ready(function(){
             <td width="64">　</td>
             <td width="64">　</td>
           </tr>
-          <tr>
-            <td rowspan="2">成永攀</td>
-            <td width="64">德基机械</td>
-            <td width="64">IPO</td>
-            <td width="64">补充中报</td>
-            <td width="64">北京</td>
-            <td width="240">访谈客户、补充招股书</td>
-            <td width="64">6</td>
-            <td width="64">5</td>
-          </tr>
-          <tr>
-            <td width="64">赛轮股份</td>
-            <td width="64">非公开</td>
-            <td width="64">上报材料</td>
-            <td width="64">北京</td>
-            <td width="240">答复反馈意见、与预审员沟通</td>
-            <td width="64">　</td>
-            <td width="64">5</td>
-          </tr>
-          <tr>
-            <td>陈嘉楠</td>
-            <td width="64">高鸿股份</td>
-            <td width="64">并购</td>
-            <td width="64">尽职调查</td>
-            <td width="64">北京</td>
-            <td width="240">写交易报告书</td>
-            <td width="64">　</td>
-            <td width="64">　</td>
-          </tr>
         </table>
         </div>
+
+        <!-- Persenal weekly report: edit & add -->
         <div id="report_new">
         <table border="0" cellpadding="1" cellspacing="0">
           <col width="64" />
@@ -404,7 +404,7 @@ $(document).ready(function(){
             <td width="64"><?=_('table_header_actions');?></td>
           </tr>
           <tr>
-            <td rowspan="3"><? echo $_SESSION['real_name']; ?></td>
+            <td rowspan="2"><? echo $_SESSION['real_name']; ?></td>
             <td width="64">同方股份</td>
             <td width="64">资产重组</td>
             <td width="64">封卷</td>
@@ -412,7 +412,10 @@ $(document).ready(function(){
             <td width="240">制作同方要求的申报材料</td>
             <td width="64">0</td>
             <td width="64">0</td>
-            <td></td>
+            <td class="item_actions">
+                <div class="btn_item w_edit"></div>
+                <div class="btn_item w_delete"></div>
+            </td>
           </tr>
           <tr>
             <td width="64">德基机械</td>
@@ -422,30 +425,11 @@ $(document).ready(function(){
             <td width="240">走访德基机械客户</td>
             <td width="64">0</td>
             <td width="64">10</td>
-            <td></td>
+            <td class="item_actions">
+                <div class="btn_item w_edit"></div>
+                <div class="btn_item w_delete"></div>
+            </td>
           </tr>
-
-          <tr class="elem_input">
-            <td width="64"><textarea rows="1"></textarea></td>
-            <td width="64"><textarea rows="1"></textarea></td>
-            <td width="64"><textarea rows="1"></textarea></td>
-            <td width="64"><textarea rows="1"></textarea></td>
-            <td width="240"><textarea rows="1"></textarea></td>
-            <td width="64"><input type="text" name="a" maxlength="3" /></td>
-            <td width="64"><input type="text" name="a" maxlength="3" /></td>
-            <td></td>
-          </tr>
-          <!--
-          <tr>
-            <td width="64">德基机械</td>
-            <td width="64">IPO</td>
-            <td width="64">审核反馈</td>
-            <td width="64">浙江宁波、辽宁阜新</td>
-            <td width="240">走访德基机械客户</td>
-            <td width="64">0小时</td>
-            <td width="64">10小时</td>
-          </tr>
-          -->
         </table>
         <div id="report_new_toolbar">
             <div id="w_add_newline" class="btn_base body_toolbar_item"><?=_('btn_w_add_newline');?></div>

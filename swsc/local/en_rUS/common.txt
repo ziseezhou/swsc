@@ -21,6 +21,12 @@ prev|Prev Day
 next|Next Day
 today|Today
 
+// common
+s_new|New
+s_save|Save
+s_edit|Edit
+s_delete|Delete
+
 // tips
 tip_navi_hello|Hello!
 tip_navi_work|navigation:

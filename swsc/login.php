@@ -23,6 +23,7 @@ if (strlen($account) > 0) {
         $sqlPwd = $row['pwd'];
         
         if ($sqlPwd == $pwd) {
+            $_SESSION['account_id'] = $row['_id'];
             $_SESSION['account'] = $account;
             $_SESSION['real_name'] = $row['real_name'];
             _exit_json(array('ret'=>true, 'account'=>$account));

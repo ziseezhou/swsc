@@ -21,6 +21,12 @@ prev|前一天
 next|后一天
 today|今天
 
+// common
+s_new|新建
+s_save|保存
+s_edit|编辑
+s_delete|删除
+
 // tips
 tip_navi_hello|您好！
 tip_navi_work|工作导航
