@@ -390,7 +390,7 @@ $(document).ready(function(){
           <col width="240" />
           <col width="64" span="3" />
           <tr class="tableDate">
-            <td colspan="9" width="752">时间：2013年8月12日-2013年8月16日</td>
+            <td colspan="9" width="752">时间：2013年8月12日-2013年8月16日-点击改变日期</td>
           </tr>
           <tr class="tableHeader">
             <td><?=_('table_header_Name');?></td>

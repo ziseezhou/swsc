@@ -13,7 +13,22 @@ $transDuration = $_POST['id_transDuration'];
 
 $action    = $_GET['action'];
 
-if (strlen($account) > 0) {
+// Get data
+if ($action == "get") {
+    $type = $_GET['type'];
+    $
+    
+    if ($type == "thisWeek") {
+        ;
+    } else if ($type == "lastWeek") {
+        ;
+    } else if ($type == "personal") {
+        ;
+    } 
+}
+
+// Add data
+else if ($action == "add") {
     $sql = "select * from user where account='$account'";
     $sql = "insert into weekly_report ";
     $sql.= "(_id_user, pro_name, pro_type, pro_stage, work_address, work_content, extra_worktime, trans_duration) values (";
@@ -40,6 +55,17 @@ if (strlen($account) > 0) {
 
     _exit_json(array('ret'=>false));
 }
+
+// Edit data
+else if () {
+    ;
+}
+
+// Delete data
+else if () {
+    ;
+}
+
 
 
 ?>
