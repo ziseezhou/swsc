@@ -17,6 +17,7 @@ $_CONTENT_MAP = array (
     "body_weekly_report" => "body_weekly_report.php",
     "body_finance_report" => "body_finance_report.php",
     "handler_weekly_report" => "handler_weekly_report.php",
+    "body_manage_staff" => "body_manage_staff.php",
     "exit" => "exit.php",
 );
 

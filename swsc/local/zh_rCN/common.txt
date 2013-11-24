@@ -5,6 +5,7 @@ search|搜索
 settings|设置
 navi_weekly_report|部门周报
 navi_finance_report|费用报销
+navi_manage_staff|人员管理
 navi_exit|退出
 login|登录
 login_name|用户名
@@ -23,6 +24,8 @@ today|今天
 
 // common
 s_new|新建
+s_add|添加
+s_cancel|取消
 s_save|保存
 s_edit|编辑
 s_delete|删除
@@ -34,6 +37,7 @@ tip_error|有错误，请联系开发人员。
 
 // body_weekly
 btn_w_add|写周报
+btn_w_list|查看所有周报
 btn_w_this|本周
 btn_w_last|上周
 btn_w_date_eg|日期格式：20131001
@@ -49,3 +53,10 @@ table_header_workContent|工作内容
 table_header_extraWorktime|加班时长(单位:小时)
 table_header_transDuration|行程时长(单位:小时)
 table_header_actions|操作
+
+staff_new_username|用户名
+staff_new_realname|真实姓名
+staff_new_status|状态
+staff_new_level|级别
+staff_new_portrait|头像
+

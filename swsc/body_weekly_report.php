@@ -117,18 +117,27 @@ $(document).ready(function(){
         <td class="item_actions"><div class="btn_item w_save"></div></td>\
       </tr>';
 
+    $('#w_list').plbtn({click:function(){
+        $('#report_list').css('display', 'block');
+        $('#report_new').css('display', 'none');
+        $('#body_toolbar_list').css('display', 'block');
+        $('#body_toolbar_add').css('display', 'none');
+    }});
     $('#w_add').plbtn({click:function(){
-        $('#report_review').css('display', 'none');
+        $('#report_list').css('display', 'none');
         $('#report_new').css('display', 'block');
+        $('#body_toolbar_list').css('display', 'none');
+        $('#body_toolbar_add').css('display', 'block');
     }});
     $('#w_this').plbtn({click:function(){
         $('#report_new').css('display', 'none');
-        $('#report_review').css('display', 'block');
+        $('#report_list').css('display', 'block');
     }});
     $('#w_last').plbtn({click:function(){alert('w_last');}});
     $('#w_query').plbtn({click:function(){alert('w_query');}});
 
     $('#w_add').plbtn('addIcon', 'img/icon/add.png');
+    $('#w_list').plbtn('addIcon', 'img/icon/list.png');
     $('#w_query').tipsy({delayIn:500, fallback:"<?=_('btn_w_date_eg');?>"});
 
     $('#w_this').click();
@@ -166,6 +175,7 @@ $(document).ready(function(){
     // after loading exist items;
     // add a new line;
     $('#w_add_newline').click();
+    $('#w_list').click();
 
 });
 </script>
@@ -197,12 +207,17 @@ $(document).ready(function(){
     -webkit-box-shadow:0 0 5px rgba(103,166,217,1);
     -o-box-shadow:0 0 5px rgba(103,166,217,1);
 }
-#report_review, #report_new {
+#report_list, #report_new {
     display: none;
 }
-.tableHeader, .tableDate {
+.tableHeader {
     font-weight: bold;
-    border: solid 2px black;
+    border-bottom: solid 2px black;
+}
+.tableDate {
+    font-weight: bold;
+    border-top: solid 2px black;
+    border-bottom: solid 2px black;
 }
 #report_new input, textarea {
     width: 100%;
@@ -234,11 +249,19 @@ $(document).ready(function(){
 .elem_input td .item_actions {
     padding: 0;
 }
+#workspace table {
+    border: solid 1px black;
+    border-collapse:collapse;
+}
+#workspace table td{
+    border: solid 1px black;
+}
 </style>
 </head>
 <body>
     <div class="body_navi">&bull;&nbsp;<?=_('navi_weekly_report');?></div>
     <div class="body_toolbar">
+        <div id="body_toolbar_list">
         <div id="w_this" class="btn_base body_toolbar_item"><?=_('btn_w_this');?></div>
         <div id="w_last" class="btn_base body_toolbar_item"><?=_('btn_w_last');?></div>
         <div class="formContainer">
@@ -249,12 +272,16 @@ $(document).ready(function(){
         <div id="w_query" class="btn_base body_toolbar_item" ><?=_('btn_w_query');?></div>
         <div class="toolbar_divider"></div>
         <div id="w_add" class="btn_base body_toolbar_item"><?=_('btn_w_add');?></div>
+        </div>
+        <div id="body_toolbar_add">
+            <div id="w_list" class="btn_base body_toolbar_item"><?=_('btn_w_list');?></div>
+        </div>
     </div>
 
     <div class="workspace">
 
         <!-- Department weekly report list -->
-        <div id="report_review">
+        <div id="report_list">
         <table border="0" cellpadding="1" cellspacing="0">
           <col width="64" />
           <col width="64" span="4" />

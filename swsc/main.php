@@ -13,7 +13,7 @@ PG_ASSERT(_local_file_load('common'));
 </head>
 <frameset frameborder=0 border=0 rows="120,*">
 <frame scrolling=no name=banner noresize="true" marginwidth=0 marginheight=0 src="?c=main_top">
-<frameset name=mainframe id=mainframe frameborder=0 border=0 cols="180,11,*">
+<frameset name=mainframe id=mainframe frameborder=0 border=0 cols="180,14,*">
     <frame scrolling=no name=menu noresize="true" marginwidth=0 marginheight=0 src="?c=main_left">
     <frame scrolling=no noresize="true" name=toogle marginwidth=0 marginheight=0 src="main_divider.html">
     <frame marginwidth=0 marginheight=0 name="f3" src="?c=main_body">

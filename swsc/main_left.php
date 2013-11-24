@@ -77,6 +77,7 @@ a:hover {
 <div id="menu">
     <li>&nbsp;&nbsp;<a id="body_weekly_report" target="f3"><?=_('navi_weekly_report');?></a></li>
     <li>&nbsp;&nbsp;<a id="body_finance_report" target="f3"><?=_('navi_finance_report');?></a></li>
+    <li>&nbsp;&nbsp;<a id="body_manage_staff" target="f3"><?=_('navi_manage_staff');?></a></li>
 </div>
 </body>
 </html>

@@ -5,6 +5,7 @@ search|Search
 settings|Settings
 navi_weekly_report|Weekly Report
 navi_finance_report|Finance Report
+navi_manage_staff|Manage staff
 navi_exit|Exit
 login|Login
 login_name|User Name
@@ -21,8 +22,10 @@ prev|Prev Day
 next|Next Day
 today|Today
 
-// common
+// common strings
 s_new|New
+s_add|Add
+s_cancel|Cancel
 s_save|Save
 s_edit|Edit
 s_delete|Delete
@@ -34,6 +37,7 @@ tip_error|Error, please notify the supporter.
 
 // body_weekly
 btn_w_add|Add
+btn_w_list|List
 btn_w_this|This Week
 btn_w_last|Last Week
 btn_w_date_eg|date format: 20131001
@@ -49,3 +53,9 @@ table_header_workContent|Job Description
 table_header_extraWorktime|Overtime length (H)
 table_header_transDuration|Transportation Duration (H)
 table_header_actions|Actions
+
+staff_new_username|User Name
+staff_new_realname|Real Name
+staff_new_status|Status
+staff_new_level|Level
+staff_new_portrait|Portrait
