@@ -13,10 +13,12 @@ PG_ASSERT(_local_file_load('common'));
 <link href='css/base.css' rel='stylesheet' type='text/css' />
 <link href='css/btn.css' rel='stylesheet' type='text/css' />
 <link href='css/tipsy.css' rel='stylesheet' type='text/css' />
+<link href="css/glDatePicker.default.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="js/plbtn.js"></script>
 <script type="text/javascript" src="js/jquery.autosize.min.js"></script>
+<script type="text/javascript" src="js/jquery.glDatePicker.min.new.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     var onClickSave = function(_id) {
@@ -170,7 +172,7 @@ $(document).ready(function(){
     });
 
 
-    
+    $('#inputDate').glDatePicker({width:500, height:300});
 
     // after loading exist items;
     // add a new line;
