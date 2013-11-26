@@ -14,6 +14,7 @@ PG_ASSERT(_local_file_load('common'));
 <link href='css/btn.css' rel='stylesheet' type='text/css' />
 <link href='css/tipsy.css' rel='stylesheet' type='text/css' />
 <link href="css/glDatePicker.default.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="js/plbtn.js"></script>
@@ -136,11 +137,9 @@ $(document).ready(function(){
         $('#report_list').css('display', 'block');
     }});
     $('#w_last').plbtn({click:function(){alert('w_last');}});
-    $('#w_query').plbtn({click:function(){alert('w_query');}});
 
     $('#w_add').plbtn('addIcon', 'img/icon/add.png');
     $('#w_list').plbtn('addIcon', 'img/icon/list.png');
-    $('#w_query').tipsy({delayIn:500, fallback:"<?=_('btn_w_date_eg');?>"});
 
     $('#w_this').click();
 
@@ -172,7 +171,21 @@ $(document).ready(function(){
     });
 
 
-    $('#inputDate').glDatePicker({width:500, height:300});
+    var datePicker = $('#w_query').glDatePicker({
+        width:500, 
+        height:300,
+        dowNames: localDowNames,
+        monthNames: localMonthNames,
+        onClick: function(el, cell, date, data) {
+            //el.val(date.toLocaleDateString());
+            alert(date.toLocaleDateString());
+        }
+    });
+
+    $('#w_query').plbtn({click:function(){
+        datePicker.show();
+    }});
+    $('#w_query').tipsy({delayIn:500, fallback:"<?=_('btn_w_date_eg');?>"});
 
     // after loading exist items;
     // add a new line;

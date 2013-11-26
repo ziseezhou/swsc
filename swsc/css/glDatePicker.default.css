@@ -68,7 +68,7 @@
 .gldp-default .dow {
 	color: #fff;
 	font-weight: bold;
-	cursor: wait !important;
+	cursor: default !important;
 	background: #ff0000;
 	background: -moz-linear-gradient(top,  #ff0000 0%, #ffcccc 1%, #ff0000 2%, #aa0000 98%, #dd4444 99%, #880000 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff0000), color-stop(1%,#dd4444), color-stop(2%,#ff0000), color-stop(98%,#aa0000), color-stop(99%,#ffcccc), color-stop(100%,#880000));
@@ -124,7 +124,7 @@
 .gldp-default .noday {
 	color: #444;
 	font-weight: normal;
-	cursor: wait !important;
+	cursor: default !important;
 	background: #aaaaaa;
 	background: -moz-linear-gradient(top,  #aaaaaa 0%, #8a8a8a 98%, #aaaaaa 99%, #8a8a8a 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#aaaaaa), color-stop(98%,#8a8a8a), color-stop(99%,#aaaaaa), color-stop(100%,#8a8a8a)); /* Chrome,Safari4+ */
