@@ -40,7 +40,9 @@ btn_w_add|Add
 btn_w_list|List
 btn_w_this|This Week
 btn_w_last|Last Week
+btn_w_date|Select Date
 btn_w_date_eg|date format: 20131001
+btn_w_date_else|Other date
 btn_w_query|Query
 btn_w_add_newline|New Line
 btn_w_add_save_all|Save All items

@@ -40,7 +40,9 @@ btn_w_add|写周报
 btn_w_list|查看所有周报
 btn_w_this|本周
 btn_w_last|上周
+btn_w_date|选择日期
 btn_w_date_eg|日期格式：20131001
+btn_w_date_else|其它日期
 btn_w_query|查询
 btn_w_add_newline|添加一行
 btn_w_add_save_all|保存所有条目

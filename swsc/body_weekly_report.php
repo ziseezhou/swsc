@@ -120,17 +120,20 @@ $(document).ready(function(){
         <td class="item_actions"><div class="btn_item w_save"></div></td>\
       </tr>';
 
+
     $('#w_list').plbtn({click:function(){
         $('#report_list').css('display', 'block');
         $('#report_new').css('display', 'none');
         $('#body_toolbar_list').css('display', 'block');
         $('#body_toolbar_add').css('display', 'none');
+        $(window).resize(); // resize glDatePicker
     }});
     $('#w_add').plbtn({click:function(){
         $('#report_list').css('display', 'none');
         $('#report_new').css('display', 'block');
         $('#body_toolbar_list').css('display', 'none');
         $('#body_toolbar_add').css('display', 'block');
+        $(window).resize(); // resize glDatePicker
     }});
     $('#w_this').plbtn({click:function(){
         $('#report_new').css('display', 'none');
@@ -172,8 +175,8 @@ $(document).ready(function(){
 
 
     var datePicker = $('#w_query').glDatePicker({
-        width:500, 
-        height:300,
+        width:330, 
+        height:280,
         dowNames: localDowNames,
         monthNames: localMonthNames,
         onClick: function(el, cell, date, data) {
@@ -185,7 +188,26 @@ $(document).ready(function(){
     $('#w_query').plbtn({click:function(){
         datePicker.show();
     }});
-    $('#w_query').tipsy({delayIn:500, fallback:"<?=_('btn_w_date_eg');?>"});
+    $('#w_query').plbtn('addIcon', 'img/icon/calendar.png');
+    //$('#w_query').tipsy({delayIn:500, fallback:"<?=_('btn_w_date_eg');?>"});
+
+     
+    var datePicker2 = $('#report_new_date_btn').glDatePicker({
+        width:330, 
+        height:280,
+        dowNames: localDowNames,
+        monthNames: localMonthNames,
+        onClick: function(el, cell, date, data) {
+            //el.val(date.toLocaleDateString());
+            alert('2:'+date.toLocaleDateString());
+        }
+    });
+    
+    $('#report_new_date_btn').plbtn({click:function(){
+        datePicker2.show();
+    }});
+    $('#report_new_date_btn').plbtn('addIcon', 'img/icon/calendar.png');
+
 
     // after loading exist items;
     // add a new line;
@@ -195,33 +217,6 @@ $(document).ready(function(){
 });
 </script>
 <style type="text/css">
-.formContainer {
-    float: left;
-}
-#inputDate {
-    padding: 0 2px;
-    height: 22px;
-    width: 75px;
-}
-#w_query {
-    margin-left: -3px;
-}
-
-.body_toolbar input[type=text], input[type=password] {
-    transition: all 0.20s ease-in-out;
-    -webkit-transition: all 0.20s ease-in-out;
-    -moz-transition: all 0.20s ease-in-out;
-    border:1px solid #C3D9FF;
-    border-radius: 3px;
-    outline: none;
-}
-.body_toolbar input[type=text]:focus,input[type=password]:focus{
-    border:1px solid black;
-    box-shadow:0 0 5px rgba(103,166,217,1);
-    -moz-box-shadow:0 0 5px rgba(103,166,217,1);
-    -webkit-box-shadow:0 0 5px rgba(103,166,217,1);
-    -o-box-shadow:0 0 5px rgba(103,166,217,1);
-}
 #report_list, #report_new {
     display: none;
 }
@@ -233,16 +228,31 @@ $(document).ready(function(){
     font-weight: bold;
     border-top: solid 2px black;
     border-bottom: solid 2px black;
+    height: 2.5em;
+}
+.tableDate div {
+    float:left;
+}
+.tableDate #report_new_date {
+    line-height: 2.2em;
+}
+.tableDate #report_new_date_btn {
+    margin-left: 5px;
 }
 #report_new input, textarea {
     width: 100%;
     font-size: 1.2em;
     color: #0000CD;
     border: 0;
+    outline: none;
 }
 #report_new input[type=text]:focus, textarea:focus {
     border: 0;
     outline: none;
+    box-shadow:0 0 0 0;
+    -moz-box-shadow:0 0 0 0;
+    -webkit-box-shadow:0 0 0 0;
+    -o-box-shadow:0 0 0 0;
 }
 #report_new input {
     height: 1.2em;
@@ -279,12 +289,7 @@ $(document).ready(function(){
         <div id="body_toolbar_list">
         <div id="w_this" class="btn_base body_toolbar_item"><?=_('btn_w_this');?></div>
         <div id="w_last" class="btn_base body_toolbar_item"><?=_('btn_w_last');?></div>
-        <div class="formContainer">
-            <form id="target" action="destination.html">
-                <input type="text" id="inputDate" value="" maxlength="8" placeholder="20131001" />
-            </form>
-        </div>
-        <div id="w_query" class="btn_base body_toolbar_item" ><?=_('btn_w_query');?></div>
+        <div id="w_query" class="btn_base body_toolbar_item" ><?=_('btn_w_date');?></div>
         <div class="toolbar_divider"></div>
         <div id="w_add" class="btn_base body_toolbar_item"><?=_('btn_w_add');?></div>
         </div>
@@ -432,7 +437,10 @@ $(document).ready(function(){
           <col width="240" />
           <col width="64" span="3" />
           <tr class="tableDate">
-            <td colspan="9" width="752">时间：2013年8月12日-2013年8月16日-点击改变日期</td>
+            <td colspan="9" width="752">
+                <div id="report_new_date">时间：2013年8月12日-2013年8月16日</div>
+                <div id="report_new_date_btn" class="btn_base body_toolbar_item"><?=_('btn_w_date_else');?></div>
+            </td>
           </tr>
           <tr class="tableHeader">
             <td><?=_('table_header_Name');?></td>
