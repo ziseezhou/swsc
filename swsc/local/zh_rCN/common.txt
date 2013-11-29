@@ -35,7 +35,8 @@ tip_navi_hello|您好！
 tip_navi_work|工作导航
 tip_error|有错误，请联系开发人员。
 cannot_be_null|不能为空。
-has_been_exists|已经存在.
+available|可用
+has_been_exists|已经存在
 
 // body_weekly
 btn_w_add|写周报

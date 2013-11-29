@@ -19,6 +19,10 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/jquery.autosize.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    //var isAccountExist = function(a) {
+    //    ;
+    //};
+
     $('#staff_add').plbtn({click:function(){
         $('#staff_list').css('display', 'none');
         $('#staff_new').css('display', 'block');
@@ -48,21 +52,21 @@ $(document).ready(function(){
             'level': level
         };
 
-        var url = '?c=body_manage_staff_handler&action_handler=add';
+        var url = '?c=body_manage_staff_handler&action=add';
         if (parseInt(_id)>0) {
-            url = '?c=body_manage_staff_handler&action_handler=edit&_id='+_id;
+            url = '?c=body_manage_staff_handler&action=edit&_id='+_id;
         }
 
         $.post(url, dataInput,
         function(data){
             if (data.ret) {
                 // succeed
-                // show the new item 
             } else {
-                //infobox.html("<?=_('login_input_error');?>");
-                //infobox.show();
-                // show error;
-                alert(data.info);
+                if ('account_exist'==data.info) {
+                    alert("<?=_('staff_new_username')._('has_been_exists');?>");
+                } else {
+                    alert('failed');
+                }
             }
         }, "json")
         .fail(function(){
@@ -79,11 +83,29 @@ $(document).ready(function(){
     $('#staff_new_btn_cancel').plbtn('addIcon', 'img/icon/back.png');
 
     $('#staff_new_account input').blur(function(e){
-        if ($(this).val().length > 0) {
-            $(this).parent().children('span')
-            .css('color', 'red')
-            .text("<?=_('staff_new_username')._('has_been_exists');?>");
+        if ($(this).val().length <= 0) {
+            $(this).parent().children('span').text("");
+            return;
         }
+
+        var url = '?c=body_manage_staff_handler&action=check_account';
+        var account = $(this).val();
+
+        $.post(url, {'account':account},
+        function(data){
+            if (data.ret) {
+                $('#staff_new_account').children('span')
+                .css('color', 'red')
+                .text("<?=_('staff_new_username')._('has_been_exists');?>");
+            } else {
+                $('#staff_new_account').children('span')
+                .css('color', 'green')
+                .text("<?=_('staff_new_username').' '._('available');?>");
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
     });
 });
 </script>

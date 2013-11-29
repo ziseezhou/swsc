@@ -44,23 +44,23 @@ $(document).ready(function(){
             'id_transDuration': transDuration
         };
 
-        var url = '?c=body_weekly_report&action_handler=add';
+        var url = '?c=body_weekly_report_handler&action=add';
         if (_id.length > 0) {
-            url = '?c=body_weekly_report&action_handler=edit&_id='+_id;
+            url = '?c=body_weekly_report_handler&action=edit&_id='+_id;
         }
 
         $.post(url, dataInput,
-        function(data){
-            if (data.ret) {
-                // succeed
-                // show the new item 
-            } else {
-                //infobox.html("<?=_('login_input_error');?>");
-                //infobox.show();
-                // show error;
-                alert(data.info);
-            }
-        }, "json")
+            function(data){
+                if (data.ret) {
+                    // succeed
+                    // show the new item 
+                } else {
+                    //infobox.html("<?=_('login_input_error');?>");
+                    //infobox.show();
+                    // show error;
+                    alert(data.info);
+                }
+            }, "json")
         .fail(function(){
             alert('failed');
         });

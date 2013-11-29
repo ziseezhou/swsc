@@ -32,7 +32,7 @@ if ($action == 'get') {
 
     if ($type == 'all') {
         ;
-    } else ($type == 'personal') {
+    } else if($type == 'personal') {
         $sql .= ' and _id_user='.$_SESSION['account_id'];
     } else {
         _exit_json(array('ret'=>false, 'info'=>'Paramenter error: invalid weekly report type'));
@@ -73,12 +73,12 @@ else if ($action == 'add') {
 }
 
 // Edit data
-else if () {
+else if ($action == 'edit') {
     ;
 }
 
 // Delete data
-else if () {
+else if ($action == 'delete') {
     ;
 }
 
