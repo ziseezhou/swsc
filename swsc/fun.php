@@ -137,13 +137,22 @@ function conn() {
     return $conn;
 }
 
-function db_str_filter($s)
-{
+function db_str_filter($s) {
+    // mysql_real_escape_string();
     //$s=str_replace("\\", '&#92;', $s);
     $s = ereg_replace("'", "&#39", $s);
     $s = ereg_replace('"', "&quot;", $s);
 
     return $s;
+}
+
+function rand_password($pw_length = 8){
+    $randpwd = '';
+    for ($i = 0; $i < $pw_length; $i++) {
+        $randpwd .= chr(mt_rand(33, 126));
+    }
+
+    return $randpwd;
 }
 
 ?>

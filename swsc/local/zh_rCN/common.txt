@@ -34,6 +34,8 @@ s_delete|删除
 tip_navi_hello|您好！
 tip_navi_work|工作导航
 tip_error|有错误，请联系开发人员。
+cannot_be_null|不能为空。
+has_been_exists|已经存在.
 
 // body_weekly
 btn_w_add|写周报
@@ -56,9 +58,14 @@ table_header_extraWorktime|加班时长(单位:小时)
 table_header_transDuration|行程时长(单位:小时)
 table_header_actions|操作
 
+// body_staff
 staff_new_username|用户名
 staff_new_realname|真实姓名
 staff_new_status|状态
 staff_new_level|级别
 staff_new_portrait|头像
+staff_status_enabled|启用
+staff_status_disabled|禁用
+staff_level_normal|普通用户
+staff_level_admin|管理人员
 

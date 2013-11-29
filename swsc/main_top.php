@@ -29,6 +29,31 @@ $(document).ready(function(){
         }, "json");
     });
 
+    var iniRow, minRow, o_mf, o_ms, s;
+    o_mf = parent.document.getElementById("rootframe");
+    o_ms = document.getElementById("btn_mini_top");
+    minRow = iniRow = o_mf.rows;
+    var pos;
+    if ((pos = minRow.indexOf(",")) != -1) {
+        minRow = "30" + minRow.substring(pos);
+    }   
+    s = false;
+
+    $("#btn_mini_top").click(function(){
+        s = !s;
+        o_mf.rows = s ? minRow : iniRow;
+        o_ms.innerHTML = s ? "&#9660;" : "&#9650;";
+
+        if (s) {
+            $('#banner').css('display', 'none');
+        } else {
+            $('#banner').css('display', 'block');
+        }
+    });
+
+    // default: collapse banner
+    $("#btn_mini_top").click();
+
 });
 </script>
 <style type="text/css">
@@ -73,7 +98,16 @@ a:hover {
 #toolbar #right{
     display: block;
     float: right;
+    margin-right: 8px;
+}
+#btn_mini_top {
+    color: white;
+    float: right;
+    height: 1.5em;
+    line-height: 1.5em;
     margin-right: 3px;
+    cursor: pointer;
+    cursor: hand; /* stupid IE */
 }
 
 </style>
@@ -82,6 +116,7 @@ a:hover {
 <div id="banner"><img src="img/logo.jpg" /></div>
 <div id="toolbar">
     <div id="left"><?=_('tip_navi_hello');?>&nbsp;<? echo $_SESSION['real_name']; ?></div>
+    <div id="btn_mini_top" class="btn_item">&#9650;</div>
     <div id="right">
         <div id="btn_exit" class="btn_toolbar"><?=_('navi_exit');?></div>
     </div>

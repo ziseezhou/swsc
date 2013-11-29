@@ -11,7 +11,7 @@ PG_ASSERT(_local_file_load('common'));
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>西南证券-北京投行二部OA系统</title>
 </head>
-<frameset frameborder=0 border=0 rows="120,*">
+<frameset name=rootframe id=rootframe frameborder=0 border=0 rows="120,*">
 <frame scrolling=no name=banner noresize="true" marginwidth=0 marginheight=0 src="?c=main_top">
 <frameset name=mainframe id=mainframe frameborder=0 border=0 cols="180,14,*">
     <frame scrolling=no name=menu noresize="true" marginwidth=0 marginheight=0 src="?c=main_left">

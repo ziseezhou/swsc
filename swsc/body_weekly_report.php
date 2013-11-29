@@ -44,9 +44,9 @@ $(document).ready(function(){
             'id_transDuration': transDuration
         };
 
-        var url = '?c=handler_weekly_report&action=add';
+        var url = '?c=body_weekly_report&action_handler=add';
         if (_id.length > 0) {
-            url = '?c=handler_weekly_report&action=edit&_id='+_id;
+            url = '?c=body_weekly_report&action_handler=edit&_id='+_id;
         }
 
         $.post(url, dataInput,
@@ -115,8 +115,8 @@ $(document).ready(function(){
         <td width="64" class="id_proStage"><textarea rows="1"></textarea></td>\
         <td width="64" class="id_workAddress"><textarea rows="1"></textarea></td>\
         <td width="240" class="id_workContent"><textarea rows="1"></textarea></td>\
-        <td width="64" class="id_extraWorktime"><input type="text" name="a" value="0" maxlength="3" /></td>\
-        <td width="64" class="id_transDuration"><input type="text" name="a" value="0" maxlength="3" /></td>\
+        <td width="64" class="id_extraWorktime"><input type="text" value="0" maxlength="3" /></td>\
+        <td width="64" class="id_transDuration"><input type="text" value="0" maxlength="3" /></td>\
         <td class="item_actions"><div class="btn_item w_save"></div></td>\
       </tr>';
 

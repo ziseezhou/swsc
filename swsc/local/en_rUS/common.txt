@@ -33,7 +33,9 @@ s_delete|Delete
 // tips
 tip_navi_hello|Hello!
 tip_navi_work|navigation:
-tip_error|Error, please notify the supporter.
+tip_error|Error, please contact the supporter.
+cannot_be_null|cannot be null.
+has_been_exists|has been exists.
 
 // body_weekly
 btn_w_add|Add
@@ -56,8 +58,13 @@ table_header_extraWorktime|Overtime length (H)
 table_header_transDuration|Transportation Duration (H)
 table_header_actions|Actions
 
+// body_staff
 staff_new_username|User Name
 staff_new_realname|Real Name
 staff_new_status|Status
 staff_new_level|Level
 staff_new_portrait|Portrait
+staff_status_enabled|Enable
+staff_status_disabled|Disabled
+staff_level_normal|Normal User
+staff_level_admin|Administrator
