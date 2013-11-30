@@ -26,6 +26,7 @@ today|今天
 s_new|新建
 s_add|添加
 s_cancel|取消
+s_return_to_list|返回列表
 s_save|保存
 s_edit|编辑
 s_delete|删除

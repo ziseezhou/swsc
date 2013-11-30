@@ -19,16 +19,66 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/jquery.autosize.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    //var isAccountExist = function(a) {
-    //    ;
-    //};
+    var listItemHeader = '\
+        <tr>\
+            <td width="128"><?=_("staff_new_username");?></td>\
+            <td width="128"><?=_("staff_new_realname");?></td>\
+            <td width="128"><?=_("staff_new_status");?></td>\
+            <td width="128"><?=_("staff_new_level");?></td>\
+            <td width="176" class="action"><?=_("table_header_actions");?></td>\
+        </tr>'
+    var listItemContainer = '\
+        <tr>\
+            <td width="128"></td>\
+            <td width="128"></td>\
+            <td width="128"></td>\
+            <td width="128"></td>\
+            <td width="176" class="action">\
+                <div class="btn_item btn_delete"></div>\
+                <div class="btn_item btn_edit"></div>\
+            </td>\
+        </tr>';
+    var loadUserList = function() {
+        $.get('?c=body_manage_staff_handler&action=getlist', function(data){
+            if (data.ret) {
+                $('#staff_list table').empty();
+                $('#staff_list table').append(listItemHeader);
+                $('#staff_list table tr:first').css('font-weight', 'bold');
+                $('#staff_list table tr:first td:last').css('text-align', 'right');
+                $.each(data.dataSet, function(index, value) {
+                    $('#staff_list table').append(listItemContainer);
+                    var newLine = $('#staff_list table tr:last td');
+                    newLine.eq(0).html(value[0]);
+                    newLine.eq(1).html(value[1]);
+                    newLine.eq(2).html(value[2]);
+                    newLine.eq(3).html(value[3]);
 
-    $('#staff_add').plbtn({click:function(){
+                    $("#staff_list table tr:last td .btn_item")
+                    .css('float', 'right')
+                    .plbtn({
+                        cssNormal:'btn_item_normal', 
+                        cssHover:'btn_item_hover', 
+                        cssDisabled:'btn_item_normal', 
+                        cssChecked:'btn_item_normal'});
+                    $("#staff_list table tr:last td .btn_edit").plbtn('addIcon', 'img/icon/edit_item.png');
+                    $("#staff_list table tr:last td .btn_delete").plbtn('addIcon', 'img/icon/delete_item.png');
+                });
+            } else {
+                alert('failed');
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
+    };
+
+    $('#staff_btn_add').plbtn({click:function(){
         $('#staff_list').css('display', 'none');
         $('#staff_new').css('display', 'block');
-        $('.body_toolbar').css('display', 'none');
+        $('#body_toolbar_list').css('display', 'block');
+        $('#body_toolbar_add').css('display', 'none');
     }});
-    $('#staff_add').plbtn('addIcon', 'img/icon/add.png');
+    $('#staff_btn_add').plbtn('addIcon', 'img/icon/add.png');
 
     $('#staff_new_btn_save').plbtn({click:function(){
         var _id = $('#staff_new table').data('account_id');
@@ -75,12 +125,14 @@ $(document).ready(function(){
     }});
     $('#staff_new_btn_save').plbtn('addIcon', 'img/icon/save.png');
 
-    $('#staff_new_btn_cancel').plbtn({click:function(){
+    $('#staff_btn_list').plbtn({click:function(){
         $('#staff_list').css('display', 'block');
         $('#staff_new').css('display', 'none');
-        $('.body_toolbar').css('display', 'block');
+        $('#body_toolbar_list').css('display', 'none');
+        $('#body_toolbar_add').css('display', 'block');
+        loadUserList();
     }});
-    $('#staff_new_btn_cancel').plbtn('addIcon', 'img/icon/back.png');
+    $('#staff_btn_list').plbtn('addIcon', 'img/icon/back.png');
 
     $('#staff_new_account input').blur(function(e){
         if ($(this).val().length <= 0) {
@@ -100,18 +152,34 @@ $(document).ready(function(){
             } else {
                 $('#staff_new_account').children('span')
                 .css('color', 'green')
-                .text("<?=_('staff_new_username').' '._('available');?>");
+                .text("<?=_('staff_new_username')._('available');?>");
             }
         }, "json")
         .fail(function(){
             alert('failed');
         });
     });
+
+
+    // init
+    loadUserList();
 });
 </script>
 <style type="text/css">
+#body_toolbar_list {
+    display: none;
+}
+#staff_list table, td {
+    border: 0;
+}
+#staff_list table tr{
+    border-bottom: solid 1px #AAA;
+}
 #staff_new {
     display: none;
+}
+#staff_new .tableHeader{
+    font-weight: bold;
 }
 #staff_new table {
     border: 0;
@@ -149,21 +217,27 @@ $(document).ready(function(){
 <body>
     <div class="body_navi">&bull;&nbsp;<?=_('navi_manage_staff');?></div>
     <div class="body_toolbar">
-        <div id="staff_add" class="btn_base body_toolbar_item"><?=_('s_add');?></div>
+        <div id="body_toolbar_list">
+            <div id="staff_btn_list" class="btn_base body_toolbar_item"><?=_('s_return_to_list');?></div>
+        </div>
+        <div id="body_toolbar_add">
+            <div id="staff_btn_add" class="btn_base body_toolbar_item"><?=_('s_add');?></div>
+        </div>
     </div>
 
     <div class="workspace">
 
         <!-- Department weekly report list -->
         <div id="staff_list">
-            list
+            <table border="0" cellpadding="0" cellspacing="0">
+            </table>
         </div>
 
         <!-- Persenal weekly report: edit & add -->
         <div id="staff_new">
             <table border="0" cellpadding="0" cellspacing="0">
                 <col width="64" />
-                <col width="360" />
+                <col width="624" />
                 <tr>
                     <td width=64 class="item_name"><?=_('staff_new_username');?>: </td>
                     <td id="staff_new_account"><input type="text" maxlength="20" /><span></span></td>
@@ -175,8 +249,8 @@ $(document).ready(function(){
                 <tr>
                     <td width=64 class="item_name"><?=_('staff_new_status');?>: </td>
                     <td id="staff_new_enable">
-                        <input type="radio" name="enable_status" value="0" checked>&nbsp;<?=_('staff_status_disabled');?>
-                        <input type="radio" name="enable_status" value="1">&nbsp;<?=_('staff_status_enabled');?><br>
+                        <input type="radio" name="enable_status" value="0">&nbsp;<?=_('staff_status_disabled');?>
+                        <input type="radio" name="enable_status" value="1" checked>&nbsp;<?=_('staff_status_enabled');?><br>
                     </td>
                 </tr>
                 <tr>
@@ -196,7 +270,6 @@ $(document).ready(function(){
             </table>
             <div id="staff_new_toolbar">
             <div id="staff_new_btn_save" class="btn_base body_toolbar_item"><?=_('s_save');?></div>
-            <div id="staff_new_btn_cancel" class="btn_base body_toolbar_item float_right"><?=_('s_cancel');?></div>
             </div>
         </div>
     </div>

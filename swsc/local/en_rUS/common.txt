@@ -26,6 +26,7 @@ today|Today
 s_new|New
 s_add|Add
 s_cancel|Cancel
+s_return_to_list|Return to list
 s_save|Save
 s_edit|Edit
 s_delete|Delete
@@ -34,9 +35,9 @@ s_delete|Delete
 tip_navi_hello|Hello!
 tip_navi_work|navigation:
 tip_error|Error, please contact the supporter.
-cannot_be_null|cannot be null.
-available| available
-has_been_exists|has been exists
+cannot_be_null|&nbsp;cannot be null.
+available|&nbsp;available
+has_been_exists|&nbsp;has been exists
 
 // body_weekly
 btn_w_add|Add
