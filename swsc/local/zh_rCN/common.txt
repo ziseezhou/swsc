@@ -30,6 +30,7 @@ s_return_to_list|返回列表
 s_save|保存
 s_edit|编辑
 s_delete|删除
+S_delete_confirm|确定要永久删除吗？
 
 // tips
 tip_navi_hello|您好！
@@ -62,7 +63,7 @@ table_header_actions|操作
 
 // body_staff
 staff_new_username|用户名
-staff_new_realname|真实姓名
+staff_new_realname|姓名
 staff_new_status|状态
 staff_new_level|级别
 staff_new_portrait|头像
@@ -70,4 +71,7 @@ staff_status_enabled|启用
 staff_status_disabled|禁用
 staff_level_normal|普通用户
 staff_level_admin|管理人员
+staff_key_reset|重置密码
+staff_ret_succeed|用户添加成功
+staff_ret_failed|用户添加失败
 

@@ -28,7 +28,7 @@ if ($action == 'getlist') {
     $conn = conn();
     PG_ASSERT2($conn, 'db conn error!', true);
 
-    $sql = 'select account,real_name,enable,level from user';
+    $sql = 'select account,real_name,enable,level,_id from user';
     $rs = @mysql_query($sql, $conn);
     if ($rs == TRUE) {
         $retArry = array();
@@ -93,5 +93,19 @@ else if ($action == 'check_account') {
     _exit_json(array('ret'=>false));
 }
 
+else if ($action == 'delete') {
+    $sql = 'delete from user where _id='.$_GET['_id'];
 
+    $conn = conn();
+    PG_ASSERT2($conn, 'db conn error!', true);
+    
+    $rs = @mysql_query($sql, $conn);
+    if ($rs == TRUE) {
+        _exit_json(array('ret'=>true));
+    }
+
+    _exit_json(array('ret'=>false));
+}
+
+ _exit_json(array('ret'=>false, 'info'=>'action='.$action));
 ?>

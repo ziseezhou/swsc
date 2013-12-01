@@ -36,8 +36,29 @@ $(document).ready(function(){
             <td width="176" class="action">\
                 <div class="btn_item btn_delete"></div>\
                 <div class="btn_item btn_edit"></div>\
+                <div class="btn_item btn_keyreset"></div>\
             </td>\
         </tr>';
+    var actionEdit = function(_id) {alert(_id);};
+    var actionDelete = function(_id) {
+        if (!window.confirm("<?=_('S_delete_confirm');?>")) {
+            return;
+        }
+
+        var url = '?c=body_manage_staff_handler&action=delete&_id='+_id;
+        $.get(url, function(data){
+            if (data.ret) {
+                loadUserList();
+            } else {
+                alert('failed');
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
+    };
+    var actionResetKey = function(_id) {alert(_id);};
+
     var loadUserList = function() {
         $.get('?c=body_manage_staff_handler&action=getlist', function(data){
             if (data.ret) {
@@ -47,11 +68,16 @@ $(document).ready(function(){
                 $('#staff_list table tr:first td:last').css('text-align', 'right');
                 $.each(data.dataSet, function(index, value) {
                     $('#staff_list table').append(listItemContainer);
+                    var _id = value[4];
                     var newLine = $('#staff_list table tr:last td');
                     newLine.eq(0).html(value[0]);
                     newLine.eq(1).html(value[1]);
-                    newLine.eq(2).html(value[2]);
-                    newLine.eq(3).html(value[3]);
+                    newLine.eq(2).html(value[2]=='0' ? "<?=_('staff_status_disabled');?>" : "<?=_('staff_status_enabled');?>");
+                    newLine.eq(3).html(value[3]=='10'? "<?=_('staff_level_admin');?>" : "<?=_('staff_level_normal');?>");
+
+                    if (value[3]=='10') {
+                        $('#staff_list table tr:last').css('background-color', '#FFE6E6');
+                    }
 
                     $("#staff_list table tr:last td .btn_item")
                     .css('float', 'right')
@@ -60,8 +86,16 @@ $(document).ready(function(){
                         cssHover:'btn_item_hover', 
                         cssDisabled:'btn_item_normal', 
                         cssChecked:'btn_item_normal'});
-                    $("#staff_list table tr:last td .btn_edit").plbtn('addIcon', 'img/icon/edit_item.png');
-                    $("#staff_list table tr:last td .btn_delete").plbtn('addIcon', 'img/icon/delete_item.png');
+                    $("#staff_list table tr:last td .btn_edit")
+                        .plbtn('addIcon', 'img/icon/edit_item.png')
+                        .click(function() {actionEdit(_id);});
+                    $("#staff_list table tr:last td .btn_delete")
+                        .plbtn('addIcon', 'img/icon/delete_item.png')
+                        .click(function() {actionDelete(_id);});
+                    $("#staff_list table tr:last td .btn_keyreset")
+                        .plbtn('addIcon', 'img/icon/key_reset.png')
+                        .tipsy({delayIn:500, fallback:"<?=_('staff_key_reset');?>"})
+                        .click(function() {actionResetKey(_id);});
                 });
             } else {
                 alert('failed');
@@ -84,12 +118,12 @@ $(document).ready(function(){
         var _id = $('#staff_new table').data('account_id');
 
         var account   = $('#staff_new_account').children('input').val();
-        var real_name = $('#staff_new_realname').children('input').val();
+        var realName = $('#staff_new_realname').children('input').val();
         var enable    = $('#staff_new_enable').children('input').val();
         var level     = $('#staff_new_level').children('select').val();
         //var portrait  = $('#staff_new_portrait').children('input').val();
 
-        if (account.length<=0 || real_name.length<=0) {
+        if (account.length<=0 || realName.length<=0) {
             alert("<?=_('staff_new_username');?>"+', '+
                 "<?=_('staff_new_realname');?><?=_('cannot_be_null');?>");
             return;
@@ -97,7 +131,7 @@ $(document).ready(function(){
 
         var dataInput = {
             'account': account,
-            'real_name': real_name,
+            'real_name': realName,
             'enable': enable,
             'level': level
         };
@@ -111,11 +145,24 @@ $(document).ready(function(){
         function(data){
             if (data.ret) {
                 // succeed
+                $('#staff_new_ret')
+                    .text(account+' '+"<?=_('staff_ret_succeed');?>")
+                    .css({'display':'block', 'color':'green'});
+
+                // 
+                //accountObj.val('');
+                //realNameObj.val('');
+                //enableObj.get(1).checked = true;
+                //levelObj.val(1);
             } else {
                 if ('account_exist'==data.info) {
-                    alert("<?=_('staff_new_username')._('has_been_exists');?>");
+                    $('#staff_new_ret')
+                    .text(account+' '+<?=_('staff_ret_failed');?>+' '+"<?=_('staff_new_username')._('has_been_exists');?>")
+                    .css({'display':'block', 'color':'red'});
                 } else {
-                    alert('failed');
+                    $('#staff_new_ret')
+                    .text(account+' '+"<?=_('staff_ret_failed');?>")
+                    .css({'display':'block', 'color':'red'});
                 }
             }
         }, "json")
@@ -206,6 +253,15 @@ $(document).ready(function(){
     text-align: right;
     background-color: #EFEFEF;
 }
+#staff_new_ret {
+    margin-top: 5px;
+    display:none;
+    padding: 3px;
+    text-align: left;
+    color: red;
+    background-color:#FFFFDD;
+    border: solid 1px #E3E197;
+}
 #staff_new_toolbar {
     margin-top: 8px;
 }
@@ -268,6 +324,7 @@ $(document).ready(function(){
                     <td id="staff_new_portrait"><input type="file" name="portrait" /> </td>
                 </tr>-->
             </table>
+            <div id="staff_new_ret"></div>
             <div id="staff_new_toolbar">
             <div id="staff_new_btn_save" class="btn_base body_toolbar_item"><?=_('s_save');?></div>
             </div>
