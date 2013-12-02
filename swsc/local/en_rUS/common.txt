@@ -25,12 +25,15 @@ today|Today
 // common strings
 s_new|New
 s_add|Add
+s_settings|Settings
 s_cancel|Cancel
 s_return_to_list|Return to list
 s_save|Save
 s_edit|Edit
 s_delete|Delete
-S_delete_confirm|Are you sure to delete permanently?
+s_delete_confirm|Are you sure to delete permanently?
+s_email|Email
+s_email_err| Email error!
 
 // tips
 tip_navi_hello|Hello!
@@ -72,5 +75,6 @@ staff_status_disabled|Disabled
 staff_level_normal|Normal User
 staff_level_admin|Administrator
 staff_key_reset|Reset key
-staff_ret_succeed|add succeessfully.
-staff_ret_failed|failed
+staff_ret_succeed|Save succeessfully.
+staff_ret_failed|Failed to save.
+staff_err_username_exist|Account has been exists!

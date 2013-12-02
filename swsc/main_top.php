@@ -17,16 +17,31 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/plbtn.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#btn_exit").plbtn({cssNormal:'btn_toolbar_normal', cssHover:'btn_toolbar_hover', cssDisabled:'btn_toolbar_normal', cssChecked:'btn_toolbar_checked'});
-    $("#btn_exit").plbtn('normal');
-    $("#btn_exit").click(function(){
-        $.get("?c=exit", function(data){
-            if (data.ret) {
-                self.parent.location.reload();
-            } else {
-                alert('<?=_("tip_error");?>');
-            }
-        }, "json");
+    var cssToolbar = {
+        cssNormal:'btn_toolbar_normal', 
+        cssHover:'btn_toolbar_hover', 
+        cssDisabled:'btn_toolbar_normal', 
+        cssChecked:'btn_toolbar_checked'
+    };
+
+    $("#btn_exit")
+        .plbtn(cssToolbar)
+        .plbtn('normal')
+        .click(function(){
+            $.get("?c=exit", function(data){
+                if (data.ret) {
+                    self.parent.location.reload();
+                } else {
+                    alert('<?=_("tip_error");?>');
+                }
+            }, "json");
+    });
+
+    $("#btn_settings")
+        .plbtn(cssToolbar)
+        .plbtn('normal')
+        .click(function(){
+            alert('settings');
     });
 
     var iniRow, minRow, o_mf, o_ms, s;
@@ -110,6 +125,12 @@ a:hover {
     cursor: hand; /* stupid IE */
 }
 
+#btn_exit {
+    border: solid 2px white;
+    border-radius:5px;
+    -moz-border-radius:5px; /* Old Firefox */
+}
+
 </style>
 </head>
 <body>
@@ -118,6 +139,7 @@ a:hover {
     <div id="left"><?=_('tip_navi_hello');?>&nbsp;<? echo $_SESSION['real_name']; ?></div>
     <div id="btn_mini_top" class="btn_item">&#9650;</div>
     <div id="right">
+        <div id="btn_settings" class="btn_toolbar"><?=_('s_settings');?></div>
         <div id="btn_exit" class="btn_toolbar"><?=_('navi_exit');?></div>
     </div>
 </div>

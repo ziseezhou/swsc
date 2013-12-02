@@ -46,21 +46,18 @@
     display: block;
     float: left;
     margin: 3px 5px 0 0;
+    padding-top: 2px;
     text-align: center;
     font-weight: bold;
     width: 56px;
-    border: solid 2px white;
-    border-radius:5px;
-    -moz-border-radius:5px; /* Old Firefox */
+    border: 0;
 }
 
 .btn_toolbar_normal {
-    border: solid 2px white;
     background: transparent;
 }
 .btn_toolbar_hover {
     cursor: default;
-    border: solid 2px white;
     background: #7F2711;
 }
 .btn_toolbar_checked {
@@ -91,5 +88,5 @@
 }
 .btn_item_hover {
     cursor: default;
-    background: #EFEFEF;
+    background: #DDD;
 }

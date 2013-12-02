@@ -13,6 +13,7 @@ PG_ASSERT(_local_file_load('common'));
 <link href='css/base.css' rel='stylesheet' type='text/css' />
 <link href='css/btn.css' rel='stylesheet' type='text/css' />
 <link href='css/tipsy.css' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="js/plbtn.js"></script>
@@ -21,27 +22,46 @@ PG_ASSERT(_local_file_load('common'));
 $(document).ready(function(){
     var listItemHeader = '\
         <tr>\
-            <td width="128"><?=_("staff_new_username");?></td>\
-            <td width="128"><?=_("staff_new_realname");?></td>\
-            <td width="128"><?=_("staff_new_status");?></td>\
-            <td width="128"><?=_("staff_new_level");?></td>\
+            <td width="64"><?=_("staff_new_username");?></td>\
+            <td width="64"><?=_("staff_new_realname");?></td>\
+            <td width="256"><?=_("s_email");?></td>\
+            <td width="64"><?=_("staff_new_status");?></td>\
+            <td width="64"><?=_("staff_new_level");?></td>\
             <td width="176" class="action"><?=_("table_header_actions");?></td>\
         </tr>'
     var listItemContainer = '\
         <tr>\
-            <td width="128"></td>\
-            <td width="128"></td>\
-            <td width="128"></td>\
-            <td width="128"></td>\
+            <td width="64"></td>\
+            <td width="64"></td>\
+            <td width="256"></td>\
+            <td width="64"></td>\
+            <td width="64"></td>\
             <td width="176" class="action">\
                 <div class="btn_item btn_delete"></div>\
                 <div class="btn_item btn_edit"></div>\
                 <div class="btn_item btn_keyreset"></div>\
             </td>\
         </tr>';
-    var actionEdit = function(_id) {alert(_id);};
+
+    var actionEdit = function(_id, account, realName, email, enable, level) {
+        $('#staff_new_account input').val(account).attr('disabled', true);
+        $('#staff_new_realname input').val(realName);
+        $('#staff_new_email input').val(email);
+        //$('#staff_new_enable').children('input').val(enable);
+        $("#staff_new_enable input:radio").filter('[value='+enable+']').prop('checked', true);
+        $('#staff_new_level select').val(level);
+
+        $('#staff_new_btn_save').data('_id', _id);
+
+        // show
+        $('#staff_list').css('display', 'none');
+        $('#staff_new').css('display', 'block');
+        $('#body_toolbar_list').css('display', 'block');
+        $('#body_toolbar_add').css('display', 'none');
+    };
+
     var actionDelete = function(_id) {
-        if (!window.confirm("<?=_('S_delete_confirm');?>")) {
+        if (!window.confirm("<?=_('s_delete_confirm');?>")) {
             return;
         }
 
@@ -57,6 +77,7 @@ $(document).ready(function(){
             alert('failed');
         });
     };
+
     var actionResetKey = function(_id) {alert(_id);};
 
     var loadUserList = function() {
@@ -68,14 +89,17 @@ $(document).ready(function(){
                 $('#staff_list table tr:first td:last').css('text-align', 'right');
                 $.each(data.dataSet, function(index, value) {
                     $('#staff_list table').append(listItemContainer);
-                    var _id = value[4];
+                    var _id = value[5];
                     var newLine = $('#staff_list table tr:last td');
                     newLine.eq(0).html(value[0]);
                     newLine.eq(1).html(value[1]);
-                    newLine.eq(2).html(value[2]=='0' ? "<?=_('staff_status_disabled');?>" : "<?=_('staff_status_enabled');?>");
-                    newLine.eq(3).html(value[3]=='10'? "<?=_('staff_level_admin');?>" : "<?=_('staff_level_normal');?>");
+                    newLine.eq(2).html(value[2]);
+                    newLine.eq(3).html(value[3]=='0' ? "<?=_('staff_status_disabled');?>" : "<?=_('staff_status_enabled');?>");
+                    newLine.eq(4).html(value[4]=='10'? "<?=_('staff_level_admin');?>" : "<?=_('staff_level_normal');?>");
 
-                    if (value[3]=='10') {
+                    if (value[3]=='0') {
+                        $('#staff_list table tr:last').css('background-color', '#EEE');
+                    }else if (value[4]=='10') {
                         $('#staff_list table tr:last').css('background-color', '#FFE6E6');
                     }
 
@@ -88,7 +112,9 @@ $(document).ready(function(){
                         cssChecked:'btn_item_normal'});
                     $("#staff_list table tr:last td .btn_edit")
                         .plbtn('addIcon', 'img/icon/edit_item.png')
-                        .click(function() {actionEdit(_id);});
+                        .click(function() {
+                            actionEdit(_id,value[0],value[1],value[2],value[3],value[4]);
+                        });
                     $("#staff_list table tr:last td .btn_delete")
                         .plbtn('addIcon', 'img/icon/delete_item.png')
                         .click(function() {actionDelete(_id);});
@@ -115,12 +141,13 @@ $(document).ready(function(){
     $('#staff_btn_add').plbtn('addIcon', 'img/icon/add.png');
 
     $('#staff_new_btn_save').plbtn({click:function(){
-        var _id = $('#staff_new table').data('account_id');
+        var _id = $('#staff_new_btn_save').data('_id');
 
-        var account   = $('#staff_new_account').children('input').val();
-        var realName = $('#staff_new_realname').children('input').val();
-        var enable    = $('#staff_new_enable').children('input').val();
-        var level     = $('#staff_new_level').children('select').val();
+        var account   = $('#staff_new_account input').val();
+        var realName  = $('#staff_new_realname input').val();
+        var email     = $('#staff_new_email input').val();
+        var enable    = $("#staff_new_enable input:checked").val();
+        var level     = $('#staff_new_level select').val();
         //var portrait  = $('#staff_new_portrait').children('input').val();
 
         if (account.length<=0 || realName.length<=0) {
@@ -129,9 +156,15 @@ $(document).ready(function(){
             return;
         }
 
+        if (email.length<=0 || !validateEmail(email)) {
+            alert("<?=_('s_email_err');?>");
+            return;
+        }
+
         var dataInput = {
             'account': account,
             'real_name': realName,
+            'email': email,
             'enable': enable,
             'level': level
         };
@@ -146,7 +179,7 @@ $(document).ready(function(){
             if (data.ret) {
                 // succeed
                 $('#staff_new_ret')
-                    .text(account+' '+"<?=_('staff_ret_succeed');?>")
+                    .text(account+", <?=_('staff_save_succeed');?>")
                     .css({'display':'block', 'color':'green'});
 
                 // 
@@ -155,15 +188,16 @@ $(document).ready(function(){
                 //enableObj.get(1).checked = true;
                 //levelObj.val(1);
             } else {
+                var infoTip = "<?=_('staff_save_failed');?>";
                 if ('account_exist'==data.info) {
-                    $('#staff_new_ret')
-                    .text(account+' '+<?=_('staff_ret_failed');?>+' '+"<?=_('staff_new_username')._('has_been_exists');?>")
-                    .css({'display':'block', 'color':'red'});
-                } else {
-                    $('#staff_new_ret')
-                    .text(account+' '+"<?=_('staff_ret_failed');?>")
-                    .css({'display':'block', 'color':'red'});
+                    infoTip = "<?=_('staff_save_failed');?>"+','+"<?=_('staff_new_username')._('has_been_exists');?>"
+                } else if (data.info != null){
+                    infoTip = data.info;
                 }
+
+                $('#staff_new_ret')
+                    .text(infoTip)
+                    .css({'display':'block', 'color':'red'});
             }
         }, "json")
         .fail(function(){
@@ -301,6 +335,10 @@ $(document).ready(function(){
                 <tr>
                     <td width=64 class="item_name"><?=_('staff_new_realname');?>: </td>
                     <td id="staff_new_realname"><input type="text" maxlength="20" /></td>
+                </tr>
+                <tr>
+                    <td width=64 class="item_name"><?=_('s_email');?>: </td>
+                    <td id="staff_new_email"><input type="text" maxlength="20" /></td>
                 </tr>
                 <tr>
                     <td width=64 class="item_name"><?=_('staff_new_status');?>: </td>

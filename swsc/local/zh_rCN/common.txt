@@ -25,12 +25,15 @@ today|今天
 // common
 s_new|新建
 s_add|添加
+s_settings|设置
 s_cancel|取消
 s_return_to_list|返回列表
 s_save|保存
 s_edit|编辑
 s_delete|删除
-S_delete_confirm|确定要永久删除吗？
+s_delete_confirm|确定要永久删除吗？
+s_email|Email
+s_email_err| Email错误!
 
 // tips
 tip_navi_hello|您好！
@@ -72,6 +75,7 @@ staff_status_disabled|禁用
 staff_level_normal|普通用户
 staff_level_admin|管理人员
 staff_key_reset|重置密码
-staff_ret_succeed|用户添加成功
-staff_ret_failed|用户添加失败
+staff_save_succeed|保存成功
+staff_save_failed|保存失败
+staff_err_username_exist|用户名已存在！
 
