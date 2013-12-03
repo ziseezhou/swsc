@@ -45,11 +45,13 @@
 .btn_toolbar{
     display: block;
     float: left;
-    margin: 3px 5px 0 0;
-    padding-top: 2px;
-    text-align: center;
+    margin-right: 5px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    line-height: 1.1em;
+    text-align: left;
     font-weight: bold;
-    width: 56px;
+    width: 66px;
     border: 0;
 }
 

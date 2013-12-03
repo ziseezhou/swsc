@@ -110,19 +110,24 @@ else if ($action == 'edit') {
     $portrait  = $_POST['portrait'];
 
     // check account firstly
-    $sql = "select count(*) from user where account='$account' and _id=$_id";
+    $sql = "select account from user where _id=$_id";
     $conn = conn();
     PG_ASSERT2($conn, 'db conn error!', true);
     
     //_exit_json(array('ret'=>false, 'info'=>$sql));
     $rs = @mysql_query($sql, $conn);
-    if (!$rs) {
-        _exit_json(array('ret'=>false, 'info'=>"account error, _id=$_id"));
+    if($row = mysql_fetch_array($rs, MYSQL_NUM)) {
+        if ($row[0] != $account && is_account_exist($account)) {
+            _exit_json(array('ret'=>false, 'info'=>'account_exist'));
+        }
+    } else {
+        _exit_json(array('ret'=>false, 'info'=>"fetch account error, _id=$_id"));
     }
 
     // update data
     // (real_name, email, enable, level, portrait);
     $sql  = ' update user set ';
+    $sql .= " account = '$account',";
     $sql .= " real_name = '$real_name',";
     $sql .= " email = '$email',";
     $sql .= " enable = '$enable',";

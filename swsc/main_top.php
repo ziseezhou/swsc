@@ -26,7 +26,7 @@ $(document).ready(function(){
 
     $("#btn_exit")
         .plbtn(cssToolbar)
-        .plbtn('normal')
+        .plbtn('addIcon', 'img/icon/exit.png')
         .click(function(){
             $.get("?c=exit", function(data){
                 if (data.ret) {
@@ -35,24 +35,24 @@ $(document).ready(function(){
                     alert('<?=_("tip_error");?>');
                 }
             }, "json");
-    });
+        });
 
     $("#btn_settings")
         .plbtn(cssToolbar)
-        .plbtn('normal')
+        .plbtn('addIcon', 'img/icon/settings.png')
         .click(function(){
             alert('settings');
-    });
+        });
 
-    var iniRow, minRow, o_mf, o_ms, s;
-    o_mf = parent.document.getElementById("rootframe");
-    o_ms = document.getElementById("btn_mini_top");
-    minRow = iniRow = o_mf.rows;
+    var o_mf = parent.document.getElementById("rootframe");
+    var o_ms = document.getElementById("btn_mini_top");
+    var minRow = o_mf.rows;
+    var iniRow = o_mf.rows;
     var pos;
     if ((pos = minRow.indexOf(",")) != -1) {
         minRow = "30" + minRow.substring(pos);
     }   
-    s = false;
+    var s = false;
 
     $("#btn_mini_top").click(function(){
         s = !s;
@@ -124,13 +124,6 @@ a:hover {
     cursor: pointer;
     cursor: hand; /* stupid IE */
 }
-
-#btn_exit {
-    border: solid 2px white;
-    border-radius:5px;
-    -moz-border-radius:5px; /* Old Firefox */
-}
-
 </style>
 </head>
 <body>

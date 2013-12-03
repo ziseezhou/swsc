@@ -20,6 +20,10 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/jquery.autosize.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+
+    // ===================================================================
+    // Constants
+
     var listItemHeader = '\
         <tr>\
             <td width="64"><?=_("staff_new_username");?></td>\
@@ -28,7 +32,8 @@ $(document).ready(function(){
             <td width="64"><?=_("staff_new_status");?></td>\
             <td width="64"><?=_("staff_new_level");?></td>\
             <td width="176" class="action"><?=_("table_header_actions");?></td>\
-        </tr>'
+        </tr>';
+
     var listItemContainer = '\
         <tr>\
             <td width="64"></td>\
@@ -43,24 +48,95 @@ $(document).ready(function(){
             </td>\
         </tr>';
 
-    var actionEdit = function(_id, account, realName, email, enable, level) {
-        $('#staff_new_account input').val(account).attr('disabled', true);
+    // ===================================================================
+    // Functions
+
+    var actionEdit = 
+    function(_id, account, realName, email, enable, level) {
+        $('#staff_new_account input').val(account);
         $('#staff_new_realname input').val(realName);
         $('#staff_new_email input').val(email);
-        //$('#staff_new_enable').children('input').val(enable);
         $("#staff_new_enable input:radio").filter('[value='+enable+']').prop('checked', true);
         $('#staff_new_level select').val(level);
-
-        $('#staff_new_btn_save').data('_id', _id);
+        $('#staff_new_btn_save').data('_id', _id).data('account', account);
 
         // show
+        $('#staff_new_ret').css('display', 'none');
         $('#staff_list').css('display', 'none');
         $('#staff_new').css('display', 'block');
         $('#body_toolbar_list').css('display', 'block');
         $('#body_toolbar_add').css('display', 'none');
     };
 
-    var actionDelete = function(_id) {
+
+    var actionSave =
+    function() {
+        $('#staff_new_ret').css('display', 'none');
+
+        var _id = $('#staff_new_btn_save').data('_id');
+
+        var account   = $('#staff_new_account input').val();
+        var realName  = $('#staff_new_realname input').val();
+        var email     = $('#staff_new_email input').val();
+        var enable    = $("#staff_new_enable input:checked").val();
+        var level     = $('#staff_new_level select').val();
+        //var portrait  = $('#staff_new_portrait').children('input').val();
+
+        if (account.length<=0 || realName.length<=0) {
+            alert("<?=_('staff_new_username');?>"+', '+
+                "<?=_('staff_new_realname');?><?=_('cannot_be_null');?>");
+            return;
+        }
+
+        if (email.length<=0 || !validateEmail(email)) {
+            alert("<?=_('s_email_err');?>");
+            return;
+        }
+
+        var dataInput = {
+            'account': account,
+            'real_name': realName,
+            'email': email,
+            'enable': enable,
+            'level': level
+        };
+
+        var url = '?c=body_manage_staff_handler&action=add';
+        if (parseInt(_id)>0) {
+            url = '?c=body_manage_staff_handler&action=edit&_id='+_id;
+        }
+
+        $.post(url, dataInput,
+        function(data){
+            if (data.ret) {
+                // succeed
+                $('#staff_new_ret')
+                    .text(account+", <?=_('staff_save_succeed');?>")
+                    .css({'display':'block', 'color':'green'});
+
+                // need clear form?
+                removeEditForm();
+            } else {
+                var infoTip = "<?=_('staff_save_failed');?>";
+                if ('account_exist'==data.info) {
+                    infoTip = "<?=_('staff_save_failed');?>"+','+"<?=_('staff_new_username')._('has_been_exists');?>"
+                } else if (data.info != null){
+                    infoTip = data.info;
+                }
+
+                $('#staff_new_ret')
+                    .text(infoTip)
+                    .css({'display':'block', 'color':'red'});
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
+    };
+
+
+    var actionDelete = 
+    function(_id) {
         if (!window.confirm("<?=_('s_delete_confirm');?>")) {
             return;
         }
@@ -78,9 +154,15 @@ $(document).ready(function(){
         });
     };
 
-    var actionResetKey = function(_id) {alert(_id);};
 
-    var loadUserList = function() {
+    var actionResetKey = 
+    function(_id) {
+        alert(_id);
+    };
+
+
+    var loadUserList = 
+    function() {
         $.get('?c=body_manage_staff_handler&action=getlist', function(data){
             if (data.ret) {
                 $('#staff_list table').empty();
@@ -132,113 +214,77 @@ $(document).ready(function(){
         });
     };
 
-    $('#staff_btn_add').plbtn({click:function(){
-        $('#staff_list').css('display', 'none');
-        $('#staff_new').css('display', 'block');
-        $('#body_toolbar_list').css('display', 'block');
-        $('#body_toolbar_add').css('display', 'none');
-    }});
-    $('#staff_btn_add').plbtn('addIcon', 'img/icon/add.png');
 
-    $('#staff_new_btn_save').plbtn({click:function(){
-        var _id = $('#staff_new_btn_save').data('_id');
+    var removeEditForm =
+    function() {
+        $('#staff_new_account input').val('');
+        $('#staff_new_realname input').val('');
+        $('#staff_new_email input').val('');
+        $("#staff_new_enable input:radio").filter('[value=1]').prop('checked', true);
+        $('#staff_new_level select').val(1);
+        $('#staff_new_btn_save').removeData();
+        $('#staff_new_account span').text('');
+    };
 
-        var account   = $('#staff_new_account input').val();
-        var realName  = $('#staff_new_realname input').val();
-        var email     = $('#staff_new_email input').val();
-        var enable    = $("#staff_new_enable input:checked").val();
-        var level     = $('#staff_new_level select').val();
-        //var portrait  = $('#staff_new_portrait').children('input').val();
+    var accountInputOnBlur =
+    function(e) {
+        var domSpan = $('#staff_new_account span');
+        var accounVal = $('#staff_new_account input').val();
 
-        if (account.length<=0 || realName.length<=0) {
-            alert("<?=_('staff_new_username');?>"+', '+
-                "<?=_('staff_new_realname');?><?=_('cannot_be_null');?>");
-            return;
-        }
-
-        if (email.length<=0 || !validateEmail(email)) {
-            alert("<?=_('s_email_err');?>");
-            return;
-        }
-
-        var dataInput = {
-            'account': account,
-            'real_name': realName,
-            'email': email,
-            'enable': enable,
-            'level': level
-        };
-
-        var url = '?c=body_manage_staff_handler&action=add';
-        if (parseInt(_id)>0) {
-            url = '?c=body_manage_staff_handler&action=edit&_id='+_id;
-        }
-
-        $.post(url, dataInput,
-        function(data){
-            if (data.ret) {
-                // succeed
-                $('#staff_new_ret')
-                    .text(account+", <?=_('staff_save_succeed');?>")
-                    .css({'display':'block', 'color':'green'});
-
-                // 
-                //accountObj.val('');
-                //realNameObj.val('');
-                //enableObj.get(1).checked = true;
-                //levelObj.val(1);
-            } else {
-                var infoTip = "<?=_('staff_save_failed');?>";
-                if ('account_exist'==data.info) {
-                    infoTip = "<?=_('staff_save_failed');?>"+','+"<?=_('staff_new_username')._('has_been_exists');?>"
-                } else if (data.info != null){
-                    infoTip = data.info;
-                }
-
-                $('#staff_new_ret')
-                    .text(infoTip)
-                    .css({'display':'block', 'color':'red'});
-            }
-        }, "json")
-        .fail(function(){
-            alert('failed');
-        });
-    }});
-    $('#staff_new_btn_save').plbtn('addIcon', 'img/icon/save.png');
-
-    $('#staff_btn_list').plbtn({click:function(){
-        $('#staff_list').css('display', 'block');
-        $('#staff_new').css('display', 'none');
-        $('#body_toolbar_list').css('display', 'none');
-        $('#body_toolbar_add').css('display', 'block');
-        loadUserList();
-    }});
-    $('#staff_btn_list').plbtn('addIcon', 'img/icon/back.png');
-
-    $('#staff_new_account input').blur(function(e){
-        if ($(this).val().length <= 0) {
-            $(this).parent().children('span').text("");
+        if (accounVal.length <= 0 || 
+            accounVal == $('#staff_new_btn_save').data('account')) {
+            domSpan.text("");
             return;
         }
 
         var url = '?c=body_manage_staff_handler&action=check_account';
-        var account = $(this).val();
 
-        $.post(url, {'account':account},
+        $.post(url, {'account':accounVal},
         function(data){
             if (data.ret) {
-                $('#staff_new_account').children('span')
-                .css('color', 'red')
+                domSpan.css('color', 'red')
                 .text("<?=_('staff_new_username')._('has_been_exists');?>");
             } else {
-                $('#staff_new_account').children('span')
-                .css('color', 'green')
+                domSpan.css('color', 'green')
                 .text("<?=_('staff_new_username')._('available');?>");
             }
         }, "json")
         .fail(function(){
             alert('failed');
         });
+    };
+
+    // ===================================================================
+    // Main
+
+    // Btn add
+    $('#staff_btn_add').plbtn({click:function(){
+        $('#staff_list').css('display', 'none');
+        $('#staff_new').css('display', 'block');
+        $('#body_toolbar_list').css('display', 'block');
+        $('#body_toolbar_add').css('display', 'none');
+        $('#staff_new_ret').css('display', 'none');
+
+        removeEditForm();
+    }}).plbtn('addIcon', 'img/icon/add.png');
+
+    // Btn save
+    $('#staff_new_btn_save').plbtn({click:function(){
+        actionSave();
+    }}).plbtn('addIcon', 'img/icon/save.png');
+
+    // Btn list
+    $('#staff_btn_list').plbtn({click:function(){
+        $('#staff_list').css('display', 'block');
+        $('#staff_new').css('display', 'none');
+        $('#body_toolbar_list').css('display', 'none');
+        $('#body_toolbar_add').css('display', 'block');
+        loadUserList();
+    }}).plbtn('addIcon', 'img/icon/back.png');
+
+    // Account validation
+    $('#staff_new_account input').blur(function(e){
+        accountInputOnBlur(e);
     });
 
 

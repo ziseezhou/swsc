@@ -133,7 +133,7 @@
         addIcon : function(i) {
             var btnSpan = this.$element.children("span.icon");
             if (btnSpan.length) {
-                btnSpan.css('background', 'url('+i+') no-repeat');
+                btnSpan.css('background-image', 'url('+i+')');
             } else {
                 this.$element.prepend("<span class='icon'></span>");
                 this.$element.children("span.icon").css({
@@ -141,7 +141,9 @@
                     'width' : '16px',
                     'height' : '16px',
                     'margin-right' : '3px',
-                    'background' : 'url('+i+') no-repeat'
+                    'background-position' : 'center left',
+                    'background-repeat' : 'no-repeat',
+                    'background-image' : 'url('+i+')'
                 });
             }
         }
