@@ -134,6 +134,11 @@ $(document).ready(function(){
         });
     };
 
+    var actionPreDelete =
+    function(elem, _id) {
+        showDeleteConfirm(elem, _id, action);
+    };
+
 
     var actionDelete = 
     function(_id) {
@@ -199,7 +204,10 @@ $(document).ready(function(){
                         });
                     $("#staff_list table tr:last td .btn_delete")
                         .plbtn('addIcon', 'img/icon/delete_item.png')
-                        .click(function() {actionDelete(_id);});
+                        .click(function() {
+                            //actionDelete(_id);
+                            actionPreDelete('#staff_list table tr:last td .btn_delete', _id);
+                        });
                     $("#staff_list table tr:last td .btn_keyreset")
                         .plbtn('addIcon', 'img/icon/key_reset.png')
                         .tipsy({delayIn:500, fallback:"<?=_('staff_key_reset');?>"})
