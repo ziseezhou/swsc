@@ -7,21 +7,23 @@ function validateEmail($email) {
 }
 
 function showDeleteConfirm(elem, _id, action) {
-    var $dialog;
-    if ($('body #_delete_confirm_dialog').length == 0) {
-        $('body').append('<div id="_delete_confirm_dialog" style="display:none">delete</div>');
+    if (!$('body').data('_delete_confirm_dialog')) {
+        $('body').data('_delete_confirm_dialog', true);
+        $('<div class="_delete_confirm_dialog">delete</div>')
+        //$('<div class="_delete_confirm_dialog"></div>').html('<div class="tipsy-arrow"></div><div class="tipsy-inner"></div>')
+        .css({top: 0, left: 0, color: 'red', display: 'none'})
+        .prependTo(document.body);
     }
 
-    $dialog = $('body #_delete_confirm_dialog');
-
+    var $dialog = $('body ._delete_confirm_dialog');
     var $elem = $(elem);
     var pos = $.extend({}, $elem.offset(), {
-        width: $elem.offsetWidth,
-        height: $elem.offsetHeight
+        width: $elem[0].offsetWidth,
+        height: $elem[0].offsetHeight
     });
     
-    var actualWidth = $dialog.offsetWidth,
-        actualHeight = $dialog.offsetHeight,
+    var actualWidth = $dialog[0].offsetWidth,
+        actualHeight = $dialog[0].offsetHeight,
         gravity = 'e'; //maybeCall(this.options.gravity, this.$element[0]);
     
     var tp;
@@ -33,10 +35,10 @@ function showDeleteConfirm(elem, _id, action) {
             tp = {top: pos.top - actualHeight - this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
             break;
         case 'e':
-            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth - this.options.offset};
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}; // - this.options.offset};
             break;
         case 'w':
-            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width + this.options.offset};
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}; // + this.options.offset};
             break;
     }
     
@@ -63,7 +65,7 @@ function showDeleteConfirm(elem, _id, action) {
     $(document).bind('mouseup', function(e) {
         var target = e.target;
 
-        if(!el.is(target) && !$dialog.is(target) && $dialog.has(target).length === 0 && $dialog.is(':block')) {
+        if(!elem.is(target) && !$dialog.is(target) && $dialog.has(target).length === 0 && $dialog.is(':block')) {
             $dialog.css('display', 'none');
         }
     });

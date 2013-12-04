@@ -136,7 +136,7 @@ $(document).ready(function(){
 
     var actionPreDelete =
     function(elem, _id) {
-        showDeleteConfirm(elem, _id, action);
+        showDeleteConfirm(elem, _id, actionDelete);
     };
 
 
