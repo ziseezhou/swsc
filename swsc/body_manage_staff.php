@@ -19,6 +19,10 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/plbtn.js"></script>
 <script type="text/javascript" src="js/jquery.autosize.min.js"></script>
 <script type="text/javascript">
+function eventReceiver(e) {
+    $(document).trigger(e.type, e);
+}
+
 $(document).ready(function(){
 
     // ===================================================================
@@ -206,7 +210,7 @@ $(document).ready(function(){
                         .plbtn('addIcon', 'img/icon/delete_item.png')
                         .click(function() {
                             //actionDelete(_id);
-                            actionPreDelete('#staff_list table tr:last td .btn_delete', _id);
+                            actionPreDelete(this, _id);
                         });
                     $("#staff_list table tr:last td .btn_keyreset")
                         .plbtn('addIcon', 'img/icon/key_reset.png')

@@ -9,9 +9,9 @@ function validateEmail($email) {
 function showDeleteConfirm(elem, _id, action) {
     if (!$('body').data('_delete_confirm_dialog')) {
         $('body').data('_delete_confirm_dialog', true);
-        $('<div class="_delete_confirm_dialog">delete</div>')
-        //$('<div class="_delete_confirm_dialog"></div>').html('<div class="tipsy-arrow"></div><div class="tipsy-inner"></div>')
-        .css({top: 0, left: 0, color: 'red', display: 'none'})
+        //$('<div class="_delete_confirm_dialog">delete</div>')
+        $('<div class="_delete_confirm_dialog"></div>').html('<div class="tipsy-arrow"></div><div class="tipsy-inner">Delete</div>')
+        .css({top: 0, left: 0, visibility: 'hidden', display: 'block'})
         .prependTo(document.body);
     }
 
@@ -24,7 +24,7 @@ function showDeleteConfirm(elem, _id, action) {
     
     var actualWidth = $dialog[0].offsetWidth,
         actualHeight = $dialog[0].offsetHeight,
-        gravity = 'e'; //maybeCall(this.options.gravity, this.$element[0]);
+        gravity = "w"; //maybeCall(this.options.gravity, this.$element[0]);
     
     var tp;
     switch (gravity.charAt(0)) {
@@ -50,8 +50,8 @@ function showDeleteConfirm(elem, _id, action) {
         }
     }
     
-    $dialog.css(tp); //.addClass('tipsy-' + gravity);
-    //$tip.find('.tipsy-arrow')[0].className = 'tipsy-arrow tipsy-arrow-' + gravity.charAt(0);
+    $dialog.css(tp).addClass('tipsy-' + gravity);
+    $dialog.find('.tipsy-arrow')[0].className = 'tipsy-arrow tipsy-arrow-' + gravity.charAt(0);
     //if (this.options.className) {
     //    $tip.addClass(maybeCall(this.options.className, this.$element[0]));
     //}
@@ -62,13 +62,15 @@ function showDeleteConfirm(elem, _id, action) {
     //    $tip.css({visibility: 'visible', opacity: this.options.opacity});
     //}
 
-    $(document).bind('mouseup', function(e) {
+    var funClear = function(e) {
         var target = e.target;
 
-        if(!elem.is(target) && !$dialog.is(target) && $dialog.has(target).length === 0 && $dialog.is(':block')) {
-            $dialog.css('display', 'none');
+        if(!$elem.is(target) && !$dialog.is(target) && $dialog.has(target).length === 0 && $dialog.is(':visible')) {
+            $dialog.css({visibility: 'hidden'});
+            $(document).off('mouseup', funClear);
         }
-    });
+    };
 
-    $dialog.css('display', 'block');
+    $(document).on('mouseup', funClear);
+    $dialog.css({visibility: 'visible'});
 }

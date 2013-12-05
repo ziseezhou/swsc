@@ -17,6 +17,10 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/plbtn.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    $(document).bind('mouseup', function(e){
+        $(window.parent.frames["f3"])[0].eventReceiver(e);
+    });
+    
     var cssToolbar = {
         cssNormal:'btn_toolbar_normal', 
         cssHover:'btn_toolbar_hover', 

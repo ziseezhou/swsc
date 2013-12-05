@@ -15,12 +15,16 @@ function bodyTo(id) {
     window.parent.frames["f3"].document.location='?c='+id;
 }
 $(document).ready(function(){
+    $(document).bind('mouseup', function(e){
+        $(window.parent.frames["f3"])[0].eventReceiver(e);
+    });
+
+    
     $('#menu li a').each(function(){
         $(this).click(function(){
             bodyTo($(this).attr('id'));
         });
     });
-
 });
 </script>
 <style type="text/css">

@@ -21,6 +21,10 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/jquery.autosize.min.js"></script>
 <script type="text/javascript" src="js/jquery.glDatePicker.min.new.js"></script>
 <script type="text/javascript">
+function eventReceiver(e) {
+    $(document).trigger(e.type, e);
+}
+
 $(document).ready(function(){
     var onClickSave = function(_id) {
         var tr = $(this).parent().parent();
