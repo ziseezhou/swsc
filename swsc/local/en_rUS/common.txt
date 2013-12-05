@@ -34,6 +34,8 @@ s_delete|Delete
 s_delete_confirm|Are you sure to delete permanently?
 s_email|Email
 s_email_err| Email error!
+s_dow_names|[ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ]
+s_month_names|[ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
 
 // tips
 tip_navi_hello|Hello!

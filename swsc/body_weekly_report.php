@@ -181,8 +181,9 @@ $(document).ready(function(){
     var datePicker = $('#w_query').glDatePicker({
         width:330, 
         height:280,
-        dowNames: localDowNames,
-        monthNames: localMonthNames,
+        borderSize:0,
+        dowNames: <?=_('s_dow_names');?>,
+        monthNames: <?=_('s_month_names');?>,
         onClick: function(el, cell, date, data) {
             //el.val(date.toLocaleDateString());
             alert(date.toLocaleDateString());
@@ -199,8 +200,9 @@ $(document).ready(function(){
     var datePicker2 = $('#report_new_date_btn').glDatePicker({
         width:330, 
         height:280,
-        dowNames: localDowNames,
-        monthNames: localMonthNames,
+        borderSize:0,
+        dowNames: <?=_('s_dow_names');?>,
+        monthNames: <?=_('s_month_names');?>,
         onClick: function(el, cell, date, data) {
             //el.val(date.toLocaleDateString());
             alert('2:'+date.toLocaleDateString());

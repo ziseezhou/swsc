@@ -174,24 +174,32 @@ $(document).ready(function(){
     function() {
         $.get('?c=body_manage_staff_handler&action=getlist', function(data){
             if (data.ret) {
-                $('#staff_list table').empty();
+                var tBody = $('#staff_list table tbody');
+                tBody.empty();
+                tBody.append(listItemHeader);
+                tBody.children('tr:first').css('font-weight', 'bold');
+                tBody.children('tr:first').children('td:last').css('text-align', 'right');
+
+/*
+                $('#staff_list table tbody').empty();
                 $('#staff_list table').append(listItemHeader);
                 $('#staff_list table tr:first').css('font-weight', 'bold');
-                $('#staff_list table tr:first td:last').css('text-align', 'right');
+                $('#staff_list table tr:first td:last').css('text-align', 'right');*/
                 $.each(data.dataSet, function(index, value) {
-                    $('#staff_list table').append(listItemContainer);
+                    tBody.append(listItemContainer);
                     var _id = value[5];
-                    var newLine = $('#staff_list table tr:last td');
-                    newLine.eq(0).html(value[0]);
-                    newLine.eq(1).html(value[1]);
-                    newLine.eq(2).html(value[2]);
-                    newLine.eq(3).html(value[3]=='0' ? "<?=_('staff_status_disabled');?>" : "<?=_('staff_status_enabled');?>");
-                    newLine.eq(4).html(value[4]=='10'? "<?=_('staff_level_admin');?>" : "<?=_('staff_level_normal');?>");
+                    var newLine = tBody.children('tr:last');
+                    var newTdSet = newLine.children('td');
+                    newTdSet.eq(0).html(value[0]);
+                    newTdSet.eq(1).html(value[1]);
+                    newTdSet.eq(2).html(value[2]);
+                    newTdSet.eq(3).html(value[3]=='0' ? "<?=_('staff_status_disabled');?>" : "<?=_('staff_status_enabled');?>");
+                    newTdSet.eq(4).html(value[4]=='10'? "<?=_('staff_level_admin');?>" : "<?=_('staff_level_normal');?>");
 
                     if (value[3]=='0') {
-                        $('#staff_list table tr:last').css('background-color', '#EEE');
+                        newLine.css('background-color', '#EEE');
                     }else if (value[4]=='10') {
-                        $('#staff_list table tr:last').css('background-color', '#FFE6E6');
+                        newLine.css('background-color', '#FFE6E6');
                     }
 
                     $("#staff_list table tr:last td .btn_item")
@@ -215,7 +223,7 @@ $(document).ready(function(){
                     $("#staff_list table tr:last td .btn_keyreset")
                         .plbtn('addIcon', 'img/icon/key_reset.png')
                         .tipsy({delayIn:500, fallback:"<?=_('staff_key_reset');?>"})
-                        .click(function() {actionResetKey(_id);});
+                        .click(function() {actionResetKey(_id);}); 
                 });
             } else {
                 alert('failed');
@@ -308,10 +316,12 @@ $(document).ready(function(){
 #body_toolbar_list {
     display: none;
 }
-#staff_list table, td {
+#staff_list table{
     border: 0;
+    border-collapse:collapse;
 }
-#staff_list table tr{
+#staff_list table td {
+    border: 0;
     border-bottom: solid 1px #AAA;
 }
 #staff_new {
@@ -378,6 +388,7 @@ $(document).ready(function(){
         <!-- Department weekly report list -->
         <div id="staff_list">
             <table border="0" cellpadding="0" cellspacing="0">
+                <tbody></tbody>
             </table>
         </div>
 

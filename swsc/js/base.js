@@ -1,5 +1,3 @@
-var localDowNames = [ '日', '一', '二', '三', '四', '五', '六' ];
-var localMonthNames = [ '1月', '2月', '3月', '4月', '5月', '6月', '6月', '8月', '9月', '10月', '11月', '12月' ];
 
 function validateEmail($email) {
     var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
@@ -11,7 +9,7 @@ function showDeleteConfirm(elem, _id, action) {
         $('body').data('_delete_confirm_dialog', true);
         //$('<div class="_delete_confirm_dialog">delete</div>')
         $('<div class="_delete_confirm_dialog"></div>').html('<div class="tipsy-arrow"></div><div class="tipsy-inner">Delete</div>')
-        .css({top: 0, left: 0, visibility: 'hidden', display: 'block'})
+        .remove().css({top: 0, left: 0, visibility: 'hidden', display: 'block'})
         .prependTo(document.body);
     }
 
@@ -21,11 +19,11 @@ function showDeleteConfirm(elem, _id, action) {
         width: $elem[0].offsetWidth,
         height: $elem[0].offsetHeight
     });
-    
+
     var actualWidth = $dialog[0].offsetWidth,
         actualHeight = $dialog[0].offsetHeight,
         gravity = "w"; //maybeCall(this.options.gravity, this.$element[0]);
-    
+    alert('w='+actualWidth+',h='+actualHeight);
     var tp;
     switch (gravity.charAt(0)) {
         case 'n':
