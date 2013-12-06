@@ -13,6 +13,7 @@ PG_ASSERT(_local_file_load('common'));
 <link href='css/base.css' rel='stylesheet' type='text/css' />
 <link href='css/btn.css' rel='stylesheet' type='text/css' />
 <link href='css/tipsy.css' rel='stylesheet' type='text/css' />
+<link href='css/floatBox.css' rel='stylesheet' type='text/css' />
 <script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
@@ -21,6 +22,100 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript">
 function eventReceiver(e) {
     $(document).trigger(e.type, e);
+}
+
+function showDeleteConfirm(elem, _id, action) {
+    var deleteBoxFloatId = 'float_id_delete_confirm';
+    var deleteBox = $('<div>Delete Box</div>');
+    var options = {
+        floatId : deleteBoxFloatId,
+        html: deleteBox
+    };
+
+    assembleFloatBox(elem, options);
+}
+
+function assembleFloatBox(elem, options) {
+    var optionsDefault = {
+        floatId : 'float_id_float',
+        borderColor: '#CCC',
+        backColor: 'white',
+        gravity: 'w',
+        html: $('<div>Float Box</div>')
+    };
+
+    options = $.extend({}, optionsDefault, options);
+
+    if (!$('body').data(options.floatId)) {
+        $('body').data(options.floatId, true);
+        $('<div id="'+options.floatId+'" class="z-float-container"></div>')
+            .html('<div class="z-float-arrow" ></div><div class="z-float-arrow2" ></div><div class="z-float-inner"></div>')
+            .css({top: 0, left: 0, visibility: 'hidden', display: 'block'})
+            .prependTo(document.body);
+    }
+
+    var $dialog = $('body #'+options.floatId);
+    $dialog.className = 'z-float-container';
+    $dialog.find('.z-float-inner').html(options.html.html());
+
+
+    var $elem = $(elem);
+    var pos = $.extend({}, $elem.offset(), {
+        width: $elem[0].offsetWidth,
+        height: $elem[0].offsetHeight
+    });
+
+    var actualWidth = $dialog[0].offsetWidth,
+        actualHeight = $dialog[0].offsetHeight,
+        gravity = options.gravity; //maybeCall(this.options.gravity, this.$element[0]);
+
+    var tp;
+    switch (gravity.charAt(0)) {
+        case 'n':
+            tp = {top: pos.top + pos.height + this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
+            break;
+        case 's':
+            tp = {top: pos.top - actualHeight - this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
+            break;
+        case 'e':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}; // - this.options.offset};
+            break;
+        case 'w':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}; // + this.options.offset};
+            break;
+    }
+    
+    if (gravity.length == 2) {
+        if (gravity.charAt(1) == 'w') {
+            tp.left = pos.left + pos.width / 2 - 15;
+        } else {
+            tp.left = pos.left + pos.width / 2 - actualWidth + 15;
+        }
+    }
+    
+    $dialog.css(tp).addClass('z-float-container-' + gravity);
+    $dialog.find('.z-float-arrow')[0].className = 'z-float-arrow z-float-arrow-' + gravity.charAt(0);
+    //if (this.options.className) {
+    //    $tip.addClass(maybeCall(this.options.className, this.$element[0]));
+    //}
+    
+    //if (this.options.fade) {
+    //    $tip.stop().css({opacity: 0, display: 'block', visibility: 'visible'}).animate({opacity: this.options.opacity});
+    //} else {
+    //    $tip.css({visibility: 'visible', opacity: this.options.opacity});
+    //}
+
+    var funClear = function(e) {
+        var target = e.target;
+
+        if(!$elem.is(target) && !$dialog.is(target) && $dialog.has(target).length === 0 && $dialog.is(':visible')) {
+            $dialog.css({visibility: 'hidden'});
+            $(document).off('mouseup', funClear);
+        }
+    };
+
+    $(document).on('mouseup', funClear);
+    $dialog.css({visibility: 'visible'});
 }
 
 $(document).ready(function(){

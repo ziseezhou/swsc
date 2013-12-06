@@ -1,0 +1,40 @@
+.z-float-container { font-size: 12px; position: absolute; padding: 5px; z-index: 1000; }
+  .z-float-inner { background-color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; }
+
+  /* Rounded corners */
+  .z-float-inner { border:solid 1px #CCC; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+  
+  /* Uncomment for shadow */
+  /*.tipsy-inner { box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; }*/
+  
+  .z-float-arrow { position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #CCC; }
+  .z-float-arrow2 { position: absolute; width: 0; height: 0; line-height: 0; border: 4px dashed #FFF; }
+  
+    /* Rules to colour arrows */
+  .z-float-arrow-n { border-bottom-color: #CCC; }
+  .z-float-arrow-s { border-top-color: #CCC; }
+  .z-float-arrow-e { border-left-color: #CCC; }
+  .z-float-arrow-w { border-right-color: #CCC; }
+
+  .z-float-arrow2-n { border-bottom-color: #FFF; }
+  .z-float-arrow2-s { border-top-color: #FFF; }
+  .z-float-arrow2-e { border-left-color: #FFF; }
+  .z-float-arrow2-w { border-right-color: #FFF; }
+
+  .z-float-container-n .z-float-arrow { top: 0px; left: 50%; margin-left: -5px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent; }
+    .z-float-container-nw .z-float-arrow { top: 0; left: 10px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent;}
+    .z-float-container-ne .z-float-arrow { top: 0; right: 10px; border-bottom-style: solid; border-top: none;  border-left-color: transparent; border-right-color: transparent;}
+  .z-float-container-s .z-float-arrow { bottom: 0; left: 50%; margin-left: -5px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
+    .z-float-container-sw .z-float-arrow { bottom: 0; left: 10px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
+    .z-float-container-se .z-float-arrow { bottom: 0; right: 10px; border-top-style: solid; border-bottom: none; border-left-color: transparent; border-right-color: transparent; }
+  .z-float-container-e .z-float-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
+  .z-float-container-w .z-float-arrow { left: 1px; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
+
+  .z-float-container-n .z-float-arrow2 { top: 2px; left: 50%; margin-left: -4px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent; }
+    .z-float-container-nw .z-float-arrow2 { top: 2px; left: 11px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent;}
+    .z-float-container-ne .z-float-arrow2 { top: 2px; right: 9px; border-bottom-style: solid; border-top: none;  border-left-color: transparent; border-right-color: transparent;}
+  .z-float-container-s .z-float-arrow2 { bottom: 2px; left: 50%; margin-left: -4px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
+    .z-float-container-sw .z-float-arrow2 { bottom: 2px; left: 11px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
+    .z-float-container-se .z-float-arrow2 { bottom: 2px; right: 9px; border-top-style: solid; border-bottom: none; border-left-color: transparent; border-right-color: transparent; }
+  .z-float-container-e .z-float-arrow2 { right: 2px; top: 50%; margin-top: -4px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
+  .z-float-container-w .z-float-arrow2 { left: 2px; top: 50%; margin-top: -4px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
