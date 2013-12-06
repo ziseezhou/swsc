@@ -24,40 +24,45 @@ function eventReceiver(e) {
     $(document).trigger(e.type, e);
 }
 
-function showDeleteConfirm(elem, _id, action) {
-    var deleteBoxFloatId = 'float_id_delete_confirm';
-    var deleteBox = $('<div>Delete Box</div>');
-    var options = {
-        floatId : deleteBoxFloatId,
-        html: deleteBox
-    };
+function showDeleteConfirm(elem, btnTitle, _id, action) {
+    var dialog;
+    var floatId = 'float_id_delete_confirm';
+    var deleteBox = $('<div class="btn_red">'+btnTitle+'</div>');
 
-    assembleFloatBox(elem, options);
-}
-
-function assembleFloatBox(elem, options) {
-    var optionsDefault = {
-        floatId : 'float_id_float',
-        borderColor: '#CCC',
-        backColor: 'white',
-        gravity: 'w',
-        html: $('<div>Float Box</div>')
-    };
-
-    options = $.extend({}, optionsDefault, options);
-
-    if (!$('body').data(options.floatId)) {
-        $('body').data(options.floatId, true);
-        $('<div id="'+options.floatId+'" class="z-float-container"></div>')
+    if (!$('body').data(floatId)) {
+        $('body').data(floatId, true);
+        $('<div id="'+floatId+'" class="z-float-container"></div>')
             .html('<div class="z-float-arrow" ></div><div class="z-float-arrow2" ></div><div class="z-float-inner"></div>')
             .css({top: 0, left: 0, visibility: 'hidden', display: 'block'})
             .prependTo(document.body);
     }
 
-    var $dialog = $('body #'+options.floatId);
-    $dialog.className = 'z-float-container';
-    $dialog.find('.z-float-inner').html(options.html.html());
+    dialog = $('body #'+floatId);
+    dialog.find('.z-float-inner').html(deleteBox);
 
+    dialog.find('.btn_red')
+    .plbtn({
+        cssNormal:'btn_red_normal', 
+        cssHover:'btn_red_hover', 
+        cssDisabled:'btn_red_normal', 
+        cssChecked:'btn_red_normal'})
+    .click(function(e){
+        action(_id);
+        $(document).trigger('mouseup', e);
+    });
+
+    assembleFloatBox(elem, dialog, {});
+}
+
+function assembleFloatBox(elem, $dialog, options) {
+    var optionsDefault = {
+        borderColor: '#CCC',
+        backColor: 'white',
+        gravity: 'w'
+    };
+
+    options = $.extend({}, optionsDefault, options);
+    $dialog.className = 'z-float-container';
 
     var $elem = $(elem);
     var pos = $.extend({}, $elem.offset(), {
@@ -67,21 +72,25 @@ function assembleFloatBox(elem, options) {
 
     var actualWidth = $dialog[0].offsetWidth,
         actualHeight = $dialog[0].offsetHeight,
-        gravity = options.gravity; //maybeCall(this.options.gravity, this.$element[0]);
+        gravity = options.gravity;
 
-    var tp;
+    var tp, borderFlag;
     switch (gravity.charAt(0)) {
         case 'n':
             tp = {top: pos.top + pos.height + this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
+            borderFlag = 'border-bottom-color';
             break;
         case 's':
             tp = {top: pos.top - actualHeight - this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
+            borderFlag = 'border-top-color';
             break;
         case 'e':
             tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}; // - this.options.offset};
+            borderFlag = 'border-left-color';
             break;
         case 'w':
             tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}; // + this.options.offset};
+            borderFlag = 'border-right-color';
             break;
     }
     
@@ -95,15 +104,18 @@ function assembleFloatBox(elem, options) {
     
     $dialog.css(tp).addClass('z-float-container-' + gravity);
     $dialog.find('.z-float-arrow')[0].className = 'z-float-arrow z-float-arrow-' + gravity.charAt(0);
-    //if (this.options.className) {
-    //    $tip.addClass(maybeCall(this.options.className, this.$element[0]));
-    //}
-    
-    //if (this.options.fade) {
-    //    $tip.stop().css({opacity: 0, display: 'block', visibility: 'visible'}).animate({opacity: this.options.opacity});
-    //} else {
-    //    $tip.css({visibility: 'visible', opacity: this.options.opacity});
-    //}
+
+    if (optionsDefault.backColor != options.backColor) {
+        $dialog.find('.z-float-inner').css('background-color', options.backColor);
+        $dialog.find('.z-float-arrow2').css('border-color', 'transparent');
+        $dialog.find('.z-float-arrow2').css(borderFlag, options.backColor);
+    }
+
+    if (optionsDefault.borderColor != options.borderColor) {
+        $dialog.find('.z-float-inner').css('border-color', options.borderColor);
+        $dialog.find('.z-float-arrow').css('border-color', 'transparent');
+        $dialog.find('.z-float-arrow').css(borderFlag, options.borderColor);
+    }
 
     var funClear = function(e) {
         var target = e.target;
@@ -235,15 +247,15 @@ $(document).ready(function(){
 
     var actionPreDelete =
     function(elem, _id) {
-        showDeleteConfirm(elem, _id, actionDelete);
+        showDeleteConfirm(elem, '<?=_("s_delete");?>', _id, actionDelete);
     };
 
 
     var actionDelete = 
     function(_id) {
-        if (!window.confirm("<?=_('s_delete_confirm');?>")) {
-            return;
-        }
+        //if (!window.confirm("<?=_('s_delete_confirm');?>")) {
+        //    return;
+        //}
 
         var url = '?c=body_manage_staff_handler&action=delete&_id='+_id;
         $.get(url, function(data){

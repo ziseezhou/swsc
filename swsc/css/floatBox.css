@@ -1,5 +1,5 @@
 .z-float-container { font-size: 12px; position: absolute; padding: 5px; z-index: 1000; }
-  .z-float-inner { background-color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; }
+  .z-float-inner { float:left; background-color: #FFF; max-width: 200px; padding: 3px 3px 3px 3px; }
 
   /* Rounded corners */
   .z-float-inner { border:solid 1px #CCC; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
