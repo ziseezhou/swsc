@@ -77,6 +77,7 @@ staff_status_disabled|Disabled
 staff_level_normal|Normal User
 staff_level_admin|Administrator
 staff_key_reset|Reset key
+staff_key_new|New password
 staff_key_reset_back_show|Show the new password
 staff_key_reset_back_email|Email to the account
 staff_ret_succeed|Save succeessfully.

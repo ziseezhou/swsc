@@ -6,8 +6,8 @@ PG_ASSERT(_local_file_load('common'));
 $account    = $_POST['a'];
 $pwd        = $_POST['p'];
 
-$account    = db_str_filter($account);
-$pwd        = db_str_filter($pwd);
+//$account    = db_str_filter($account);
+//$pwd        = db_str_filter($pwd);
 
 if (strlen($account) > 0) {
     $sql = "select * from user where account='$account'";
@@ -40,14 +40,15 @@ if (strlen($account) > 0) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>西南证券-北京投行二部OA系统</title>
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/md5.js"></script>
 <script type="text/javascript">                                         
 $(document).ready(function(){
     $("#loginForm").submit(function(event){
         event.preventDefault();
 
         var form    = $(this);
-        var account = form.find('input[name="a"]').val();
-        var pwd     = form.find('input[name="p"]').val();
+        var account = $.trim(form.find('input[name="a"]').val());
+        var pwd     = $.trim(form.find('input[name="p"]').val());
         var url     = form.attr('action');
         var infobox = $('#info');
 
@@ -58,7 +59,9 @@ $(document).ready(function(){
             return;
         }
 
-        $.post(url, {a:account, p:pwd},
+        var pwd_md5 = md5(pwd);
+
+        $.post(url, {a:account, p:pwd_md5},
         function(data){
             if (data.ret) {
                 // sign in successfully

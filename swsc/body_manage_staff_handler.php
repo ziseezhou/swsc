@@ -24,7 +24,7 @@ function is_account_exist($a) {
     return false;
 }
 //----------------------------------
-if ($action == 'getlist') {
+if ($action == 'get_list') {
     $conn = conn();
     PG_ASSERT2($conn, 'db conn error!', true);
 
@@ -32,7 +32,7 @@ if ($action == 'getlist') {
     $rs = @mysql_query($sql, $conn);
     if ($rs == TRUE) {
         $retArry = array();
-        while ($row = mysql_fetch_array($rs, MYSQL_NUM)) {
+        while ($row = mysql_fetch_array($rs, MYSQL_ASSOC)) {
             array_push($retArry, $row);
         }
 
@@ -140,6 +140,34 @@ else if ($action == 'edit') {
     $rs = @mysql_query($sql, $conn);
     if ($rs) {
         _exit_json(array('ret'=>true));
+    }
+
+    _exit_json(array('ret'=>false));
+}
+
+else if ($action == 'reset_key') {
+    $_id = $_GET['_id'];
+    $type = $_GET['type'];
+
+    $pwd = rand_password(6);
+    $pwd_md5 = md5($pwd);
+
+    $sql  = ' update user set ';
+    $sql .= " pwd = '$pwd_md5'";
+    $sql .= " where _id=$_id";
+
+    $conn = conn();
+    PG_ASSERT2($conn, 'db conn error!', true);
+    
+    $rs = @mysql_query($sql, $conn);
+    if ($rs == TRUE) {
+        if ($type == 'show') {
+            _exit_json(array('ret'=>true, 'type'=>$type, 'pwd'=>$pwd));
+        } else {
+            // email the new pwd
+            //_exit_json(array('ret'=>true, 'type'=>$type));
+            _exit_json(array('ret'=>true, 'type'=>$type, 'pwd'=>$pwd));
+        }
     }
 
     _exit_json(array('ret'=>false));

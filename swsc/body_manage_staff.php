@@ -58,15 +58,25 @@ $(document).ready(function(){
 
     // ===================================================================
     // Functions
+    var showKeyResetRet =
+    function(elem, pwd) {
+        var floatId = 'float_id_reset_user_key_ret';
+        var view = $('<div class="reset_key_ret"><?=_("staff_key_new");?>:<span class="pwd">'+pwd+'</span></div>');
+        var dialog = $.f.floatDialogGet(floatId);
+        var options ={borderSize: 2, gravity: 'w'};
+
+        $.f.floatDialogInflate(dialog, view);
+        $.f.floatDialogAssemble(elem, dialog, options);
+    };
 
     var showKeyReset = 
-    function(elem, _id, action) {
+    function(elem, value, action) {
         var floatId = 'float_id_reset_user_key';
         var view = $('<div></div>').html('\
                 <div class="dilag_title"><?=_("staff_key_reset");?></div>\
                 <div class="dilag_info">\
-                  <?=_("staff_new_username");?>:<br/>\
-                  <?=_("staff_new_realname");?>:\
+                  <?=_("staff_new_username");?>:'+value['account']+'<br/>\
+                  <?=_("staff_new_realname");?>:'+value['real_name']+'\
                 </div>\
                 <div class="dilag_buttons">\
                   <div id="reset_back_show" class="btn_base btn_normal btn_dialog_left" ><?=_("staff_key_reset_back_show");?></div>\
@@ -81,13 +91,17 @@ $(document).ready(function(){
 
         btnShow
             .plbtn({})
+            .plbtn('addIcon', 'img/icon/display.png')
             .click(function(e){
-                //
+                action(value['_id'], 'show', elem);
+                $(document).trigger('mouseup', e);
             });
         btnEmail
             .plbtn({})
+            .plbtn('addIcon', 'img/icon/mail.png')
             .click(function(e){
-                //
+                action(value['_id'], 'mail', elem);
+                $(document).trigger('mouseup', e);
             });
 
         var options ={borderSize: 2, gravity: 'w'};
@@ -95,13 +109,13 @@ $(document).ready(function(){
     };
 
     var actionEdit = 
-    function(_id, account, realName, email, enable, level) {
-        $('#staff_new_account input').val(account);
-        $('#staff_new_realname input').val(realName);
-        $('#staff_new_email input').val(email);
-        $("#staff_new_enable input:radio").filter('[value='+enable+']').prop('checked', true);
-        $('#staff_new_level select').val(level);
-        $('#staff_new_btn_save').data('_id', _id).data('account', account);
+    function(value) {
+        $('#staff_new_account input').val(value['account']);
+        $('#staff_new_realname input').val(value['real_name']);
+        $('#staff_new_email input').val(value['email']);
+        $("#staff_new_enable input:radio").filter('[value='+value['enable']+']').prop('checked', true);
+        $('#staff_new_level select').val(value['level']);
+        $('#staff_new_btn_save').data('_id', value['_id']).data('account', value['account']);
 
         // show
         $('#staff_new_ret').css('display', 'none');
@@ -206,14 +220,26 @@ $(document).ready(function(){
 
 
     var actionResetKey = 
-    function(_id) {
-        alert(_id);
+    function(_id, type, elem) {
+        var url = '?c=body_manage_staff_handler&action=reset_key&_id='+_id+'&type='+type;
+        $.get(url, function(data){
+            if (data.ret) {
+                if (data.type == 'show') {
+                    showKeyResetRet(elem, data.pwd);
+                }
+            } else {
+                alert('failed');
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
     };
 
 
     var loadUserList = 
     function() {
-        $.get('?c=body_manage_staff_handler&action=getlist', function(data){
+        $.get('?c=body_manage_staff_handler&action=get_list', function(data){
             if (data.ret) {
                 var tBody = $('#staff_list table tbody');
                 tBody.empty();
@@ -226,11 +252,11 @@ $(document).ready(function(){
                     var _id = value[5];
                     var newLine = tBody.children('tr:last');
                     var newTdSet = newLine.children('td');
-                    newTdSet.eq(0).html(value[0]);
-                    newTdSet.eq(1).html(value[1]);
-                    newTdSet.eq(2).html(value[2]);
-                    newTdSet.eq(3).html(value[3]=='0' ? "<?=_('staff_status_disabled');?>" : "<?=_('staff_status_enabled');?>");
-                    newTdSet.eq(4).html(value[4]=='10'? "<?=_('staff_level_admin');?>" : "<?=_('staff_level_normal');?>");
+                    newTdSet.eq(0).html(value['account']);
+                    newTdSet.eq(1).html(value['real_name']);
+                    newTdSet.eq(2).html(value['email']);
+                    newTdSet.eq(3).html(value['enable']=='0' ? "<?=_('staff_status_disabled');?>" : "<?=_('staff_status_enabled');?>");
+                    newTdSet.eq(4).html(value['level']=='10'? "<?=_('staff_level_admin');?>" : "<?=_('staff_level_normal');?>");
 
                     if (value[3]=='0') {
                         newLine.css('background-color', '#EEE');
@@ -248,7 +274,7 @@ $(document).ready(function(){
                     $("#staff_list table tr:last td .btn_edit")
                         .plbtn('addIcon', 'img/icon/edit_item.png')
                         .click(function() {
-                            actionEdit(_id,value[0],value[1],value[2],value[3],value[4]);
+                            actionEdit(value);
                         });
                     $("#staff_list table tr:last td .btn_delete")
                         .plbtn('addIcon', 'img/icon/delete_item.png')
@@ -259,7 +285,7 @@ $(document).ready(function(){
                     $("#staff_list table tr:last td .btn_keyreset")
                         .plbtn('addIcon', 'img/icon/key_reset.png')
                         .click(function() {
-                            showKeyReset(this, _id, actionResetKey);
+                            showKeyReset(this, value, actionResetKey);
                         });
                         // .tipsy({delayIn:500, fallback:"<?=_('staff_key_reset');?>"})
                 });
@@ -415,6 +441,17 @@ $(document).ready(function(){
 }
 .float_right {
     float: right;
+}
+.reset_key_ret {
+    padding: 6px 0 6px 0;
+}
+.reset_key_ret .pwd {
+    margin-left: 2px;
+    padding: 5px 8px 5px 8px;
+    color: black;
+    font-weight: bold;
+    border: solid 1px #ADCD3C;
+    background-color: #F2FDDB;
 }
 </style>
 </head>
