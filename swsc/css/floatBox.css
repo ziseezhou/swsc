@@ -1,5 +1,12 @@
+.dilag_title, .dilag_info, .dilag_buttons { clear:both; margin: 0 3px 2px 3px; min-width: 198px; }
+.dilag_title { padding-bottom:5px; text-align: center; border: 0; border-bottom: solid 1px #CCC; }
+.dilag_info { padding: 5px 0 5px 0; min-height: 60px; }
+.dilag_buttons { }
+.dilag_buttons .btn_dialog_left { float: left; }
+.dilag_buttons .btn_dialog_right { float: right; }
 .z-float-container { font-size: 12px; position: absolute; padding: 5px; z-index: 1000; }
-  .z-float-inner { float:left; background-color: #FFF; max-width: 200px; padding: 3px 3px 3px 3px; }
+.z-float-container div { float:left; }
+  .z-float-inner { float:left; background-color: #FFF; max-width: 800px; padding: 3px 3px 3px 3px; }
 
   /* Rounded corners */
   .z-float-inner { border:solid 1px #CCC; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }

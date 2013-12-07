@@ -25,6 +25,8 @@ function eventReceiver(e) {
     $(document).trigger(e.type, e);
 }
 
+
+
 $(document).ready(function(){
 
     // ===================================================================
@@ -56,6 +58,41 @@ $(document).ready(function(){
 
     // ===================================================================
     // Functions
+
+    var showKeyReset = 
+    function(elem, _id, action) {
+        var floatId = 'float_id_reset_user_key';
+        var view = $('<div></div>').html('\
+                <div class="dilag_title"><?=_("staff_key_reset");?></div>\
+                <div class="dilag_info">\
+                  <?=_("staff_new_username");?>:<br/>\
+                  <?=_("staff_new_realname");?>:\
+                </div>\
+                <div class="dilag_buttons">\
+                  <div id="reset_back_show" class="btn_base btn_normal btn_dialog_left" ><?=_("staff_key_reset_back_show");?></div>\
+                  <div id="reset_back_email" class="btn_base btn_normal btn_dialog_right" ><?=_("staff_key_reset_back_email");?></div>\
+                </div>');
+
+        var dialog = $.f.floatDialogGet(floatId);
+        $.f.floatDialogInflate(dialog, view);
+
+        var btnShow = dialog.find('#reset_back_show');
+        var btnEmail = dialog.find('#reset_back_email');
+
+        btnShow
+            .plbtn({})
+            .click(function(e){
+                //
+            });
+        btnEmail
+            .plbtn({})
+            .click(function(e){
+                //
+            });
+
+        var options ={borderSize: 2, gravity: 'w'};
+        $.f.floatDialogAssemble(elem, dialog, options);
+    };
 
     var actionEdit = 
     function(_id, account, realName, email, enable, level) {
@@ -221,8 +258,10 @@ $(document).ready(function(){
                         });
                     $("#staff_list table tr:last td .btn_keyreset")
                         .plbtn('addIcon', 'img/icon/key_reset.png')
-                        .tipsy({delayIn:500, fallback:"<?=_('staff_key_reset');?>"})
-                        .click(function() {actionResetKey(_id);}); 
+                        .click(function() {
+                            showKeyReset(this, _id, actionResetKey);
+                        });
+                        // .tipsy({delayIn:500, fallback:"<?=_('staff_key_reset');?>"})
                 });
             } else {
                 alert('failed');

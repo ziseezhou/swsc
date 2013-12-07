@@ -1,6 +1,6 @@
 (function($) {
     $.f = {};
-    
+
     $.f.validateEmail  = function($email) {
         var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         return emailReg.test($email);
@@ -11,10 +11,26 @@
     };
 
     $.f.showDeleteConfirm = function(elem, btnTitle, _id, action) {
-        var dialog;
         var floatId = 'float_id_delete_confirm';
-        var deleteBox = $('<div class="btn_red">'+btnTitle+'</div>');
+        var view = $('<div class="btn_red">'+btnTitle+'</div>');
 
+        var dialog = $.f.floatDialogGet(floatId);
+        $.f.floatDialogInflate(dialog, view);
+
+        var btnDelete = dialog.find('.btn_red');
+        btnDelete
+            .plbtn({cssNormal:'btn_red_normal', cssHover:'btn_red_hover'})
+            .plbtn('addIcon', 'img/icon/trash.png')
+            .click(function(e){
+                action(_id);
+                $(document).trigger('mouseup', e);
+            });
+
+        var options ={borderSize: 2, gravity: 'w'};
+        $.f.floatDialogAssemble(elem, dialog, options);
+    };
+
+    $.f.floatDialogGet = function(floatId) {
         if (!$('body').data(floatId)) {
             $('body').data(floatId, true);
             $('<div id="'+floatId+'" class="z-float-container"></div>')
@@ -23,29 +39,14 @@
                 .prependTo(document.body);
         }
 
-        dialog = $('body #'+floatId);
-        dialog.find('.z-float-inner').html(deleteBox);
-
-        dialog.find('.btn_red')
-        .plbtn({
-            cssNormal:'btn_red_normal', 
-            cssHover:'btn_red_hover', 
-            cssDisabled:'btn_red_normal', 
-            cssChecked:'btn_red_normal'})
-        .click(function(e){
-            action(_id);
-            $(document).trigger('mouseup', e);
-        });
-
-        var options ={
-            borderSize: 2,
-            gravity: 'w'
-        };
-
-        $.f.assembleFloatBox(elem, dialog, options);
+        return $('body #'+floatId);
     };
 
-    $.f.assembleFloatBox = function(elem, $dialog, options) {
+    $.f.floatDialogInflate = function(dialog, view) {
+        dialog.find('.z-float-inner').html(view);
+    };
+
+    $.f.floatDialogAssemble = function(elem, $dialog, options) {
         var optionsDefault = {
             borderSize: 1,
             borderColor: '#CCC',
