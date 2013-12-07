@@ -166,18 +166,16 @@ form {
     background-position: center top;
 }
 input[type=text], input[type=password] {
-    transition: all 0.20s ease-in-out;
-    -webkit-transition: all 0.20s ease-in-out;
-    -moz-transition: all 0.20s ease-in-out;
     border:1px solid #C3D9FF;
     border-radius: 3px;
     outline: none;
 }
 input[type=text]:focus,input[type=password]:focus,textarea:focus{
-    box-shadow:0 0 5px rgba(103,166,217,1);
-    -moz-box-shadow:0 0 5px rgba(103,166,217,1);
-    -webkit-box-shadow:0 0 5px rgba(103,166,217,1);
-    -o-box-shadow:0 0 5px rgba(103,166,217,1);
+    outline: none;
+    outline: none;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
 }
 </style>
 </head>

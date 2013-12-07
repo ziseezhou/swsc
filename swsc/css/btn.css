@@ -7,8 +7,8 @@
 .btn_base     {
     display:block;
     float:left;
-    font-size: 12px;
-    padding: 3px 5px;
+    line-height: 1.4em;
+    padding: 5px;
     color: black;
     border: solid 1px #CCCCCC;
     cursor: default;

@@ -28,7 +28,7 @@
     .z-float-container-sw .z-float-arrow { bottom: 0; left: 10px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
     .z-float-container-se .z-float-arrow { bottom: 0; right: 10px; border-top-style: solid; border-bottom: none; border-left-color: transparent; border-right-color: transparent; }
   .z-float-container-e .z-float-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
-  .z-float-container-w .z-float-arrow { left: 1px; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
+  .z-float-container-w .z-float-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
 
   .z-float-container-n .z-float-arrow2 { top: 2px; left: 50%; margin-left: -4px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent; }
     .z-float-container-nw .z-float-arrow2 { top: 2px; left: 11px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent;}

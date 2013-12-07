@@ -14,12 +14,12 @@ PG_ASSERT(_local_file_load('common'));
 <link href='css/btn.css' rel='stylesheet' type='text/css' />
 <link href='css/tipsy.css' rel='stylesheet' type='text/css' />
 <link href="css/glDatePicker.default.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
-<script type="text/javascript" src="js/plbtn.js"></script>
 <script type="text/javascript" src="js/jquery.autosize.min.js"></script>
 <script type="text/javascript" src="js/jquery.glDatePicker.min.new.js"></script>
+<script type="text/javascript" src="js/funs.js"></script>
+<script type="text/javascript" src="js/plbtn.js"></script>
 <script type="text/javascript">
 function eventReceiver(e) {
     $(document).trigger(e.type, e);
@@ -177,11 +177,15 @@ $(document).ready(function(){
         $(this).plbtn('addIcon', 'img/icon/delete_item.png');
     });
 
+    var dataPickerBorderSize = 1;
+    if ($.f.isIE6()) {
+        dataPickerBorderSize = 0;
+    }
 
     var datePicker = $('#w_query').glDatePicker({
         width:330, 
         height:280,
-        borderSize:0,
+        borderSize: dataPickerBorderSize,
         dowNames: <?=_('s_dow_names');?>,
         monthNames: <?=_('s_month_names');?>,
         onClick: function(el, cell, date, data) {
@@ -200,7 +204,7 @@ $(document).ready(function(){
     var datePicker2 = $('#report_new_date_btn').glDatePicker({
         width:330, 
         height:280,
-        borderSize:0,
+        borderSize: dataPickerBorderSize,
         dowNames: <?=_('s_dow_names');?>,
         monthNames: <?=_('s_month_names');?>,
         onClick: function(el, cell, date, data) {

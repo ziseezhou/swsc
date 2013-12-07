@@ -14,120 +14,15 @@ PG_ASSERT(_local_file_load('common'));
 <link href='css/btn.css' rel='stylesheet' type='text/css' />
 <link href='css/tipsy.css' rel='stylesheet' type='text/css' />
 <link href='css/floatBox.css' rel='stylesheet' type='text/css' />
-<script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
-<script type="text/javascript" src="js/plbtn.js"></script>
 <script type="text/javascript" src="js/jquery.autosize.min.js"></script>
+<script type="text/javascript" src="js/funs.js"></script>
+<script type="text/javascript" src="js/plbtn.js"></script>
 <script type="text/javascript">
+
 function eventReceiver(e) {
     $(document).trigger(e.type, e);
-}
-
-function showDeleteConfirm(elem, btnTitle, _id, action) {
-    var dialog;
-    var floatId = 'float_id_delete_confirm';
-    var deleteBox = $('<div class="btn_red">'+btnTitle+'</div>');
-
-    if (!$('body').data(floatId)) {
-        $('body').data(floatId, true);
-        $('<div id="'+floatId+'" class="z-float-container"></div>')
-            .html('<div class="z-float-arrow" ></div><div class="z-float-arrow2" ></div><div class="z-float-inner"></div>')
-            .css({top: 0, left: 0, visibility: 'hidden', display: 'block'})
-            .prependTo(document.body);
-    }
-
-    dialog = $('body #'+floatId);
-    dialog.find('.z-float-inner').html(deleteBox);
-
-    dialog.find('.btn_red')
-    .plbtn({
-        cssNormal:'btn_red_normal', 
-        cssHover:'btn_red_hover', 
-        cssDisabled:'btn_red_normal', 
-        cssChecked:'btn_red_normal'})
-    .click(function(e){
-        action(_id);
-        $(document).trigger('mouseup', e);
-    });
-
-    assembleFloatBox(elem, dialog, {});
-}
-
-function assembleFloatBox(elem, $dialog, options) {
-    var optionsDefault = {
-        borderColor: '#CCC',
-        backColor: 'white',
-        gravity: 'w'
-    };
-
-    options = $.extend({}, optionsDefault, options);
-    $dialog.className = 'z-float-container';
-
-    var $elem = $(elem);
-    var pos = $.extend({}, $elem.offset(), {
-        width: $elem[0].offsetWidth,
-        height: $elem[0].offsetHeight
-    });
-
-    var actualWidth = $dialog[0].offsetWidth,
-        actualHeight = $dialog[0].offsetHeight,
-        gravity = options.gravity;
-
-    var tp, borderFlag;
-    switch (gravity.charAt(0)) {
-        case 'n':
-            tp = {top: pos.top + pos.height + this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
-            borderFlag = 'border-bottom-color';
-            break;
-        case 's':
-            tp = {top: pos.top - actualHeight - this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
-            borderFlag = 'border-top-color';
-            break;
-        case 'e':
-            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}; // - this.options.offset};
-            borderFlag = 'border-left-color';
-            break;
-        case 'w':
-            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}; // + this.options.offset};
-            borderFlag = 'border-right-color';
-            break;
-    }
-    
-    if (gravity.length == 2) {
-        if (gravity.charAt(1) == 'w') {
-            tp.left = pos.left + pos.width / 2 - 15;
-        } else {
-            tp.left = pos.left + pos.width / 2 - actualWidth + 15;
-        }
-    }
-    
-    $dialog.css(tp).addClass('z-float-container-' + gravity);
-    $dialog.find('.z-float-arrow')[0].className = 'z-float-arrow z-float-arrow-' + gravity.charAt(0);
-
-    if (optionsDefault.backColor != options.backColor) {
-        $dialog.find('.z-float-inner').css('background-color', options.backColor);
-        $dialog.find('.z-float-arrow2').css('border-color', 'transparent');
-        $dialog.find('.z-float-arrow2').css(borderFlag, options.backColor);
-    }
-
-    if (optionsDefault.borderColor != options.borderColor) {
-        $dialog.find('.z-float-inner').css('border-color', options.borderColor);
-        $dialog.find('.z-float-arrow').css('border-color', 'transparent');
-        $dialog.find('.z-float-arrow').css(borderFlag, options.borderColor);
-    }
-
-    var funClear = function(e) {
-        var target = e.target;
-
-        if(!$elem.is(target) && !$dialog.is(target) && $dialog.has(target).length === 0 && $dialog.is(':visible')) {
-            $dialog.css({visibility: 'hidden'});
-            $(document).off('mouseup', funClear);
-        }
-    };
-
-    $(document).on('mouseup', funClear);
-    $dialog.css({visibility: 'visible'});
 }
 
 $(document).ready(function(){
@@ -186,9 +81,9 @@ $(document).ready(function(){
 
         var _id = $('#staff_new_btn_save').data('_id');
 
-        var account   = $('#staff_new_account input').val();
-        var realName  = $('#staff_new_realname input').val();
-        var email     = $('#staff_new_email input').val();
+        var account   = $.trim($('#staff_new_account input').val());
+        var realName  = $.trim($('#staff_new_realname input').val());
+        var email     = $.trim($('#staff_new_email input').val());
         var enable    = $("#staff_new_enable input:checked").val();
         var level     = $('#staff_new_level select').val();
         //var portrait  = $('#staff_new_portrait').children('input').val();
@@ -199,7 +94,7 @@ $(document).ready(function(){
             return;
         }
 
-        if (email.length<=0 || !validateEmail(email)) {
+        if (email.length<=0 || !$.f.validateEmail(email)) {
             alert("<?=_('s_email_err');?>");
             return;
         }
@@ -212,8 +107,10 @@ $(document).ready(function(){
             'level': level
         };
 
+        var isEdit = false;
         var url = '?c=body_manage_staff_handler&action=add';
         if (parseInt(_id)>0) {
+            isEdit = true;
             url = '?c=body_manage_staff_handler&action=edit&_id='+_id;
         }
 
@@ -226,7 +123,7 @@ $(document).ready(function(){
                     .css({'display':'block', 'color':'green'});
 
                 // need clear form?
-                removeEditForm();
+                if (!isEdit) removeEditForm();
             } else {
                 var infoTip = "<?=_('staff_save_failed');?>";
                 if ('account_exist'==data.info) {
@@ -247,7 +144,7 @@ $(document).ready(function(){
 
     var actionPreDelete =
     function(elem, _id) {
-        showDeleteConfirm(elem, '<?=_("s_delete");?>', _id, actionDelete);
+        $.f.showDeleteConfirm(elem, '<?=_("s_delete");?>', _id, actionDelete);
     };
 
 
@@ -287,11 +184,6 @@ $(document).ready(function(){
                 tBody.children('tr:first').css('font-weight', 'bold');
                 tBody.children('tr:first').children('td:last').css('text-align', 'right');
 
-/*
-                $('#staff_list table tbody').empty();
-                $('#staff_list table').append(listItemHeader);
-                $('#staff_list table tr:first').css('font-weight', 'bold');
-                $('#staff_list table tr:first td:last').css('text-align', 'right');*/
                 $.each(data.dataSet, function(index, value) {
                     tBody.append(listItemContainer);
                     var _id = value[5];
@@ -356,7 +248,7 @@ $(document).ready(function(){
     var accountInputOnBlur =
     function(e) {
         var domSpan = $('#staff_new_account span');
-        var accounVal = $('#staff_new_account input').val();
+        var accounVal = $.trim($('#staff_new_account input').val());
 
         if (accounVal.length <= 0 || 
             accounVal == $('#staff_new_btn_save').data('account')) {
@@ -451,12 +343,20 @@ $(document).ready(function(){
     margin-left: 5px;
     display:inline;
 }
-#staff_new input[type=text], select{
+#staff_new input[type=text]{
     height: 1.5em;
     line-height: 1.5em;
     width: 160px;
-    border: solid 1px #CCC;
+    border:1px solid #CCC;
+    border-radius: 1px;
     outline: none;
+}
+#staff_new input[type=text]:focus{
+    border:1px solid #333;
+    outline: none;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
 }
 #staff_new .item_name {
     text-align: right;
@@ -519,8 +419,8 @@ $(document).ready(function(){
                 <tr>
                     <td width=64 class="item_name"><?=_('staff_new_status');?>: </td>
                     <td id="staff_new_enable">
-                        <input type="radio" name="enable_status" value="0">&nbsp;<?=_('staff_status_disabled');?>
-                        <input type="radio" name="enable_status" value="1" checked>&nbsp;<?=_('staff_status_enabled');?><br>
+                        <input type="radio" name="enable_status" value="0" />&nbsp;<?=_('staff_status_disabled');?>
+                        <input type="radio" name="enable_status" value="1" checked />&nbsp;<?=_('staff_status_enabled');?><br>
                     </td>
                 </tr>
                 <tr>
