@@ -73,10 +73,10 @@ $(document).ready(function(){
     function(elem, value, action) {
         var floatId = 'float_id_reset_user_key';
         var view = $('<div></div>').html('\
-                <div class="dilag_title"><?=_("staff_key_reset");?></div>\
+                <div class="dilag_title"><span><?=_("staff_key_reset");?></span></div>\
                 <div class="dilag_info">\
-                  <?=_("staff_new_username");?>:'+value['account']+'<br/>\
-                  <?=_("staff_new_realname");?>:'+value['real_name']+'\
+                  <span><?=_("staff_new_username");?>:'+value['account']+'</span><br/>\
+                  <span><?=_("staff_new_realname");?>:'+value['real_name']+'</span>\
                 </div>\
                 <div class="dilag_buttons">\
                   <div id="reset_back_show" class="btn_base btn_normal btn_dialog_left" ><?=_("staff_key_reset_back_show");?></div>\
@@ -280,7 +280,7 @@ $(document).ready(function(){
                         .plbtn('addIcon', 'img/icon/delete_item.png')
                         .click(function() {
                             //actionDelete(_id);
-                            actionPreDelete(this, _id);
+                            actionPreDelete(this, value['_id']);
                         });
                     $("#staff_list table tr:last td .btn_keyreset")
                         .plbtn('addIcon', 'img/icon/key_reset.png')
@@ -443,6 +443,7 @@ $(document).ready(function(){
     float: right;
 }
 .reset_key_ret {
+    margin: 3px;
     padding: 6px 0 6px 0;
 }
 .reset_key_ret .pwd {

@@ -10,7 +10,7 @@
 <body>
 <?php 
 // show error info
-echo $_SESSION['error'];
+echo $_SESSION['session_error'];
 ?>
 </body>
 </html>

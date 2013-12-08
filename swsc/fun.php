@@ -31,7 +31,7 @@ function str_remove_sql_injection($s)
 }
 
 function show_error_page($err) {
-    $_SESSION['error'] = $err;
+    $_SESSION['session_error'] = $err;
     include('error.php');
     exit;
 }
@@ -45,7 +45,7 @@ function _local_file_load($localFileName){
     }
 
     // fetch local flag
-    $local = $_SESSION['local']; // example: zh_rCN
+    $local = $_SESSION['session_local']; // example: zh_rCN
     if ( strlen($local)<=0) {
 
         // again check from cookie;

@@ -9,7 +9,7 @@ include('config.php');
  */
 $watchdog = true;
 
-if (!isset($_SESSION['account']))
+if (!isset($_SESSION['session_account']))
 {
     include('login.php');
     exit;

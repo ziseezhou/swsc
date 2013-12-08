@@ -14,18 +14,18 @@ $transDuration = $_POST['id_transDuration'];
 $action    = $_GET['action'];
 
 // Get data
-if ($action == 'get') {
+if ($action == 'get_list') {
     $type = $_GET['type'];
     $time = $_GET['time'];
     $sql  = 'select * from weekly_report where ';
     
     // compose sql
     if ($time == 'thisWeek') {
-        $sql .= ' YEARWEEK(date_format(report_time, \'%Y-%m-%d\')) = YEARWEEK(now())';
+        $sql .= ' YEARWEEK(date_format(report_date, \'%Y-%m-%d\')) = YEARWEEK(now())';
     } else if ($time == 'lastWeek') {
-        $sql .= ' YEARWEEK(date_format(report_time, \'%Y-%m-%d\')) = YEARWEEK(now())-1';
+        $sql .= ' YEARWEEK(date_format(report_date, \'%Y-%m-%d\')) = YEARWEEK(now())-1';
     } else if (date_create_from_format('Y-m-d', $time)!= FALSE) {
-        $sql .= ' YEARWEEK(date_format(report_time, \'%Y-%m-%d\')) = YEARWEEK('.$time.')';
+        $sql .= ' YEARWEEK(date_format(report_date, \'%Y-%m-%d\')) = YEARWEEK('.$time.')';
     } else {
         _exit_json(array('ret'=>false, 'info'=>'Paramenter error: invalid weekly report type'));
     }
@@ -33,22 +33,38 @@ if ($action == 'get') {
     if ($type == 'all') {
         ;
     } else if($type == 'personal') {
-        $sql .= ' and _id_user='.$_SESSION['account_id'];
+        $sql .= ' and _id_user='.$_SESSION['session_account_id'];
     } else {
         _exit_json(array('ret'=>false, 'info'=>'Paramenter error: invalid weekly report type'));
     }
 
-    //
-    _exit_json(array('ret'=>false, 'info'=>$sql));
+    // debug
+    //_exit_json(array('ret'=>false, 'info'=>$sql));
+
+    $conn = conn();
+    PG_ASSERT2($conn, 'db conn error!', true);
+
+    // query
+    $rs = @mysql_query($sql, $conn);
+    if ($rs == TRUE) {
+        $retArry = array();
+        while ($row = mysql_fetch_array($rs, MYSQL_ASSOC)) {
+            array_push($retArry, $row);
+        }
+
+        _exit_json(array('ret'=>'true', 'dataSet'=>$retArry));
+    }
 
     // create json data
+    //_exit_json(array('ret'=>false, 'info'=>'Query error, sql='+$sql));
+    _exit_json(array('ret'=>false, 'info'=>'Query error, sql='.$sql));
 }
 
 // Add data
 else if ($action == 'add') {
     $sql = 'insert into weekly_report ';
     $sql.= '(_id_user, pro_name, pro_type, pro_stage, work_address, work_content, extra_worktime, trans_duration) values (';
-    $sql.= $_SESSION['account_id'].', ';
+    $sql.= $_SESSION['session_account_id'].', ';
     $sql.= "'".$proName."', ";
     $sql.= "'".$proType."', ";
     $sql.= "'".$proStage."', ";

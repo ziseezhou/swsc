@@ -26,7 +26,7 @@
                 $(document).trigger('mouseup', e);
             });
 
-        var options ={borderSize: 2, gravity: 'w'};
+        var options ={borderSize: 2, borderColor:'#C70E0C', backColor: '#C70E0C', gravity: 'w'};
         $.f.floatDialogAssemble(elem, dialog, options);
     };
 
@@ -58,44 +58,52 @@
         $dialog.className = 'z-float-container';
 
         var $elem = $(elem);
-        var pos = $.extend({}, $elem.offset(), {
-            width: $elem[0].offsetWidth,
-            height: $elem[0].offsetHeight
-        });
-
-        var actualWidth = $dialog[0].offsetWidth,
-            actualHeight = $dialog[0].offsetHeight,
-            gravity = options.gravity;
-
+        var gravity = options.gravity;
         var tp, borderFlag;
-        switch (gravity.charAt(0)) {
-            case 'n':
-                tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2};
-                borderFlag = 'border-bottom-color';
-                break;
-            case 's':
-                tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2};
-                borderFlag = 'border-top-color';
-                break;
-            case 'e':
-                tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}; // - this.options.offset};
-                borderFlag = 'border-left-color';
-                break;
-            case 'w':
-                tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}; // + this.options.offset};
-                borderFlag = 'border-right-color';
-                break;
-        }
-        
-        if (gravity.length == 2) {
-            if (gravity.charAt(1) == 'w') {
-                tp.left = pos.left + pos.width / 2 - 15;
-            } else {
-                tp.left = pos.left + pos.width / 2 - actualWidth + 15;
+
+        var onResize = function() {
+            var pos = $.extend({}, $elem.offset(), {
+                width: $elem[0].offsetWidth,
+                height: $elem[0].offsetHeight
+            });
+
+            var actualWidth = $dialog[0].offsetWidth,
+                actualHeight = $dialog[0].offsetHeight;
+
+            switch (gravity.charAt(0)) {
+                case 'n':
+                    tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2};
+                    borderFlag = 'border-bottom-color';
+                    break;
+                case 's':
+                    tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2};
+                    borderFlag = 'border-top-color';
+                    break;
+                case 'e':
+                    tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}; // - this.options.offset};
+                    borderFlag = 'border-left-color';
+                    break;
+                case 'w':
+                    tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}; // + this.options.offset};
+                    borderFlag = 'border-right-color';
+                    break;
             }
-        }
+            
+            if (gravity.length == 2) {
+                if (gravity.charAt(1) == 'w') {
+                    tp.left = pos.left + pos.width / 2 - 15;
+                } else {
+                    tp.left = pos.left + pos.width / 2 - actualWidth + 15;
+                }
+            }
+
+            $dialog.css(tp);
+        };
+
+        $(window).resize(onResize);
+        onResize();
         
-        $dialog.css(tp).addClass('z-float-container-' + gravity);
+        $dialog.addClass('z-float-container-' + gravity);
         $dialog.find('.z-float-arrow')[0].className = 'z-float-arrow z-float-arrow-' + gravity.charAt(0);
 
         if (optionsDefault.backColor != options.backColor) {

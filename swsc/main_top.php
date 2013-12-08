@@ -18,7 +18,11 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript">
 $(document).ready(function(){
     $(document).bind('mouseup', function(e){
-        $(window.parent.frames["f3"])[0].eventReceiver(e);
+        try {
+            $(window.parent.frames["f3"])[0].eventReceiver(e);
+        } catch (e) {
+            //console.log(e);
+        }
     });
     
     var cssToolbar = {
@@ -38,7 +42,10 @@ $(document).ready(function(){
                 } else {
                     alert('<?=_("tip_error");?>');
                 }
-            }, "json");
+            }, "json")
+            .fail(function(){
+                alert('fail');
+            });
         });
 
     $("#btn_settings")
@@ -133,7 +140,9 @@ a:hover {
 <body>
 <div id="banner"><img src="img/logo.jpg" /></div>
 <div id="toolbar">
-    <div id="left"><?=_('tip_navi_hello');?>&nbsp;<? echo $_SESSION['real_name']; ?></div>
+    <div id="left">
+        <?=_('tip_navi_hello');?>&nbsp;<? echo $_SESSION['session_real_name']; ?>
+    </div>
     <div id="btn_mini_top" class="btn_item">&#9650;</div>
     <div id="right">
         <div id="btn_settings" class="btn_toolbar"><?=_('s_settings');?></div>

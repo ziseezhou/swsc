@@ -16,7 +16,11 @@ function bodyTo(id) {
 }
 $(document).ready(function(){
     $(document).bind('mouseup', function(e){
-        $(window.parent.frames["f3"])[0].eventReceiver(e);
+        try {
+            $(window.parent.frames["f3"])[0].eventReceiver(e);
+        } catch (e) {
+            //console.log(e);
+        }
     });
 
     

@@ -6,7 +6,7 @@ if (!isset($watchdog)) {
     exit;
 }
 
-if (!isset($_SESSION['account']))
+if (!isset($_SESSION['session_account']))
 {
     include('login.php');
     exit;

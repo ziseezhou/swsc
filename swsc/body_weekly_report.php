@@ -26,6 +26,30 @@ function eventReceiver(e) {
 }
 
 $(document).ready(function(){
+
+    // ===================================================================
+    // Constants
+
+    var T_ALL = 'all';
+    var T_PER = 'personal';
+    var TIME_THIS_WEEK = 'thisWeek';
+    var TIME_LAST_WEEK = 'lastWeek';
+
+    var ele_newLine = '<tr class="elem_input">\
+        <td width="64" class="id_proName"><textarea rows="1"></textarea></td>\
+        <td width="64" class="id_proType"><textarea rows="1"></textarea></td>\
+        <td width="64" class="id_proStage"><textarea rows="1"></textarea></td>\
+        <td width="64" class="id_workAddress"><textarea rows="1"></textarea></td>\
+        <td width="240" class="id_workContent"><textarea rows="1"></textarea></td>\
+        <td width="64" class="id_extraWorktime"><input type="text" value="0" maxlength="3" /></td>\
+        <td width="64" class="id_transDuration"><input type="text" value="0" maxlength="3" /></td>\
+        <td class="item_actions"><div class="btn_item w_save"></div></td>\
+      </tr>';
+
+
+    // ===================================================================
+    // Functions
+
     var onClickSave = function(_id) {
         var tr = $(this).parent().parent();
 
@@ -113,59 +137,111 @@ $(document).ready(function(){
         // custom contextmenu
     };
 
-    var ele_newLine = '<tr class="elem_input">\
-        <td width="64" class="id_proName"><textarea rows="1"></textarea></td>\
-        <td width="64" class="id_proType"><textarea rows="1"></textarea></td>\
-        <td width="64" class="id_proStage"><textarea rows="1"></textarea></td>\
-        <td width="64" class="id_workAddress"><textarea rows="1"></textarea></td>\
-        <td width="240" class="id_workContent"><textarea rows="1"></textarea></td>\
-        <td width="64" class="id_extraWorktime"><input type="text" value="0" maxlength="3" /></td>\
-        <td width="64" class="id_transDuration"><input type="text" value="0" maxlength="3" /></td>\
-        <td class="item_actions"><div class="btn_item w_save"></div></td>\
-      </tr>';
+    var emptyTableList = function(type) {
+        var tableId = (type==T_ALL) ? '#report_list table tbody' : '#report_new table tbody';
+        $(tableId).children('tr').each(function(){
+            if (!$(this).hasClass('tableHeader') && !$(this).hasClass('tableDate')){
+                $(this).remove();
+            }
+        });
+    };
 
+    var loadingList = function(type, time) {
+        if (typeof time == 'undefined') {
+            time = TIME_THIS_WEEK;
+        }
 
+        $.get('?c=body_weekly_report_handler&action=get_list&type='+type+'&time='+time, function(data){
+            if (data.ret) {
+                emptyTableList(type);
+                assembleList(type, data.dataRet);
+            }
+            else {
+                alert('failed');
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
+    };
+
+    var assembleList = function(type, data) {
+        
+
+        if (type == T_PER) {
+            // add a new line
+            $('#w_add_newline').click();
+        }
+    };
+
+    
+    // ===================================================================
+    // Main
+
+    // Btn list
     $('#w_list').plbtn({click:function(){
         $('#report_list').css('display', 'block');
         $('#report_new').css('display', 'none');
         $('#body_toolbar_list').css('display', 'block');
         $('#body_toolbar_add').css('display', 'none');
         $(window).resize(); // resize glDatePicker
+
+        // loading list
+        loadingList(T_ALL);
+    }}).plbtn('addIcon', 'img/icon/list.png');
+
+    // Btn this week
+    $('#w_this').plbtn({click:function(){
+        loadingList(T_ALL, TIME_THIS_WEEK);
     }});
+
+    // Btn last week 
+    $('#w_last').plbtn({click:function(){
+        loadingList(T_ALL, TIME_LAST_WEEK);
+    }});
+
+
+    
+
+    // Btn add
     $('#w_add').plbtn({click:function(){
         $('#report_list').css('display', 'none');
         $('#report_new').css('display', 'block');
         $('#body_toolbar_list').css('display', 'none');
         $('#body_toolbar_add').css('display', 'block');
         $(window).resize(); // resize glDatePicker
-    }});
-    $('#w_this').plbtn({click:function(){
-        $('#report_new').css('display', 'none');
-        $('#report_list').css('display', 'block');
-    }});
-    $('#w_last').plbtn({click:function(){alert('w_last');}});
 
-    $('#w_add').plbtn('addIcon', 'img/icon/add.png');
-    $('#w_list').plbtn('addIcon', 'img/icon/list.png');
+        // loading personal list
+        loadingList(T_PER);
 
-    $('#w_this').click();
+        
+    }}).plbtn('addIcon', 'img/icon/add.png');
 
+    
+    // Btn personal, Add new line
     $('#w_add_newline').plbtn({click:function(){
-        $('#report_new table').append(ele_newLine);
-        var firstLineTag = '#report_new table tr:nth-child(3) td:first';
-        var rowspan = $(firstLineTag).attr('rowspan');
-        $(firstLineTag).attr('rowspan', (parseInt(rowspan)+1));
+        var firstLineTag = '#report_new table tr:last';
+        var rowspan = $(firstLineTag).children('td:first').attr('rowspan');
+
+        if (typeof rowspan == 'undefined') {
+            var firstInputLien = $(ele_newLine).prepend('<td rowspan="1"><?=$_SESSION["session_real_name"];?></td>');
+            $('#report_new table tbody').append(firstInputLien);
+        } else {
+            $('#report_new table tbody').append(ele_newLine);
+            $(firstLineTag).attr('rowspan', (parseInt(rowspan)+1));
+        }
 
         setupInputLine('#report_new table tr:last');
-    }});
+    }}).plbtn('addIcon', 'img/icon/add_item.png');
     
+    // Btn personal, Save all lines
+    $('#w_add_save_all').plbtn({click:function(){
+        alert('w_add_save_all');
+    }}).plbtn('addIcon', 'img/icon/save.png');
 
-    $('#w_add_save_all').plbtn({click:function(){alert('w_add_save_all');}});
-    $('#w_add_newline').plbtn('addIcon', 'img/icon/add_item.png');
-    $('#w_add_save_all').plbtn('addIcon', 'img/icon/save.png');
 
-
-    $('textarea').autosize();
+    // Loading ....
+    //$('textarea').autosize();
 
     $(".btn_item").each(function(){
         $(this).plbtn({cssNormal:'btn_item_normal', cssHover:'btn_item_hover', cssDisabled:'btn_item_normal', cssChecked:'btn_item_normal'});
@@ -177,11 +253,15 @@ $(document).ready(function(){
         $(this).plbtn('addIcon', 'img/icon/delete_item.png');
     });
 
+
+
+    // Workaround for IE6 date picker
     var dataPickerBorderSize = 1;
     if ($.f.isIE6()) {
         dataPickerBorderSize = 0;
     }
 
+    // Init datapicker 1
     var datePicker = $('#w_query').glDatePicker({
         width:330, 
         height:280,
@@ -189,18 +269,18 @@ $(document).ready(function(){
         dowNames: <?=_('s_dow_names');?>,
         monthNames: <?=_('s_month_names');?>,
         onClick: function(el, cell, date, data) {
-            //el.val(date.toLocaleDateString());
-            alert(date.toLocaleDateString());
+            var time = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+            loadingList(T_ALL, time);
         }
     });
 
+    // Btn query from date
     $('#w_query').plbtn({click:function(){
         datePicker.show();
-    }});
-    $('#w_query').plbtn('addIcon', 'img/icon/calendar.png');
-    //$('#w_query').tipsy({delayIn:500, fallback:"<?=_('btn_w_date_eg');?>"});
+    }}).plbtn('addIcon', 'img/icon/calendar.png');
 
-     
+    
+    // Init datapicker 2
     var datePicker2 = $('#report_new_date_btn').glDatePicker({
         width:330, 
         height:280,
@@ -208,20 +288,21 @@ $(document).ready(function(){
         dowNames: <?=_('s_dow_names');?>,
         monthNames: <?=_('s_month_names');?>,
         onClick: function(el, cell, date, data) {
-            //el.val(date.toLocaleDateString());
-            alert('2:'+date.toLocaleDateString());
+            var time = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+            loadingList(T_PER, time);
         }
     });
     
+    // Btn personal, query from date
     $('#report_new_date_btn').plbtn({click:function(){
         datePicker2.show();
-    }});
-    $('#report_new_date_btn').plbtn('addIcon', 'img/icon/calendar.png');
+    }}).plbtn('addIcon', 'img/icon/calendar.png');
 
 
+    // Init
     // after loading exist items;
     // add a new line;
-    $('#w_add_newline').click();
+    // 
     $('#w_list').click();
 
 });
@@ -317,6 +398,7 @@ $(document).ready(function(){
           <col width="64" span="4" />
           <col width="240" />
           <col width="64" span="2" />
+          <tbody>
           <tr class="tableDate">
             <td colspan="8" width="688">时间：2013年8月12日-2013年8月16日</td>
           </tr>
@@ -436,6 +518,7 @@ $(document).ready(function(){
             <td width="64">　</td>
             <td width="64">　</td>
           </tr>
+          </tbody>
         </table>
         </div>
 
@@ -446,6 +529,7 @@ $(document).ready(function(){
           <col width="64" span="4" />
           <col width="240" />
           <col width="64" span="3" />
+          <tbody>
           <tr class="tableDate">
             <td colspan="9" width="752">
                 <div id="report_new_date">时间：2013年8月12日-2013年8月16日</div>
@@ -464,7 +548,7 @@ $(document).ready(function(){
             <td width="64"><?=_('table_header_actions');?></td>
           </tr>
           <tr>
-            <td rowspan="2"><? echo $_SESSION['real_name']; ?></td>
+            <td rowspan="2"><? echo $_SESSION['session_real_name']; ?></td>
             <td width="64">同方股份</td>
             <td width="64">资产重组</td>
             <td width="64">封卷</td>
@@ -490,6 +574,7 @@ $(document).ready(function(){
                 <div class="btn_item w_delete"></div>
             </td>
           </tr>
+          <tbody>
         </table>
         <div id="report_new_toolbar">
             <div id="w_add_newline" class="btn_base body_toolbar_item"><?=_('btn_w_add_newline');?></div>
