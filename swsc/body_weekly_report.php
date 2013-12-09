@@ -91,7 +91,7 @@ $(document).ready(function(){
         };
 
         var url = '?c=body_weekly_report_handler&action=add';
-        if (_id.length > 0) {
+        if (typeof _id!='undefined' && _id.length > 0) {
             url = '?c=body_weekly_report_handler&action=edit&_id='+_id;
         }
 
@@ -150,9 +150,7 @@ $(document).ready(function(){
             cssDisabled:'btn_item_normal', 
             cssChecked:'btn_item_normal'});
         $(sSelector+' .w_save').plbtn('addIcon', 'img/icon/save.png');
-        $(sSelector+' .w_save').click(function(){
-            onClickSave();
-        });
+        $(sSelector+' .w_save').click(onClickSave);
 
         // custom contextmenu
     };
@@ -186,37 +184,46 @@ $(document).ready(function(){
     };
 
     var assembleList = function(type, data) {
+        var tableDivId = 'report_list';
+        var lastLineId = '#report_list table tbody tr:last';
+        var newViewStr = ele_AllListLine;
+
         if (type == T_PER) {
-            // add a new line
-            $('#w_add_newline').click();
-        } else {
-            var table = $('#report_list table tbody');
-            var lastLineId = '#report_list table tr:last';
+            tableDivId = 'report_new';
+            lastLineId = '#report_new table tbody tr:last';
+            newViewStr = ele_newLine;
+        } 
+
+        {
+            //var lastLineId = '#report_list table tbody tr:last';
             var latestNameLine = $(lastLineId);
+            var indexOfLastNameLine = 1;
             var indexOfTdSet = 0;
 
             $.each(data, function(index, value) {
-                if (latestNameLine.data('_id') != value['_id']) {
-                    $(ele_AllListLine)
-                        .prepend('<td rowspan="1">'+value['real_name']+'</td>')
-                        .insertAfter(lastLineId);
+                var i = latestNameLine.data('_id_user');
+                if (latestNameLine.data('_id_user') != value['_id_user']) {
+                    var newLine = $(newViewStr).prepend('<td rowspan="1" style="color:black;">'+value['real_name']+'</td>')
+                    newLine.insertAfter(lastLineId);
                     latestNameLine = $(lastLineId);
-                    latestNameLine.data('_id', value['_id']);
+                    latestNameLine.data('_id_user', value['_id_user']);
                     indexOfTdSet = 1;
+                    indexOfLastNameLine = index + 2;
                 } else {
                     var tdRowSpan = document
-                        .getElementById('report_new')
+                        .getElementById(tableDivId)
                         .getElementsByTagName('table')[0]
-                        .getElementsByTagName('tr')[2]
+                        .getElementsByTagName('tr')[indexOfLastNameLine]
                         .getElementsByTagName('td')[0];
                     rowspan = tdRowSpan.rowSpan;
                     tdRowSpan.rowSpan = rowspan+1;
+                    indexOfTdSet = 0;
 
-                    $(ele_newLine).insertAfter(lastLineId);
+                    $(newViewStr).insertAfter(lastLineId);
                 }
 
                 // set datas
-                var newTdSet = table.children('tr:last').children('td');
+                var newTdSet = $(lastLineId).children('td');
 
                 newTdSet.eq(indexOfTdSet).html(value['pro_name']);
                 newTdSet.eq(indexOfTdSet+1).html(value['pro_type']);
@@ -225,7 +232,15 @@ $(document).ready(function(){
                 newTdSet.eq(indexOfTdSet+4).html(value['work_content']);
                 newTdSet.eq(indexOfTdSet+5).html(value['extra_worktime']);
                 newTdSet.eq(indexOfTdSet+6).html(value['trans_duration']);
+
+                if (type == T_PER) {
+                    //setupInputLine();
+                } 
             });
+            
+            if (type == T_PER) {
+                $('#w_add_newline').click();
+            } 
         }
     };
 

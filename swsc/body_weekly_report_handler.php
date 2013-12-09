@@ -68,6 +68,9 @@ if ($action == 'get_list') {
             }
 
             $row['real_name'] = $cacheNames[$row['_id_user']];
+            $row['extra_worktime'] = (int) $row['extra_worktime']; // trim 0
+            $row['trans_duration'] = (int) $row['trans_duration']; // trim 0
+
             array_push($retArry, $row);
         }
 
