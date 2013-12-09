@@ -26,6 +26,14 @@ function eventReceiver(e) {
 }
 
 $(document).ready(function(){
+    // ===================================================================
+    // Ajax Loading indicator
+
+    $(document).ajaxStart(function(){
+        $('#loading').show();
+    }).ajaxStop(function(){
+        $('#loading').hide();
+    });
 
     // ===================================================================
     // Constants
@@ -34,6 +42,16 @@ $(document).ready(function(){
     var T_PER = 'personal';
     var TIME_THIS_WEEK = 'thisWeek';
     var TIME_LAST_WEEK = 'lastWeek';
+
+    var ele_AllListLine = '<tr>\
+            <td width="64"></td>\
+            <td width="64"></td>\
+            <td width="64"></td>\
+            <td width="64"></td>\
+            <td width="240"></td>\
+            <td width="64"></td>\
+            <td width="64"></td>\
+          </tr>';
 
     var ele_newLine = '<tr class="elem_input">\
         <td width="64" class="id_proName"><textarea rows="1"></textarea></td>\
@@ -132,7 +150,9 @@ $(document).ready(function(){
             cssDisabled:'btn_item_normal', 
             cssChecked:'btn_item_normal'});
         $(sSelector+' .w_save').plbtn('addIcon', 'img/icon/save.png');
-        $(sSelector+' .w_save').click(onClickSave);
+        $(sSelector+' .w_save').click(function(){
+            onClickSave();
+        });
 
         // custom contextmenu
     };
@@ -154,7 +174,7 @@ $(document).ready(function(){
         $.get('?c=body_weekly_report_handler&action=get_list&type='+type+'&time='+time, function(data){
             if (data.ret) {
                 emptyTableList(type);
-                assembleList(type, data.dataRet);
+                assembleList(type, data.dataSet);
             }
             else {
                 alert('failed');
@@ -166,11 +186,46 @@ $(document).ready(function(){
     };
 
     var assembleList = function(type, data) {
-        
-
         if (type == T_PER) {
             // add a new line
             $('#w_add_newline').click();
+        } else {
+            var table = $('#report_list table tbody');
+            var lastLineId = '#report_list table tr:last';
+            var latestNameLine = $(lastLineId);
+            var indexOfTdSet = 0;
+
+            $.each(data, function(index, value) {
+                if (latestNameLine.data('_id') != value['_id']) {
+                    $(ele_AllListLine)
+                        .prepend('<td rowspan="1">'+value['real_name']+'</td>')
+                        .insertAfter(lastLineId);
+                    latestNameLine = $(lastLineId);
+                    latestNameLine.data('_id', value['_id']);
+                    indexOfTdSet = 1;
+                } else {
+                    var tdRowSpan = document
+                        .getElementById('report_new')
+                        .getElementsByTagName('table')[0]
+                        .getElementsByTagName('tr')[2]
+                        .getElementsByTagName('td')[0];
+                    rowspan = tdRowSpan.rowSpan;
+                    tdRowSpan.rowSpan = rowspan+1;
+
+                    $(ele_newLine).insertAfter(lastLineId);
+                }
+
+                // set datas
+                var newTdSet = table.children('tr:last').children('td');
+
+                newTdSet.eq(indexOfTdSet).html(value['pro_name']);
+                newTdSet.eq(indexOfTdSet+1).html(value['pro_type']);
+                newTdSet.eq(indexOfTdSet+2).html(value['pro_stage']);
+                newTdSet.eq(indexOfTdSet+3).html(value['work_address']);
+                newTdSet.eq(indexOfTdSet+4).html(value['work_content']);
+                newTdSet.eq(indexOfTdSet+5).html(value['extra_worktime']);
+                newTdSet.eq(indexOfTdSet+6).html(value['trans_duration']);
+            });
         }
     };
 
@@ -220,18 +275,27 @@ $(document).ready(function(){
     
     // Btn personal, Add new line
     $('#w_add_newline').plbtn({click:function(){
-        var firstLineTag = '#report_new table tr:last';
-        var rowspan = $(firstLineTag).children('td:first').attr('rowspan');
+        var lastLineId = '#report_new table tr:last';
+        var rowspan = $('#report_new table tr:nth-child(3) td:first').attr('rowspan');
+
+        try {
+            var tdRowSpan = document
+                .getElementById('report_new')
+                .getElementsByTagName('table')[0]
+                .getElementsByTagName('tr')[2]
+                .getElementsByTagName('td')[0];
+            rowspan = tdRowSpan.rowSpan;
+            tdRowSpan.rowSpan = rowspan+1;
+        }catch(e){}
 
         if (typeof rowspan == 'undefined') {
-            var firstInputLien = $(ele_newLine).prepend('<td rowspan="1"><?=$_SESSION["session_real_name"];?></td>');
-            $('#report_new table tbody').append(firstInputLien);
+            var firstInputLine = $(ele_newLine).prepend('<td rowspan="1"><?=$_SESSION["session_real_name"];?></td>');
+            firstInputLine.insertAfter(lastLineId);
         } else {
-            $('#report_new table tbody').append(ele_newLine);
-            $(firstLineTag).attr('rowspan', (parseInt(rowspan)+1));
+            $(ele_newLine).insertAfter(lastLineId);
         }
 
-        setupInputLine('#report_new table tr:last');
+        setupInputLine(lastLineId);
     }}).plbtn('addIcon', 'img/icon/add_item.png');
     
     // Btn personal, Save all lines
@@ -240,7 +304,7 @@ $(document).ready(function(){
     }}).plbtn('addIcon', 'img/icon/save.png');
 
 
-    // Loading ....
+    // Loading .... {{{
     //$('textarea').autosize();
 
     $(".btn_item").each(function(){
@@ -252,6 +316,8 @@ $(document).ready(function(){
     $(".w_delete").each(function(){
         $(this).plbtn('addIcon', 'img/icon/delete_item.png');
     });
+
+    // }}}
 
 
 
@@ -375,7 +441,7 @@ $(document).ready(function(){
 </style>
 </head>
 <body>
-    <div class="body_navi">&bull;&nbsp;<?=_('navi_weekly_report');?></div>
+    <div class="body_navi">&bull;&nbsp;<?=_('navi_weekly_report');?><img id="loading" src="img/loading.gif" /></div>
     <div class="body_toolbar">
         <div id="body_toolbar_list">
         <div id="w_this" class="btn_base body_toolbar_item"><?=_('btn_w_this');?></div>
@@ -547,38 +613,13 @@ $(document).ready(function(){
             <td width="64"><?=_('table_header_transDuration');?></td>
             <td width="64"><?=_('table_header_actions');?></td>
           </tr>
-          <tr>
-            <td rowspan="2"><? echo $_SESSION['session_real_name']; ?></td>
-            <td width="64">同方股份</td>
-            <td width="64">资产重组</td>
-            <td width="64">封卷</td>
-            <td width="64">北京</td>
-            <td width="240">制作同方要求的申报材料</td>
-            <td width="64">0</td>
-            <td width="64">0</td>
-            <td class="item_actions">
-                <div class="btn_item w_edit"></div>
-                <div class="btn_item w_delete"></div>
-            </td>
-          </tr>
-          <tr>
-            <td width="64">德基机械</td>
-            <td width="64">IPO</td>
-            <td width="64">审核反馈</td>
-            <td width="64">浙江宁波、辽宁阜新</td>
-            <td width="240">走访德基机械客户</td>
-            <td width="64">0</td>
-            <td width="64">10</td>
-            <td class="item_actions">
-                <div class="btn_item w_edit"></div>
-                <div class="btn_item w_delete"></div>
-            </td>
-          </tr>
           <tbody>
         </table>
         <div id="report_new_toolbar">
             <div id="w_add_newline" class="btn_base body_toolbar_item"><?=_('btn_w_add_newline');?></div>
+            <!--
             <div id="w_add_save_all" class="btn_base body_toolbar_item"><?=_('btn_w_add_save_all');?></div>
+            -->
         </div>
         </div>
     </div>

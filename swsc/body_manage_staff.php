@@ -28,6 +28,14 @@ function eventReceiver(e) {
 
 
 $(document).ready(function(){
+    // ===================================================================
+    // Ajax Loading indicator
+    
+    $(document).ajaxStart(function(){
+        $('#loading').show();
+    }).ajaxStop(function(){
+        $('#loading').hide();
+    });
 
     // ===================================================================
     // Constants
@@ -175,6 +183,10 @@ $(document).ready(function(){
 
                 // need clear form?
                 if (!isEdit) removeEditForm();
+                else {
+                    // edit self date, update UI
+                    window.parent.frames["banner"].document.location.reload(true);
+                }
             } else {
                 var infoTip = "<?=_('staff_save_failed');?>";
                 if ('account_exist'==data.info) {
@@ -249,7 +261,6 @@ $(document).ready(function(){
 
                 $.each(data.dataSet, function(index, value) {
                     tBody.append(listItemContainer);
-                    var _id = value[5];
                     var newLine = tBody.children('tr:last');
                     var newTdSet = newLine.children('td');
                     newTdSet.eq(0).html(value['account']);
@@ -279,7 +290,6 @@ $(document).ready(function(){
                     $("#staff_list table tr:last td .btn_delete")
                         .plbtn('addIcon', 'img/icon/delete_item.png')
                         .click(function() {
-                            //actionDelete(_id);
                             actionPreDelete(this, value['_id']);
                         });
                     $("#staff_list table tr:last td .btn_keyreset")
@@ -457,7 +467,7 @@ $(document).ready(function(){
 </style>
 </head>
 <body>
-    <div class="body_navi">&bull;&nbsp;<?=_('navi_manage_staff');?></div>
+    <div class="body_navi">&bull;&nbsp;<?=_('navi_manage_staff');?><img id="loading" src="img/loading.gif" /></div>
     <div class="body_toolbar">
         <div id="body_toolbar_list">
             <div id="staff_btn_list" class="btn_base body_toolbar_item"><?=_('s_return_to_list');?></div>

@@ -38,13 +38,16 @@ $(document).ready(function(){
         .click(function(){
             $.get("?c=exit", function(data){
                 if (data.ret) {
-                    self.parent.location.reload();
+                    //self.parent.location.reload();
                 } else {
-                    alert('<?=_("tip_error");?>');
+                    //alert('<?=_("tip_error");?>');
                 }
+
+                self.parent.location.reload();
             }, "json")
             .fail(function(){
-                alert('fail');
+                //alert('fail');
+                self.parent.location.reload();
             });
         });
 

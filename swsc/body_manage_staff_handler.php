@@ -139,6 +139,12 @@ else if ($action == 'edit') {
 
     $rs = @mysql_query($sql, $conn);
     if ($rs) {
+        if ($_SESSION['session_account_id'] == $_id) {
+            // update the seesion values
+            $_SESSION['session_account']    = $account;
+            $_SESSION['session_real_name']  = $real_name;
+        }
+
         _exit_json(array('ret'=>true));
     }
 

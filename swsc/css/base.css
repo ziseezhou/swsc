@@ -45,6 +45,7 @@ input[type=text]:focus,input[type=password]:focus{
     background-color:#FFE88E;
     border-bottom: solid 1px #F3AD47;
 }
+.body_navi #loading { margin-left: 10px;}
 .body_toolbar {
     padding: 5px;
 }
