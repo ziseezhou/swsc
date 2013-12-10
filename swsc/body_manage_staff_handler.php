@@ -3,6 +3,8 @@ include_once('security.php');
 include_once('fun.php');
 PG_ASSERT(_local_file_load('common'));
 
+$LOG_TAG = 'STAFF';
+
 $action    = $_GET['action'];
 
 // functions
@@ -93,6 +95,17 @@ else if ($action == 'delete') {
     
     $rs = @mysql_query($sql, $conn);
     if ($rs == TRUE) {
+        // Oh, my god, you delete yourself
+        if ($_SESSION['session_account_id'] == $_id) {
+            // update the seesion values
+            unset($_SESSION['session_account_id']);
+            unset($_SESSION['session_real_name']);
+            unset($_SESSION['session_account']);
+            ZLOG($LOG_TAG, 'delete, MY GOD! delete self');
+            include('login.php');
+            exit;
+        }
+
         _exit_json(array('ret'=>true));
     }
 
@@ -135,7 +148,7 @@ else if ($action == 'edit') {
     $sql .= " portrait = '$portrait'";
     $sql .= " where _id=$_id";
 
-    _exit_json(array('ret'=>false, 'info'=>$sql));
+    //_exit_json(array('ret'=>false, 'info'=>$sql));
 
     $rs = @mysql_query($sql, $conn);
     if ($rs) {
@@ -145,6 +158,7 @@ else if ($action == 'edit') {
             $_SESSION['session_real_name']  = $real_name;
         }
 
+        ZLOG_UPDATE($LOG_TAG, $_id, $account, $real_name, $email, $enable, $level, $$portrait);
         _exit_json(array('ret'=>true));
     }
 

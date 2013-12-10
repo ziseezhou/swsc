@@ -13,6 +13,7 @@ PG_ASSERT(_local_file_load('common'));
 <link href='css/base.css' rel='stylesheet' type='text/css' />
 <link href='css/btn.css' rel='stylesheet' type='text/css' />
 <link href='css/tipsy.css' rel='stylesheet' type='text/css' />
+<link href='css/floatBox.css' rel='stylesheet' type='text/css' />
 <link href="css/glDatePicker.default.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
@@ -95,9 +96,12 @@ $(document).ready(function(){
             'id_transDuration': transDuration
         };
 
-        var url = '?c=body_weekly_report_handler&action=add';
+        var url;
         if (typeof _id!='undefined' && parseInt(_id)>0) {
             url = '?c=body_weekly_report_handler&action=edit&_id='+_id;
+        } else {
+            var time = $('#report_new .report_new_date').data('date');
+            url = '?c=body_weekly_report_handler&action=add&time='+time;
         }
 
         var btnSave = $(this);
@@ -109,9 +113,6 @@ $(document).ready(function(){
                         btnSave.data('_id', data._id);
                     switchMode(btnSave, false);
                 } else {
-                    //infobox.html("<?=_('login_input_error');?>");
-                    //infobox.show();
-                    // show error;
                     alert(data.info);
                 }
             }, "json")
@@ -125,7 +126,36 @@ $(document).ready(function(){
         $.f.showDeleteConfirm(elem, '<?=_("s_delete");?>', _id, actionDelete);
     };
 
-    var actionDelete = function() {};
+    var actionDelete = function(_id, elem) {
+        var url = '?c=body_weekly_report_handler&action=delete&_id='+_id;
+        $.get(url, function(data){
+            if (data.ret) {
+                var rowspan = $('#report_new table tr:nth-child(3) td:first').attr('rowspan');
+                try {
+                    var tdRowSpan = document
+                        .getElementById('report_new')
+                        .getElementsByTagName('table')[0]
+                        .getElementsByTagName('tr')[2]
+                        .getElementsByTagName('td')[0];
+                    rowspan = tdRowSpan.rowSpan -1;
+                    tdRowSpan.rowSpan = rowspan;
+                }catch(e){}
+
+                var tr = $(elem).parent().parent();
+                if (tr.index() == 2){
+                    $('<td rowspan="'+rowspan+'" style="color:black;"></td>')
+                        .html(tr.children('td:first').html())
+                        .prependTo(tr.next());
+                }
+                tr.remove();
+            } else {
+                alert('failed');
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
+    };
     var actionEdit = function() {};
 
     var switchMode = function(elem, isEditMode) {
@@ -443,6 +473,7 @@ $(document).ready(function(){
             var time = date.getFullYear()+'-'+
                        ('0'+(date.getMonth()+1)).slice(-2)+'-'+
                        ('0'+date.getDate()).slice(-2);
+            $('#report_new .report_new_date').data('date', time);
             loadingList(T_PER, time);
         }
     });

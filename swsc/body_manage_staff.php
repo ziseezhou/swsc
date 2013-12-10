@@ -212,7 +212,7 @@ $(document).ready(function(){
 
 
     var actionDelete = 
-    function(_id) {
+    function(_id, elem) {
         //if (!window.confirm("<?=_('s_delete_confirm');?>")) {
         //    return;
         //}
@@ -220,7 +220,9 @@ $(document).ready(function(){
         var url = '?c=body_manage_staff_handler&action=delete&_id='+_id;
         $.get(url, function(data){
             if (data.ret) {
-                loadUserList();
+                //loadUserList();
+                var tr = $(elem).parent().parent();
+                tr.remove();
             } else {
                 alert('failed');
             }

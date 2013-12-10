@@ -43,6 +43,13 @@ if (strlen($account) > 0) {
 <script type="text/javascript" src="js/md5.js"></script>
 <script type="text/javascript">                                         
 $(document).ready(function(){
+    // avoid login page in frameset;
+    try{
+        if (typeof window.parent != "undefined") {
+            window.parent.location.refresh(true);
+        }
+    }catch(e){}
+
     $("#loginForm").submit(function(event){
         event.preventDefault();
 

@@ -22,7 +22,7 @@
             .plbtn({cssNormal:'btn_red_normal', cssHover:'btn_red_hover'})
             .plbtn('addIcon', 'img/icon/trash.png')
             .click(function(e){
-                action(_id);
+                action(_id, elem);
                 $(document).trigger('mouseup', e);
             });
 

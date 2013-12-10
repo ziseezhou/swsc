@@ -155,4 +155,56 @@ function rand_password($pw_length = 8){
     return $randpwd;
 }
 
+function ZLOG($TAG, $str) {
+    $log = $TAG.':'.$str;
+
+    $sql = 'insert into log (user_id, user_account, user_name, log) values';
+    $sql.= '("'.$_SESSION['session_account_id'].'", "'.$_SESSION['session_account'].'","'.$_SESSION['session_real_name'].'", "'.$log.'")';
+
+    $conn = conn();
+    mysql_query($sql, $conn);
+}
+
+function ZLOG_INSERT() {
+    $TAG  = 'NULL';
+    $str  = 'INSERT:';
+    $args = func_get_args(); 
+    foreach ( $args as $key => $value ) {
+        if ($key == 0) $TAG = $value;
+        else {
+            $str .= $value.',';
+        }
+    }
+
+    ZLOG($TAG, $str);
+}
+
+function ZLOG_UPDATE() {
+    $TAG  = 'NULL';
+    $str  = 'UPDATE:';
+    $args = func_get_args(); 
+    foreach ( $args as $key => $value ) {
+        if ($key == 0) $TAG = $value;
+        else {
+            $str .= $value.',';
+        }
+    }
+
+    ZLOG($TAG, $str);
+}
+
+function ZLOG_DEL() {
+    $TAG  = 'NULL';
+    $str  = 'DEL:';
+    $args = func_get_args(); 
+    foreach ( $args as $key => $value ) {
+        if ($key == 0) $TAG = $value;
+        else {
+            $str .= $value.',';
+        }
+    }
+
+    ZLOG($TAG, $str);
+}
+
 ?>
