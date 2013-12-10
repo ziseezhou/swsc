@@ -61,15 +61,20 @@ $(document).ready(function(){
         <td width="240" class="id_workContent"><textarea rows="1"></textarea></td>\
         <td width="64" class="id_extraWorktime"><input type="text" value="0" maxlength="3" /></td>\
         <td width="64" class="id_transDuration"><input type="text" value="0" maxlength="3" /></td>\
-        <td class="item_actions"><div class="btn_item w_save"></div></td>\
+        <td class="item_actions">\
+            <div class="btn_item btn_save"></div>\
+            <div class="btn_item btn_edit"></div>\
+            <div class="btn_item btn_delete"></div>\
+        </td>\
       </tr>';
 
 
     // ===================================================================
     // Functions
 
-    var onClickSave = function(_id) {
+    var actionSave = function() {
         var tr = $(this).parent().parent();
+        var _id = $(this).data('_id');
 
         var proName = tr.children('.id_proName').children('textarea').val();
         var proType = tr.children('.id_proType').children('textarea').val();
@@ -91,15 +96,18 @@ $(document).ready(function(){
         };
 
         var url = '?c=body_weekly_report_handler&action=add';
-        if (typeof _id!='undefined' && _id.length > 0) {
+        if (typeof _id!='undefined' && parseInt(_id)>0) {
             url = '?c=body_weekly_report_handler&action=edit&_id='+_id;
         }
 
+        var btnSave = $(this);
         $.post(url, dataInput,
             function(data){
                 if (data.ret) {
                     // succeed
-                    // show the new item 
+                    if (typeof data._id != 'undefined' && parseInt(data._id) > 0)
+                        btnSave.data('_id', data._id);
+                    switchMode(btnSave, false);
                 } else {
                     //infobox.html("<?=_('login_input_error');?>");
                     //infobox.show();
@@ -112,10 +120,35 @@ $(document).ready(function(){
         });
     };
 
-    var onClickDelete = function() {};
-    var onClickEdit = function() {};
+    var actionPreDelete =
+    function(elem, _id) {
+        $.f.showDeleteConfirm(elem, '<?=_("s_delete");?>', _id, actionDelete);
+    };
 
-    var setupInputLine = function (sSelector) {
+    var actionDelete = function() {};
+    var actionEdit = function() {};
+
+    var switchMode = function(elem, isEditMode) {
+        var tr = $(elem).parent().parent();
+
+        if (isEditMode) {
+            tr.find('.btn_save').css('display', 'block');
+            tr.find('.btn_edit').css('display', 'none');
+            tr.find('.btn_delete').css('display', 'none');
+
+            tr.find('textarea').css('color', '#0000CD').prop('readonly', false);
+            tr.find('input').css('color', '#0000CD').prop('readonly', false);
+        } else {
+            tr.find('.btn_save').css('display', 'none');
+            tr.find('.btn_edit').css('display', 'block');
+            tr.find('.btn_delete').css('display', 'block');
+
+            tr.find('textarea').css('color', 'black').prop('readonly', true);
+            tr.find('input').css('color', 'black').prop('readonly', true);
+        }
+    };
+
+    var setupInputLine = function (sSelector, isEditMode, _id) {
         $(sSelector+' td').each(function(){
             var childInput = $(this).children('input');
             var childTextArea = $(this).children('textarea');
@@ -144,14 +177,42 @@ $(document).ready(function(){
         });
 
         $(sSelector+' textarea').autosize();
-        $(sSelector+' .w_save').plbtn({
+
+        if (typeof isEditMode != 'undefined' && isEditMode) {
+            $(sSelector+' textarea').css('color', '#0000CD').prop('readonly', false);
+            $(sSelector+' input').css('color', '#0000CD').prop('readonly', false);
+            _id = 0;
+        } else {
+            $(sSelector+' textarea').css('color', 'black').prop('readonly', true);
+            $(sSelector+' input').css('color', 'black').prop('readonly', true);
+        }
+
+        $(sSelector+' .btn_item').plbtn({
             cssNormal:'btn_item_normal', 
             cssHover:'btn_item_hover', 
             cssDisabled:'btn_item_normal', 
-            cssChecked:'btn_item_normal'});
-        $(sSelector+' .w_save').plbtn('addIcon', 'img/icon/save.png');
-        $(sSelector+' .w_save').click(onClickSave);
+            cssChecked:'btn_item_normal'
+            });
+        
+        $(sSelector+' .btn_save')
+            .plbtn('addIcon', 'img/icon/save.png')
+            .click(actionSave)
+            .data('_id', _id);
 
+        $(sSelector+' .btn_edit')
+            .plbtn('addIcon', 'img/icon/edit_item.png')
+            .click(function(){
+                switchMode(this, true);
+            });
+
+        $(sSelector+' .btn_delete')
+            .plbtn('addIcon', 'img/icon/delete_item.png')
+            .click(function(){
+                actionPreDelete(this, _id);
+            });
+
+
+        switchMode($(sSelector+' .btn_save'), !(parseInt(_id)>0));
         // custom contextmenu
     };
 
@@ -172,7 +233,7 @@ $(document).ready(function(){
         $.get('?c=body_weekly_report_handler&action=get_list&type='+type+'&time='+time, function(data){
             if (data.ret) {
                 emptyTableList(type);
-                assembleList(type, data.dataSet);
+                assembleList(type, data.dataDate, data.dataSet);
             }
             else {
                 alert('failed');
@@ -183,7 +244,7 @@ $(document).ready(function(){
         });
     };
 
-    var assembleList = function(type, data) {
+    var assembleList = function(type, date, data) {
         var tableDivId = 'report_list';
         var lastLineId = '#report_list table tbody tr:last';
         var newViewStr = ele_AllListLine;
@@ -201,7 +262,6 @@ $(document).ready(function(){
             var indexOfTdSet = 0;
 
             $.each(data, function(index, value) {
-                var i = latestNameLine.data('_id_user');
                 if (latestNameLine.data('_id_user') != value['_id_user']) {
                     var newLine = $(newViewStr).prepend('<td rowspan="1" style="color:black;">'+value['real_name']+'</td>')
                     newLine.insertAfter(lastLineId);
@@ -224,19 +284,28 @@ $(document).ready(function(){
 
                 // set datas
                 var newTdSet = $(lastLineId).children('td');
-
-                newTdSet.eq(indexOfTdSet).html(value['pro_name']);
-                newTdSet.eq(indexOfTdSet+1).html(value['pro_type']);
-                newTdSet.eq(indexOfTdSet+2).html(value['pro_stage']);
-                newTdSet.eq(indexOfTdSet+3).html(value['work_address']);
-                newTdSet.eq(indexOfTdSet+4).html(value['work_content']);
-                newTdSet.eq(indexOfTdSet+5).html(value['extra_worktime']);
-                newTdSet.eq(indexOfTdSet+6).html(value['trans_duration']);
-
                 if (type == T_PER) {
-                    //setupInputLine();
-                } 
+                    newTdSet.eq(indexOfTdSet).children('textarea').val(value['pro_name']);
+                    newTdSet.eq(indexOfTdSet+1).children('textarea').val(value['pro_type']);
+                    newTdSet.eq(indexOfTdSet+2).children('textarea').val(value['pro_stage']);
+                    newTdSet.eq(indexOfTdSet+3).children('textarea').val(value['work_address']);
+                    newTdSet.eq(indexOfTdSet+4).children('textarea').val(value['work_content']);
+                    newTdSet.eq(indexOfTdSet+5).children('input').val(value['extra_worktime']);
+                    newTdSet.eq(indexOfTdSet+6).children('input').val(value['trans_duration']);
+                    setupInputLine(lastLineId, false, value['_id']);
+                } else {
+                    newTdSet.eq(indexOfTdSet).html(value['pro_name']);
+                    newTdSet.eq(indexOfTdSet+1).html(value['pro_type']);
+                    newTdSet.eq(indexOfTdSet+2).html(value['pro_stage']);
+                    newTdSet.eq(indexOfTdSet+3).html(value['work_address']);
+                    newTdSet.eq(indexOfTdSet+4).html(value['work_content']);
+                    newTdSet.eq(indexOfTdSet+5).html(value['extra_worktime']);
+                    newTdSet.eq(indexOfTdSet+6).html(value['trans_duration']);
+                }
             });
+
+            // set time
+            $('#'+tableDivId+' .report_new_date').html('<?=_("s_time");?>: '+date);
             
             if (type == T_PER) {
                 $('#w_add_newline').click();
@@ -304,13 +373,13 @@ $(document).ready(function(){
         }catch(e){}
 
         if (typeof rowspan == 'undefined') {
-            var firstInputLine = $(ele_newLine).prepend('<td rowspan="1"><?=$_SESSION["session_real_name"];?></td>');
+            var firstInputLine = $(ele_newLine).prepend('<td rowspan="1" style="color:black;"><?=$_SESSION["session_real_name"];?></td>');
             firstInputLine.insertAfter(lastLineId);
         } else {
             $(ele_newLine).insertAfter(lastLineId);
         }
 
-        setupInputLine(lastLineId);
+        setupInputLine(lastLineId, true, 0);
     }}).plbtn('addIcon', 'img/icon/add_item.png');
     
     // Btn personal, Save all lines
@@ -350,7 +419,9 @@ $(document).ready(function(){
         dowNames: <?=_('s_dow_names');?>,
         monthNames: <?=_('s_month_names');?>,
         onClick: function(el, cell, date, data) {
-            var time = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+            var time = date.getFullYear()+'-'+
+                       ('0'+(date.getMonth()+1)).slice(-2)+'-'+
+                       ('0'+date.getDate()).slice(-2);
             loadingList(T_ALL, time);
         }
     });
@@ -369,7 +440,9 @@ $(document).ready(function(){
         dowNames: <?=_('s_dow_names');?>,
         monthNames: <?=_('s_month_names');?>,
         onClick: function(el, cell, date, data) {
-            var time = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+            var time = date.getFullYear()+'-'+
+                       ('0'+(date.getMonth()+1)).slice(-2)+'-'+
+                       ('0'+date.getDate()).slice(-2);
             loadingList(T_PER, time);
         }
     });
@@ -400,16 +473,20 @@ $(document).ready(function(){
     font-weight: bold;
     border-top: solid 2px black;
     border-bottom: solid 2px black;
-    height: 2.5em;
+    height: 3.0em;
 }
 .tableDate div {
     float:left;
 }
-.tableDate #report_new_date {
-    line-height: 2.2em;
+.tableDate .report_new_date {
+    line-height: 2.5em;
+    width: 180px;
 }
 .tableDate #report_new_date_btn {
     margin-left: 5px;
+}
+.fontBlack {
+    color: black;
 }
 #report_new input, textarea {
     width: 100%;
@@ -436,7 +513,6 @@ $(document).ready(function(){
     color: #0000CD;
 }
 .elem_input td {
-    padding-top: 4px;
     vertical-align: top;
 }
 .elem_input textarea {
@@ -481,7 +557,9 @@ $(document).ready(function(){
           <col width="64" span="2" />
           <tbody>
           <tr class="tableDate">
-            <td colspan="8" width="688">时间：2013年8月12日-2013年8月16日</td>
+            <td colspan="8" width="688">
+                <div class="report_new_date"></div>
+            </td>
           </tr>
           <tr class="tableHeader">
             <td><?=_('table_header_Name');?></td>
@@ -492,112 +570,6 @@ $(document).ready(function(){
             <td width="240"><?=_('table_header_workContent');?></td>
             <td width="64"><?=_('table_header_extraWorktime');?></td>
             <td width="64"><?=_('table_header_transDuration');?></td>
-          </tr>
-          <tr>
-            <td>苏磊</td>
-            <td width="64">赛轮股份</td>
-            <td width="64">非公开</td>
-            <td width="64">答复反馈意见</td>
-            <td width="64">青岛</td>
-            <td width="240">补充半年报及答复反馈意见</td>
-            <td width="64">0</td>
-            <td width="64">　</td>
-          </tr>
-          <tr>
-            <td>宋元</td>
-            <td width="64">德基机械</td>
-            <td width="64">IPO</td>
-            <td width="64">补半年报</td>
-            <td width="64">北京</td>
-            <td width="240">更新财务数据</td>
-            <td width="64">　</td>
-            <td width="64">　</td>
-          </tr>
-          <tr>
-            <td>牛志鹏</td>
-            <td width="64">天和众邦</td>
-            <td width="64">IPO</td>
-            <td width="64">保荐阶段</td>
-            <td width="64">北京</td>
-            <td width="240">更新半年报及反馈意见</td>
-            <td width="64">--</td>
-            <td width="64">--</td>
-          </tr>
-          <tr>
-            <td>李建功</td>
-            <td width="64">高鸿股份</td>
-            <td width="64">资产重组</td>
-            <td width="64">尽职调查</td>
-            <td width="64">北京</td>
-            <td width="240">尽职调查</td>
-            <td width="64">无</td>
-            <td width="64">无</td>
-          </tr>
-          <tr>
-            <td>王宜生</td>
-            <td width="64">长征电气非公开项目</td>
-            <td width="64">非公开</td>
-            <td width="64">辅导&amp;尽职调查</td>
-            <td width="64">北京</td>
-            <td width="240">长征电气过往三年及一期关联交易情况核查、上次募投项目、本次募投项目内容及重大合同核对</td>
-            <td width="64">0小时</td>
-            <td width="64">0小时</td>
-          </tr>
-          <tr>
-            <td rowspan="2">侯泱</td>
-            <td width="64">同方股份</td>
-            <td width="64">资产重组</td>
-            <td width="64">封卷</td>
-            <td width="64">北京</td>
-            <td width="240">制作同方要求的申报材料</td>
-            <td width="64">0小时</td>
-            <td width="64">0小时</td>
-          </tr>
-          <tr>
-            <td width="64">德基机械</td>
-            <td width="64">IPO</td>
-            <td width="64">审核反馈</td>
-            <td width="64">浙江宁波、辽宁阜新</td>
-            <td width="240">走访德基机械客户</td>
-            <td width="64">0小时</td>
-            <td width="64">10小时</td>
-          </tr>
-          <tr>
-            <td rowspan="4">陈明星</td>
-            <td width="64">山东美多</td>
-            <td width="64">IPO</td>
-            <td width="64">辅导</td>
-            <td width="64">北京</td>
-            <td width="240">撰写业务与技术章节，跟踪蓝天环科模拟合并问题</td>
-            <td width="64">　</td>
-            <td width="64">　</td>
-          </tr>
-          <tr>
-            <td width="64">绿翔糖业</td>
-            <td width="64">IPO</td>
-            <td width="64">改制</td>
-            <td width="64">北京</td>
-            <td width="240">召开中介会，准备股改相关工作，督促企业尽快股改</td>
-            <td width="64">　</td>
-            <td width="64">　</td>
-          </tr>
-          <tr>
-            <td width="64">长征电气</td>
-            <td width="64">非公开</td>
-            <td width="64">尽调</td>
-            <td width="64">北京</td>
-            <td width="240">尽职调查，撰写尽调报告</td>
-            <td width="64">　</td>
-            <td width="64">　</td>
-          </tr>
-          <tr>
-            <td width="64">同方股份</td>
-            <td width="64">重组</td>
-            <td width="64">发行</td>
-            <td width="64">北京</td>
-            <td width="240">准备发行阶段相关文件</td>
-            <td width="64">　</td>
-            <td width="64">　</td>
           </tr>
           </tbody>
         </table>
@@ -613,7 +585,7 @@ $(document).ready(function(){
           <tbody>
           <tr class="tableDate">
             <td colspan="9" width="752">
-                <div id="report_new_date">时间：2013年8月12日-2013年8月16日</div>
+                <div class="report_new_date"></div>
                 <div id="report_new_date_btn" class="btn_base body_toolbar_item"><?=_('btn_w_date_else');?></div>
             </td>
           </tr>

@@ -23,6 +23,7 @@ next|后一天
 today|今天
 
 // common
+s_time|时间
 s_new|新建
 s_add|添加
 s_settings|设置

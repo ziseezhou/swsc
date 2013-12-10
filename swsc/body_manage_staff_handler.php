@@ -135,7 +135,7 @@ else if ($action == 'edit') {
     $sql .= " portrait = '$portrait'";
     $sql .= " where _id=$_id";
 
-    //_exit_json(array('ret'=>false, 'info'=>$sql));
+    _exit_json(array('ret'=>false, 'info'=>$sql));
 
     $rs = @mysql_query($sql, $conn);
     if ($rs) {

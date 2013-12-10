@@ -21,15 +21,30 @@ if ($action == 'get_list') {
     $time = $_GET['time'];
     $sql  = 'select * from weekly_report where ';
     
+    $dateFormat = 'Y.m.d';
+    $queryDate  = 'invalid';
+
     // compose sql
     if ($time == 'thisWeek') {
         $sql .= ' YEARWEEK(date_format(report_date, \'%Y-%m-%d\')) = YEARWEEK(now())';
+        $queryDate = date($dateFormat, mktime(0, 0 , 0, date("m"), date("d")-date("w")+1, date("Y"))).'-';
+        $queryDate.= date($dateFormat, mktime(23,59,59, date("m"), date("d")-date("w")+7, date("Y")));
     } else if ($time == 'lastWeek') {
         $sql .= ' YEARWEEK(date_format(report_date, \'%Y-%m-%d\')) = YEARWEEK(now())-1';
-    } else if (date_create_from_format('Y-m-d', $time) != FALSE) {
-        $sql .= ' YEARWEEK(date_format(report_date, \'%Y-%m-%d\')) = YEARWEEK('.$time.')';
+        $queryDate = date($dateFormat, mktime(0, 0 , 0, date("m"), date("d")-date("w")+1-7, date("Y"))).'-';
+        $queryDate.= date($dateFormat, mktime(23,59,59, date("m"), date("d")-date("w")+7-7, date("Y")));
+    //} else if (date_create_from_format('Y-m-d', $time) != FALSE) {
+    } else if (date('Y-m-d', strtotime($time)) == $time) {
+        // avoid 00:00:00, it will be the next day
+        $time = date('Y-m-d', strtotime("-1 days", strtotime($time)));
+        $sql  .= ' YEARWEEK(date_format(report_date, \'%Y-%m-%d\')) = YEARWEEK("'.$time.'")';
+        
+        $d         = strtotime($time);
+        $queryDate = date($dateFormat, mktime(0, 0 , 0, date("m", $d), date("d", $d)-date("w", $d)+1, date("Y", $d))).'-';
+        $queryDate.= date($dateFormat, mktime(23,59,59, date("m", $d), date("d", $d)-date("w", $d)+7, date("Y", $d)));
     } else {
-        _exit_json(array('ret'=>false, 'info'=>'Paramenter error: invalid weekly report type'));
+        _exit_json(array('ret'=>false, 'info'=>'Paramenter error: invalid weekly report type',
+                         'date'=>date('Y-m-d', strtotime($time)), 'time'=>$time));
     }
 
     if ($type == 'all') {
@@ -74,7 +89,7 @@ if ($action == 'get_list') {
             array_push($retArry, $row);
         }
 
-        _exit_json(array('ret'=>'true', 'dataSet'=>$retArry));
+        _exit_json(array('ret'=>'true', 'dataDate'=>$queryDate, 'dataSet'=>$retArry));
     }
 
     // create json data
@@ -110,7 +125,8 @@ else if ($action == 'add') {
     
     $rs = @mysql_query($sql, $conn);
     if ($rs == TRUE) {
-        _exit_json(array('ret'=>true));
+        $_id = mysql_insert_id();
+        _exit_json(array('ret'=>true, '_id'=>$_id));
     }
 
     _exit_json(array('ret'=>false));
@@ -118,14 +134,56 @@ else if ($action == 'add') {
 
 // Edit data
 else if ($action == 'edit') {
-    ;
+    $_id = $_GET['_id'];
+
+    $proName       = $_POST['id_proName'];
+    $proType       = $_POST['id_proType'];
+    $proStage      = $_POST['id_proStage']; 
+    $workAddress   = $_POST['id_workAddress'];
+    $workContent   = $_POST['id_workContent'];
+    $extraWorktime = $_POST['id_extraWorktime'];
+    $transDuration = $_POST['id_transDuration'];
+
+    $update_time = date('Y-m-d H:i:s');
+
+    $sql  = ' update weekly_report set';
+    $sql .= " pro_name = '$proName',";
+    $sql .= " pro_type = '$proType',";
+    $sql .= " pro_stage = '$proStage',";
+    $sql .= " work_address = '$workAddress',";
+    $sql .= " work_content = '$workContent',";
+    $sql .= " extra_worktime = '$extraWorktime',";
+    $sql .= " trans_duration = '$transDuration',";
+    $sql .= " report_update_date = '$update_time'";
+    $sql .= " where _id=$_id";
+
+    //_exit_json(array('ret'=>false, 'info'=>$sql));
+
+    $conn = conn();
+    PG_ASSERT2($conn, 'db conn error!', true);
+    
+    $rs = @mysql_query($sql, $conn);
+    if ($rs) {
+        _exit_json(array('ret'=>true));
+    }
+
+    _exit_json(array('ret'=>false, 'info'=>'Query error'));
 }
 
 // Delete data
 else if ($action == 'delete') {
-    ;
+    $sql = 'delete from weekly_report where _id='.$_GET['_id'];
+
+    $conn = conn();
+    PG_ASSERT2($conn, 'db conn error!', true);
+    
+    $rs = @mysql_query($sql, $conn);
+    if ($rs == TRUE) {
+        _exit_json(array('ret'=>true));
+    }
+
+    _exit_json(array('ret'=>false));
 }
 
-
-
+_exit_json(array('ret'=>false, 'info'=>'action='.$action));
 ?>

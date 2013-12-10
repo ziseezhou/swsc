@@ -23,6 +23,7 @@ next|Next Day
 today|Today
 
 // common strings
+s_time|Time
 s_new|New
 s_add|Add
 s_settings|Settings
