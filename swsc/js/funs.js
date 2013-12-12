@@ -10,6 +10,10 @@
          return ((window.XMLHttpRequest == undefined) && (ActiveXObject != undefined));
     };
 
+    $.f.bodyTo = function(id) {
+        window.parent.frames["f3"].document.location='?c='+id;
+    }
+
     $.f.showDeleteConfirm = function(elem, btnTitle, _id, action) {
         var floatId = 'float_id_delete_confirm';
         var view = $('<div class="btn_red">'+btnTitle+'</div>');

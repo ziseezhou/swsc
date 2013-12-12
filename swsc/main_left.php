@@ -10,10 +10,8 @@ PG_ASSERT(_local_file_load('common'));
 <title>西南证券-北京投行二部</title>
 <link href='css/base.css' rel='stylesheet' type='text/css' />
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/funs.js"></script>
 <script type="text/javascript">
-function bodyTo(id) {
-    window.parent.frames["f3"].document.location='?c='+id;
-}
 $(document).ready(function(){
     $(document).bind('mouseup', function(e){
         try {
@@ -26,7 +24,7 @@ $(document).ready(function(){
     
     $('#menu li a').each(function(){
         $(this).click(function(){
-            bodyTo($(this).attr('id'));
+            $.f.bodyTo($(this).attr('id'));
         });
     });
 });

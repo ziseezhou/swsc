@@ -15,6 +15,7 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="js/plbtn.js"></script>
+<script type="text/javascript" src="js/funs.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(document).bind('mouseup', function(e){
@@ -55,7 +56,7 @@ $(document).ready(function(){
         .plbtn(cssToolbar)
         .plbtn('addIcon', 'img/icon/settings.png')
         .click(function(){
-            alert('settings');
+            $.f.bodyTo('body_settings');
         });
 
     var o_mf = parent.document.getElementById("rootframe");

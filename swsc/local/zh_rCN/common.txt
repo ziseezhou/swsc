@@ -88,3 +88,9 @@ staff_save_succeed|保存成功
 staff_save_failed|保存失败
 staff_err_username_exist|用户名已存在！
 
+// settings
+settings_s_change|更改
+settings_title_lang|语言
+settings_title_lang_en_rUS|English(US)
+settings_title_lang_zh_rCN|中文(简体)
+settings_title_pwd|更改密码

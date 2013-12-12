@@ -87,3 +87,10 @@ staff_key_reset_back_email|Email to the account
 staff_ret_succeed|Save succeessfully.
 staff_ret_failed|Failed to save.
 staff_err_username_exist|Account has been exists!
+
+// settings
+settings_s_change|Change
+settings_title_lang|Language
+settings_title_lang_en_rUS|English(US)
+settings_title_lang_zh_rCN|中文(简体)
+settings_title_pwd|Change password
