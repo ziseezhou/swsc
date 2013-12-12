@@ -26,6 +26,7 @@ if (strlen($account) > 0) {
             $_SESSION['session_account_id'] = $row['_id'];
             $_SESSION['session_account']    = $account;
             $_SESSION['session_real_name']  = $row['real_name'];
+            $_SESSION['session_level']      = $row['level'];
             _exit_json(array('ret'=>true, 'account'=>$account));
         }
     }

@@ -63,9 +63,12 @@ table_header_proType|Project Type
 table_header_proStage|Project Stage
 table_header_workAddress|Place of Work
 table_header_workContent|Job Description
-table_header_extraWorktime|Overtime length (H)
-table_header_transDuration|Transportation Duration (H)
+table_header_extraWorktime|Overtime length
+table_header_transDuration|Transportation Duration
+table_header_time_unit|H
 table_header_actions|Actions
+info_cannot_empty|All cannot be empty
+info_should_be_numeric| should be numeric
 
 // body_staff
 staff_new_username|User Name

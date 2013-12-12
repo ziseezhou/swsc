@@ -55,11 +55,11 @@ $(document).ready(function(){
           </tr>';
 
     var ele_newLine = '<tr class="elem_input">\
-        <td width="64" class="id_proName"><textarea rows="1"></textarea></td>\
-        <td width="64" class="id_proType"><textarea rows="1"></textarea></td>\
-        <td width="64" class="id_proStage"><textarea rows="1"></textarea></td>\
-        <td width="64" class="id_workAddress"><textarea rows="1"></textarea></td>\
-        <td width="240" class="id_workContent"><textarea rows="1"></textarea></td>\
+        <td width="64" class="id_proName"><textarea rows="1" maxlength="50"></textarea></td>\
+        <td width="64" class="id_proType"><textarea rows="1" maxlength="50"></textarea></td>\
+        <td width="64" class="id_proStage"><textarea rows="1" maxlength="50"></textarea></td>\
+        <td width="64" class="id_workAddress"><textarea rows="1" maxlength="100"></textarea></td>\
+        <td width="240" class="id_workContent"><textarea rows="1" maxlength="500"></textarea></td>\
         <td width="64" class="id_extraWorktime"><input type="text" value="0" maxlength="3" /></td>\
         <td width="64" class="id_transDuration"><input type="text" value="0" maxlength="3" /></td>\
         <td class="item_actions">\
@@ -73,19 +73,49 @@ $(document).ready(function(){
     // ===================================================================
     // Functions
 
+    var showToastInfo = function(text) {
+        var floatId = 'float_id_info_box';
+        var view = $('<div></div>').html('<div class="infoBox">'+text+'</div>');
+
+        var dialog = $.f.floatDialogGet(floatId);
+        $.f.floatDialogInflate(dialog, view);
+
+
+        var options ={borderSize: 1, borderColor:'#999', backColor: '#FFFFDD', gravity: 's'};
+        $.f.floatDialogAssemble('#report_new table', dialog, options);
+
+        //$('.error').fadeIn(400).delay(3000).fadeOut(400);
+    };
+
     var actionSave = function() {
         var tr = $(this).parent().parent();
         var _id = $(this).data('_id');
 
-        var proName = tr.children('.id_proName').children('textarea').val();
-        var proType = tr.children('.id_proType').children('textarea').val();
-        var proStage = tr.children('.id_proStage').children('textarea').val();
-        var workAddress = tr.children('.id_workAddress').children('textarea').val();
-        var workContent = tr.children('.id_workContent').children('textarea').val();
-        var extraWorktime = tr.children('.id_extraWorktime').children('input').val();
-        var transDuration = tr.children('.id_transDuration').children('input').val();
+        var proName = $.trim(tr.children('.id_proName').children('textarea').val());
+        var proType = $.trim(tr.children('.id_proType').children('textarea').val());
+        var proStage = $.trim(tr.children('.id_proStage').children('textarea').val());
+        var workAddress = $.trim(tr.children('.id_workAddress').children('textarea').val());
+        var workContent = $.trim(tr.children('.id_workContent').children('textarea').val());
+        var extraWorktime = $.trim(tr.children('.id_extraWorktime').children('input').val());
+        var transDuration = $.trim(tr.children('.id_transDuration').children('input').val());
 
         //alert(proName+proType+proStage+workAddress+workConten+extraWorktime+transDuration);
+        if (proName.length<=0 || 
+            proType.length<=0 || 
+            proStage.length<=0 || 
+            workAddress.length<=0 || 
+            workContent.length<=0 ||
+            extraWorktime.length<=0 ||
+            transDuration.length<=0 ) {
+            showToastInfo('<?=_("info_cannot_empty");?>');
+            return;
+        }
+
+        if (!$.isNumeric(extraWorktime) || !$.isNumeric(transDuration)) {
+            showToastInfo('<?=_("table_header_extraWorktime");?>,<?=_("table_header_transDuration");?> <?=_("info_should_be_numeric");?>');
+            return;
+        }
+
         var dataInput = {
             'id_proName': proName,
             'id_proType': proType,
@@ -560,6 +590,15 @@ $(document).ready(function(){
 #workspace table td{
     border: solid 1px black;
 }
+.infoBox {
+    margin: 5px;
+    min-width: 360px;
+    width: auto !important;
+    width: 360px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+}
 </style>
 </head>
 <body>
@@ -599,8 +638,8 @@ $(document).ready(function(){
             <td width="64"><?=_('table_header_proStage');?></td>
             <td width="64"><?=_('table_header_workAddress');?></td>
             <td width="240"><?=_('table_header_workContent');?></td>
-            <td width="64"><?=_('table_header_extraWorktime');?></td>
-            <td width="64"><?=_('table_header_transDuration');?></td>
+            <td width="64"><?=_('table_header_extraWorktime');?> (<?=_('table_header_time_unit');?>)</td>
+            <td width="64"><?=_('table_header_transDuration');?> (<?=_('table_header_time_unit');?>)</td>
           </tr>
           </tbody>
         </table>
@@ -627,8 +666,8 @@ $(document).ready(function(){
             <td width="64"><?=_('table_header_proStage');?></td>
             <td width="64"><?=_('table_header_workAddress');?></td>
             <td width="240"><?=_('table_header_workContent');?></td>
-            <td width="64"><?=_('table_header_extraWorktime');?></td>
-            <td width="64"><?=_('table_header_transDuration');?></td>
+            <td width="64"><?=_('table_header_extraWorktime');?> (<?=_('table_header_time_unit');?>)</td>
+            <td width="64"><?=_('table_header_transDuration');?> (<?=_('table_header_time_unit');?>)</td>
             <td width="64"><?=_('table_header_actions');?></td>
           </tr>
           <tbody>

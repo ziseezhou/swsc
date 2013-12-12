@@ -63,9 +63,12 @@ table_header_proType|项目类型
 table_header_proStage|项目阶段
 table_header_workAddress|工作地点
 table_header_workContent|工作内容
-table_header_extraWorktime|加班时长(单位:小时)
-table_header_transDuration|行程时长(单位:小时)
+table_header_extraWorktime|加班时长
+table_header_transDuration|行程时长
+table_header_time_unit|小时
 table_header_actions|操作
+info_cannot_empty|每一项都需要填写
+info_should_be_numeric|必须为数字
 
 // body_staff
 staff_new_username|用户名
