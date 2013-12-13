@@ -90,7 +90,11 @@ staff_err_username_exist|Account has been exists!
 
 // settings
 settings_s_change|Change
+settings_s_submit|Submit
 settings_title_lang|Language
 settings_title_lang_en_rUS|English(US)
 settings_title_lang_zh_rCN|中文(简体)
 settings_title_pwd|Change password
+settings_title_pwd_old|Old Password
+settings_title_pwd_new|New Password
+settings_title_pwd_new_again|Confirm New Password

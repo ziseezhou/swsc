@@ -541,7 +541,7 @@ $(document).ready(function(){
 }
 .tableDate .report_new_date {
     line-height: 2.5em;
-    width: 180px;
+    width: 195px;
 }
 .tableDate #report_new_date_btn {
     margin-left: 5px;

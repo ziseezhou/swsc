@@ -408,7 +408,6 @@ $(document).ready(function(){
 }
 #staff_new table {
     border: 0;
-    border-bottom: solid 1px #CCC;
     border-collapse:collapse;
 }
 #staff_new table td{
@@ -420,15 +419,17 @@ $(document).ready(function(){
     margin-left: 5px;
     display:inline;
 }
-#staff_new input[type=text]{
-    height: 1.5em;
-    line-height: 1.5em;
+#staff_new #staff_new_account input,
+#staff_new #staff_new_realname input,
+#staff_new #staff_new_email input{
+    height: 2.2em;
+    line-height: 2.2em;
     width: 160px;
     border:1px solid #CCC;
     border-radius: 1px;
     outline: none;
 }
-#staff_new input[type=text]:focus{
+#staff_new input:focus{
     border:1px solid #333;
     outline: none;
     -webkit-box-shadow: none !important;
@@ -436,8 +437,8 @@ $(document).ready(function(){
     box-shadow: none !important;
 }
 #staff_new .item_name {
-    text-align: right;
-    background-color: #EFEFEF;
+    text-align: left;
+    width: 90px;
 }
 #staff_new_ret {
     margin-top: 5px;
@@ -491,29 +492,27 @@ $(document).ready(function(){
         <!-- Persenal weekly report: edit & add -->
         <div id="staff_new">
             <table border="0" cellpadding="0" cellspacing="0">
-                <col width="64" />
-                <col width="624" />
                 <tr>
-                    <td width=64 class="item_name"><?=_('staff_new_username');?>: </td>
+                    <td class="item_name"><?=_('staff_new_username');?>: </td>
                     <td id="staff_new_account"><input type="text" maxlength="20" /><span></span></td>
                 </tr>
                 <tr>
-                    <td width=64 class="item_name"><?=_('staff_new_realname');?>: </td>
+                    <td class="item_name"><?=_('staff_new_realname');?>: </td>
                     <td id="staff_new_realname"><input type="text" maxlength="20" /></td>
                 </tr>
                 <tr>
-                    <td width=64 class="item_name"><?=_('s_email');?>: </td>
-                    <td id="staff_new_email"><input type="text" maxlength="20" /></td>
+                    <td class="item_name"><?=_('s_email');?>: </td>
+                    <td id="staff_new_email"><input type="text" maxlength="100" /></td>
                 </tr>
                 <tr>
-                    <td width=64 class="item_name"><?=_('staff_new_status');?>: </td>
+                    <td class="item_name"><?=_('staff_new_status');?>: </td>
                     <td id="staff_new_enable">
                         <input type="radio" name="enable_status" value="0" />&nbsp;<?=_('staff_status_disabled');?>
                         <input type="radio" name="enable_status" value="1" checked />&nbsp;<?=_('staff_status_enabled');?><br>
                     </td>
                 </tr>
                 <tr>
-                    <td width=64 class="item_name"><?=_('staff_new_level');?>: </td>
+                    <td class="item_name"><?=_('staff_new_level');?>: </td>
                     <td id="staff_new_level">
                         <select>
                         <option value="1"><?=_('staff_level_normal');?></option>

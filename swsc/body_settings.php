@@ -32,15 +32,41 @@ $(document).ready(function(){
     // ===================================================================
     // Main
 
-    $('#settings_btn_chglang').plbtn({click:function(){
+    $('#settings_btn_lang_chg').plbtn({click:function(){
         alert('change');
+    }});
+
+    $('#settings_btn_pwd_submit').plbtn({click:function(){
+        alert('pwd');
     }});
 });
 </script>
 <style type="text/css">
 body {
     margin: 0 auto;
-    width: 100%;
+}
+input {
+    height: 2.2em;
+    line-height: 2.2em;
+    width: 180px;
+    border:1px solid #CCC;
+    border-radius: 1px;
+    outline: none;
+}
+input[type=text]:focus, input[type=password]:focus{
+    border:1px solid #333;
+    outline: none;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+.btn_base {
+    font-size: 1.2em;
+    line-height: 1.2em;
+    min-width: 50px;
+    width: auto !important;
+    width: 50px;
+    text-align: center;
 }
 .settings_item {
     margin: 0 auto;
@@ -52,7 +78,9 @@ body {
     _display:inline-block;
 }
 .title {
-    width:150px; float:left;
+    float:left;
+    width:150px;
+    font-weight: bold;
 }
 .content {
     margin-left:160px; 
@@ -64,12 +92,28 @@ body {
     margin-top: 5px;
 }
 #lang select{
-    width: 160px;
+    width: 200px;
     height: 2.2em;
+    line-height: 2.2em;
+    font-size: 1.1em !important;
+    font-size: 1.6em;
     padding: 0.3em 0 0.3em 0;
 }
-#lang #settings_btn_chglang {
+#lang #settings_btn_lang_chg {
     margin-left: 10px;
+}
+#pwd table {
+    border: 0;
+    border-collapse:collapse;
+}
+#pwd table td{
+    border:0;
+    height: 30px;
+}
+#pwd .item_name {
+    text-align: left;
+    width: 90px;
+    height: 2.6em;
 }
 </style>
 </head>
@@ -86,7 +130,7 @@ body {
                 <option value="zh_rCN"><?=_('settings_title_lang_zh_rCN');?></option>
                 </select>
             </div>
-            <div id="settings_btn_chglang" class="btn_base"><?=_('settings_s_change');?></div>
+            <div id="settings_btn_lang_chg" class="btn_base"><?=_('settings_s_change');?></div>
         </div>
     </div>
     <div class="settings_item" id="pwd">
@@ -94,6 +138,21 @@ body {
             <?=_("settings_title_pwd");?>
         </div>
         <div class="content">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="item_name"><?=_('settings_title_pwd_old');?>: </td>
+                    <td id="pwd_old"><input type="password" maxlength="20" /></td>
+                </tr>
+                <tr>
+                    <td class="item_name"><?=_('settings_title_pwd_new');?>: </td>
+                    <td id="pwd_new"><input type="password" maxlength="20" /></td>
+                </tr>
+                <tr>
+                    <td class="item_name"><?=_('settings_title_pwd_new_again');?>: </td>
+                    <td id="pwd_new_agin"><input type="password" maxlength="20" /></td>
+                </tr>
+            </table>
+            <div id="settings_btn_pwd_submit" class="btn_base"><?=_('settings_s_submit');?></div>
         </div>
     </div>
 </body>

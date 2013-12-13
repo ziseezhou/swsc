@@ -90,7 +90,11 @@ staff_err_username_exist|用户名已存在！
 
 // settings
 settings_s_change|更改
+settings_s_submit|提交
 settings_title_lang|语言
 settings_title_lang_en_rUS|English(US)
 settings_title_lang_zh_rCN|中文(简体)
 settings_title_pwd|更改密码
+settings_title_pwd_old|旧密码
+settings_title_pwd_new|新密码
+settings_title_pwd_new_again|确认新密码

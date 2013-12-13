@@ -146,10 +146,22 @@ function db_str_filter($s) {
     return $s;
 }
 
-function rand_password($pw_length = 8){
+function rand_password_old($length = 8){
     $randpwd = '';
-    for ($i = 0; $i < $pw_length; $i++) {
+    for ($i = 0; $i < $length; $i++) {
         $randpwd .= chr(mt_rand(33, 126));
+    }
+
+    return $randpwd;
+}
+
+function rand_password($length = 8) {
+    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_ []{}<>~`+=,.;:/?|';
+
+    $randpwd = '';
+    for ( $i = 0; $i < $length; $i++ ) {
+        // $randpwd .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        $randpwd .= $chars[ mt_rand(0, strlen($chars) - 1) ];
     }
 
     return $randpwd;

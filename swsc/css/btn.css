@@ -55,6 +55,12 @@
     border: 0;
 }
 
+.btn_toolbar span {
+    /* for icon*/
+    margin-top: 0 !important;
+    margin-top: -2px;
+}
+
 .btn_toolbar_normal {
     background: transparent;
 }
