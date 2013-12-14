@@ -20,6 +20,7 @@ $_CONTENT_MAP = array (
     "body_manage_staff"          => "body_manage_staff.php",
     "body_manage_staff_handler"  => "body_manage_staff_handler.php",
     "body_settings"              => "body_settings.php",
+    "body_settings_handler"      => "body_settings_handler.php",
     "exit"                       => "exit.php"
 );
 

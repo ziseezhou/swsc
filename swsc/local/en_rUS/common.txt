@@ -5,7 +5,7 @@ search|Search
 settings|Settings
 navi_weekly_report|Weekly Report
 navi_finance_report|Finance Report
-navi_manage_staff|Manage staff
+navi_manage_staff|Manage staffs
 navi_exit|Exit
 login|Login
 login_name|User Name

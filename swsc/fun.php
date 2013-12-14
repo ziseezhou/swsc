@@ -46,7 +46,7 @@ function _local_file_load($localFileName){
 
     // fetch local flag
     $local = $_SESSION['session_local']; // example: zh_rCN
-    if ( strlen($local)<=0) {
+    if ( strlen($local)<=0) { // actually, need more check
 
         // again check from cookie;
         // {{
@@ -54,6 +54,7 @@ function _local_file_load($localFileName){
         // }}
 
         $local = "zh_rCN"; // default Chinese
+        $_SESSION['session_local'] = $local;
     } 
 
     $filePath = "./local/".$local."/".$localFileName.'.txt'; // example: /local/zh_rCN/common.txt

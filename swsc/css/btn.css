@@ -46,12 +46,11 @@
     display: block;
     float: left;
     margin-right: 5px;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 8px 5px;
     line-height: 1.1em;
     text-align: left;
     font-weight: bold;
-    width: 66px;
+    min-width: 66px;
     border: 0;
 }
 

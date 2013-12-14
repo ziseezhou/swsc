@@ -27,6 +27,13 @@ if (strlen($account) > 0) {
             $_SESSION['session_account']    = $account;
             $_SESSION['session_real_name']  = $row['real_name'];
             $_SESSION['session_level']      = $row['level'];
+            $_SESSION['session_settings']   = $row['settings'];
+
+            $settings = @json_decode($row['settings']);
+            if ($settings != null) {
+                $_SESSION['session_local'] = $settings['local'];
+            } // lese {use default}
+
             _exit_json(array('ret'=>true, 'account'=>$account));
         }
     }

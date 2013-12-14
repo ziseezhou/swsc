@@ -33,7 +33,21 @@ $(document).ready(function(){
     // Main
 
     $('#settings_btn_lang_chg').plbtn({click:function(){
-        alert('change');
+        var url = '?c=body_settings_handler&action=lang&val='+$('#lang select').val();
+        $.get(url, function(data){
+            if (data.ret) {
+                if (typeof window.parent != "undefined") {
+                    top.frames.location.reload(true);
+                } else {
+                    document.location.reload(true);
+                }
+            } else {
+                alert('failed');
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
     }});
 
     $('#settings_btn_pwd_submit').plbtn({click:function(){
@@ -126,8 +140,8 @@ input[type=text]:focus, input[type=password]:focus{
         <div class="content">
             <div>
                 <select>
-                <option value="en_rUS"><?=_('settings_title_lang_en_rUS');?></option>
-                <option value="zh_rCN"><?=_('settings_title_lang_zh_rCN');?></option>
+                <option value="en_rUS" <? if ($_SESSION['session_local']=='en_rUS') echo 'selected="selected"'; ?>><?=_('settings_title_lang_en_rUS');?></option>
+                <option value="zh_rCN" <? if ($_SESSION['session_local']=='zh_rCN') echo 'selected="selected"'; ?>><?=_('settings_title_lang_zh_rCN');?></option>
                 </select>
             </div>
             <div id="settings_btn_lang_chg" class="btn_base"><?=_('settings_s_change');?></div>
