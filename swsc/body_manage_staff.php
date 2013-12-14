@@ -271,10 +271,10 @@ $(document).ready(function(){
                     newTdSet.eq(3).html(value['enable']=='0' ? "<?=_('staff_status_disabled');?>" : "<?=_('staff_status_enabled');?>");
                     newTdSet.eq(4).html(value['level']=='10'? "<?=_('staff_level_admin');?>" : "<?=_('staff_level_normal');?>");
 
-                    if (value[3]=='0') {
-                        newLine.css('background-color', '#EEE');
-                    }else if (value[4]=='10') {
-                        newLine.css('background-color', '#FFE6E6');
+                    if (value['enable']=='0') {
+                        newLine.find('td').css('background-color', '#EEE');
+                    }else if (value['level']=='10') {
+                        newLine.find('td').css('background-color', '#FFE6E6');
                     }
 
                     $("#staff_list table tr:last td .btn_item")

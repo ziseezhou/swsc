@@ -74,8 +74,8 @@ function _local_file_load($localFileName){
 
             $keyValue = explode("|", $lineStr, 2);
 
-            //$_PG_LOCAL[$keyValue[0]] = $keyValue[1];
-            $_PG_LOCAL[$keyValue[0]] = preg_replace("/\s/","",$keyValue[1]);
+            $_PG_LOCAL[$keyValue[0]] = $keyValue[1];
+            // $_PG_LOCAL[$keyValue[0]] = preg_replace("/\s/","",$keyValue[1]);
         } //else { echo $lineStr;} // debug code
     }
 

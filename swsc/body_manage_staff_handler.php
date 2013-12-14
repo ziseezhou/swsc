@@ -193,5 +193,32 @@ else if ($action == 'reset_key') {
     _exit_json(array('ret'=>false));
 }
 
+else if ($action == 'chg_key') {
+    $oldPwd = $_POST['oldPwd'];
+    $newPwd = $_POST['newPwd'];
+
+    $sql = 'select pwd from user where _id='.$_SESSION['session_account_id'];
+
+    $conn = conn();
+    PG_ASSERT2($conn, 'db conn error!', true);
+    
+    //_exit_json(array('ret'=>false, 'info'=>$sql));
+    $rs = @mysql_query($sql, $conn);
+    if($row = mysql_fetch_array($rs, MYSQL_NUM)) {
+        if ($row[0] != $oldPwd) {
+            _exit_json(array('ret'=>false, 'info'=>'current_key_err'));
+        }
+    }
+
+    $sql = "update user set pwd='$newPwd' where _id=".$_SESSION['session_account_id'];
+    //_exit_json(array('ret'=>false, 'info'=>$sql));
+    $rs = @mysql_query($sql, $conn);
+    if ($rs == TRUE) {
+         _exit_json(array('ret'=>true));
+    }
+
+    _exit_json(array('ret'=>false));
+}
+
  _exit_json(array('ret'=>false, 'info'=>'action='.$action));
 ?>

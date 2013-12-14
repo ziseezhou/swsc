@@ -9,7 +9,7 @@ if ($action == 'lang') {
     $val = $_GET['val'];
     $settings = $_SESSION['session_settings'];
 
-    $settingsArray = @json_decode($settings);
+    $settingsArray = @json_decode($settings, true);
     if ($settingsArray != null) {
         $settingsArray['local'] = $val;
     } else {

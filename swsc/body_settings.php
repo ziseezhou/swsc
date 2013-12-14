@@ -17,6 +17,8 @@ PG_ASSERT(_local_file_load('common'));
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="js/plbtn.js"></script>
+<script type="text/javascript" src="js/funs.js"></script>
+<script type="text/javascript" src="js/md5.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     // ===================================================================
@@ -51,7 +53,53 @@ $(document).ready(function(){
     }});
 
     $('#settings_btn_pwd_submit').plbtn({click:function(){
-        alert('pwd');
+        
+        var oldPwd = $.trim($('#pwd_old input').val());
+        var newPwd = $.trim($('#pwd_new input').val());
+        var newPwdAgain = $.trim($('#pwd_new_again input').val());
+
+        var itemNull = false;
+        $('#pwd input').each(function(){
+            if ($.trim($(this).val()).length <= 0) {
+                $.f.showToastInfo($(this).parent(), '<?=_("cannot_be_null");?>');
+                itemNull = true;
+            }
+        });
+
+        if (itemNull) {
+            return;
+        }
+
+        if (newPwd != newPwdAgain) {
+            $.f.showToastInfo($('#pwd_new_again'), '<?=_("settings_title_pwd_new_again_error");?>');
+            return;
+        }
+
+        var url = '?c=body_manage_staff_handler&action=chg_key';
+
+        var oldPwd_md5 = md5(oldPwd);
+        var newPwd_md5 = md5(newPwd);
+
+        $.post(url, {'oldPwd':oldPwd_md5, 'newPwd':newPwd_md5},
+        function(data){
+            if (data.ret) {
+                // reset input
+                $('#pwd_old input').val('');
+                $('#pwd_new input').val('');
+                $('#pwd_new_again input').val('');
+
+                $.f.showToastInfo('#settings_btn_pwd_submit', '<?=_("settings_title_pwd_succeed");?>');
+            } else {
+                if (data.info == 'current_key_err') {
+                    $.f.showToastInfo($('#pwd_old'), '<?=_("s_pwd_err");?>');
+                } else {
+                    alert('failed');
+                }
+            }
+        }, "json")
+        .fail(function(){
+            alert('failed');
+        });
     }});
 });
 </script>
@@ -126,7 +174,7 @@ input[type=text]:focus, input[type=password]:focus{
 }
 #pwd .item_name {
     text-align: left;
-    width: 90px;
+    width: 150px;
     height: 2.6em;
 }
 </style>
@@ -163,7 +211,7 @@ input[type=text]:focus, input[type=password]:focus{
                 </tr>
                 <tr>
                     <td class="item_name"><?=_('settings_title_pwd_new_again');?>: </td>
-                    <td id="pwd_new_agin"><input type="password" maxlength="20" /></td>
+                    <td id="pwd_new_again"><input type="password" maxlength="20" /></td>
                 </tr>
             </table>
             <div id="settings_btn_pwd_submit" class="btn_base"><?=_('settings_s_submit');?></div>

@@ -5,7 +5,7 @@ search|Search
 settings|Settings
 navi_weekly_report|Weekly Report
 navi_finance_report|Finance Report
-navi_manage_staff|Manage staffs
+navi_manage_staff|Accounts
 navi_exit|Exit
 login|Login
 login_name|User Name
@@ -37,12 +37,13 @@ s_email|Email
 s_email_err| Email error!
 s_dow_names|[ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ]
 s_month_names|[ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+s_pwd_err|Password error
 
 // tips
 tip_navi_hello|Hello!
 tip_navi_work|navigation:
 tip_error|Error, please contact the supporter.
-cannot_be_null|&nbsp;cannot be null.
+cannot_be_null|&nbsp;cannot be null
 available|&nbsp;available
 has_been_exists|&nbsp;has been exists
 
@@ -71,7 +72,7 @@ info_cannot_empty|All cannot be empty
 info_should_be_numeric| should be numeric
 
 // body_staff
-staff_new_username|User Name
+staff_new_username|Account
 staff_new_realname|Real Name
 staff_new_status|Status
 staff_new_level|Level
@@ -95,6 +96,8 @@ settings_title_lang|Language
 settings_title_lang_en_rUS|English(US)
 settings_title_lang_zh_rCN|中文(简体)
 settings_title_pwd|Change password
-settings_title_pwd_old|Old Password
+settings_title_pwd_old|Current Password
 settings_title_pwd_new|New Password
-settings_title_pwd_new_again|Confirm New Password
+settings_title_pwd_new_again|Reenter New Password
+settings_title_pwd_new_again_error|Please check the new passwords match
+settings_title_pwd_succeed|New password has been saved

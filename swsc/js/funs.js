@@ -14,6 +14,18 @@
         window.parent.frames["f3"].document.location='?c='+id;
     }
 
+    $.f.showToastInfo = function(elem, text, options) {
+        elem = $(elem);
+        var floatId = 'float_id_info_box'+elem.attr('id');
+        var view = $('<div></div>').html('<div class="infoBox">'+text+'</div>');
+
+        var dialog = $.f.floatDialogGet(floatId);
+        $.f.floatDialogInflate(dialog, view);
+
+        options = $.extend({}, {borderSize: 1, borderColor:'#999', backColor: '#FFFFDD', gravity: 'w'}, options);
+        $.f.floatDialogAssemble(elem, dialog, options);
+    };
+
     $.f.showDeleteConfirm = function(elem, btnTitle, _id, action) {
         var floatId = 'float_id_delete_confirm';
         var view = $('<div class="btn_red">'+btnTitle+'</div>');

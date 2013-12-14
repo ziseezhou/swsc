@@ -37,12 +37,13 @@ s_email|Email
 s_email_err| Email错误!
 s_dow_names|['日', '一', '二', '三', '四', '五', '六']
 s_month_names|['1月', '2月', '3月', '4月', '5月', '6月', '6月', '8月', '9月', '10月', '11月', '12月']
+s_pwd_err|密码错误
 
 // tips
 tip_navi_hello|您好！
 tip_navi_work|工作导航
 tip_error|有错误，请联系开发人员。
-cannot_be_null|不能为空。
+cannot_be_null|不能为空
 available|可用
 has_been_exists|已经存在
 
@@ -98,3 +99,5 @@ settings_title_pwd|更改密码
 settings_title_pwd_old|旧密码
 settings_title_pwd_new|新密码
 settings_title_pwd_new_again|确认新密码
+settings_title_pwd_new_again_error|新密码两次输入不一致
+settings_title_pwd_succeed|已成功设置新密码

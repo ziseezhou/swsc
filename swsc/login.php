@@ -29,7 +29,7 @@ if (strlen($account) > 0) {
             $_SESSION['session_level']      = $row['level'];
             $_SESSION['session_settings']   = $row['settings'];
 
-            $settings = @json_decode($row['settings']);
+            $settings = @json_decode($row['settings'], true);
             if ($settings != null) {
                 $_SESSION['session_local'] = $settings['local'];
             } // lese {use default}
